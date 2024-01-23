@@ -26,7 +26,6 @@
               <div>邮箱：1135957121@qq.com</div>
               <div>微信：19550102670(欢迎加微信入群,群员已超200)</div>
               <div>技术栈：JavaScript、HTML、CSS、Vue、Node、React</div>
-              <div>~~~接外包~~~</div>
             </div>
             <el-divider></el-divider>
             <div style="margin-bottom: 15px"><h5>个性标签</h5></div>
