@@ -1,5 +1,6 @@
 <template>
   <div class="app-main">
+    <!--v-slot 是插槽 怎么用呀-->
     <router-view v-slot="{ Component, route }">
       <transition name="fade-slide" mode="out-in" appear>
         <keep-alive v-if="isReload" :include="cacheRoutes">

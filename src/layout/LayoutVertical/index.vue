@@ -1,5 +1,6 @@
 <template>
   <!--纵向布局-->
+  <!--侧边栏-->
   <Sidebar />
   <div class="main-container">
     <HeaderVertical />

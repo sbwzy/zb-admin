@@ -1,4 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw, createWebHashHistory, Router } from 'vue-router'
+//createRouter  创建一个可以被 Vue 应用使用的 Router 实例。
+//createWebHistory 创建一个 HTML5 历史。对于单页应用来说这是最常见的历史。
+//RouteRecordRaw  是 类别别名 的 ts类型
+//createWebHashHistory 创建一个 hash 模式的历史。在没有主机的 web 应用 (如 file://) 或无法通过配置服务器来处理任意 URL 的时候非常有用。
+//Router 对象
+
+//Layout 是什么？ 页面而己
 import Layout from '@/layout/index.vue'
 // 扩展继承属性
 interface extendRoute {
@@ -71,6 +78,7 @@ export const constantRoutes: Array<RouteRecordRaw & extendRoute> = [
   {
     path: '/',
     name: 'layout',
+    //component 的作用是什么
     component: Layout,
     redirect: '/home',
     meta: { title: '首页', icon: 'House' },

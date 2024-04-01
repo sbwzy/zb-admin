@@ -1,7 +1,11 @@
 <template>
+  <!--左侧菜单栏-->
   <div class="sidebar-container" :class="{ 'has-logo': themeConfig.showLogo }">
+    <!--菜单栏logo-->
     <Logo v-if="themeConfig.showLogo" :is-collapse="isCollapse" />
+    <!--滚动框-->
     <el-scrollbar wrap-class="scrollbar-wrapper">
+      <!--菜单-->
       <el-menu
         :default-active="activeMenu"
         background-color="#304156"
@@ -11,6 +15,7 @@
         class="el-menu-vertical-demo"
         :collapse="isCollapse"
       >
+        <!--菜单内容-->
         <SubItem v-for="route in permission_routes" :key="route.path" :item="route" />
       </el-menu>
     </el-scrollbar>
@@ -40,6 +45,8 @@
 
   const activeMenu = computed(() => {
     const { meta, path } = route
+    console.log('这里的路由获取到了啥')
+    console.log(meta)
     if (meta.activeMenu) {
       return meta.activeMenu
     }

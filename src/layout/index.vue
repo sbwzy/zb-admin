@@ -1,8 +1,13 @@
 <template>
   <div class="g-container-layout" :class="classObj">
+    <!--左上方菜单栏按钮-->
     <Mobile />
+    <!--页面布局-->
+    <!--左侧侧边栏-->
     <LayoutVertical v-if="device === 'mobile'" />
+    <!-- 渲染一个“元组件”为动态组件。依 is 的值，来决定哪个组件被渲染 -->
     <component :is="LayoutComponents[themeConfig.mode]" v-else />
+    <!--上方和右侧按钮-->
     <Theme />
   </div>
 </template>
