@@ -124,6 +124,21 @@ $dark_gray: #889aa4;
   .title {
   }
 }
+.button-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: -40px;
+  margin-left: -40px;
+  margin-right: -40px;
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  margin-right: -78px;
+  font-size: 16px;
+}
 
 @media (max-width: 850px) {
   .login-container {
