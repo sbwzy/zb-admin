@@ -14,6 +14,8 @@
   import HeaderVertical from './HeaderVertical/index.vue'
   import Main from '../components/Main/index.vue'
   import Footer from '../components/Footer/index.vue'
+
+  console.log('打开的页面顺序 3')
 </script>
 
 <style lang="scss" scoped>

@@ -7,6 +7,8 @@
   // hooks 是什么配置文件夹 | useResizeHandler 又是什么
   import { useResizeHandler } from '@/hooks/useResizeHandler'
   import { useSettingStore } from '@/store/modules/setting'
+
+  console.log('打开的页面顺序 2')
   // device 是 用来监听 移动端还是pc端的值
   let { device } = useResizeHandler()
   const SettingStore = useSettingStore()
