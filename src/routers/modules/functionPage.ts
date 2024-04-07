@@ -26,6 +26,12 @@ const functionPageRouter = [
         meta: { title: '404 页面', keepAlive: true, icon: 'MenuIcon' },
       },
       {
+        path: '/function-page/leafletMap',
+        component: () => import('@/views/Map/index.vue'),
+        name: 'function-leafletMap',
+        meta: { title: '地图', keepAlive: true, icon: 'MenuIcon' },
+      },
+      {
         path: '/function-page/403',
         component: () => import('@/views/errorPages/403.vue'),
         name: 'function-403',
