@@ -15,6 +15,7 @@
 
   const SettingStore = useSettingStore()
   // 配置全局组件大小
+  // 2024-04-07
   const globalComSize = computed((): string => SettingStore.themeConfig.globalComSize)
 </script>
 
