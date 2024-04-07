@@ -22,6 +22,7 @@
   import LayoutHorizontal from './LayoutHorizontal/index.vue'
   import LayoutColumns from './LayoutColumns/index.vue'
 
+  console.log('打开的页面顺序 1')
   const SettingStore = useSettingStore()
   const themeConfig = computed(() => SettingStore.themeConfig)
   const LayoutComponents = {
@@ -63,21 +64,25 @@
   .g-container-layout {
     height: 100%;
     width: 100%;
+
     .main-container {
       display: flex;
       flex: 1;
       box-sizing: border-box;
       flex-direction: column;
     }
+
     &.mobile.openSidebar {
       position: fixed;
       top: 0;
     }
   }
+
   .sidebar-container {
     display: flex;
     flex-direction: column;
   }
+
   .drawer-bg {
     background: #000;
     opacity: 0.3;
