@@ -27,7 +27,7 @@ const functionPageRouter = [
       },
       {
         path: '/function-page/leafletMap',
-        component: () => import('@/views/functionPage/Map/index.vue'),
+        component: () => import('@/views/functionPage/Map/components/ecnuGisMap/index.vue'),
         name: 'leafletMap',
         meta: { title: '地图', keepAlive: true, icon: 'MenuIcon' },
         children: [

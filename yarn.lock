@@ -377,6 +377,18 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@terraformer/arcgis@^2.1.0":
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/@terraformer/arcgis/-/arcgis-2.1.2.tgz"
+  integrity sha512-IvdfqehcNAUtKU1OFMKwPT8EvdKlVFZ7q7ZKzkIF8XzYZIVsZLuXuOS1UBdRh5u/o+X5Gax7jiZhD8U/4TV+Jw==
+  dependencies:
+    "@terraformer/common" "^2.1.2"
+
+"@terraformer/common@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/@terraformer/common/-/common-2.1.2.tgz"
+  integrity sha512-cwPdTFzIpekZhZRrgDEkqLKNPoqbyCBQHiemaovnGIeUx0Pl336MY/eCxzJ5zXkrQLVo9zPalq/vYW5HnyKevQ==
+
 "@transloadit/prettier-bytes@0.0.7":
   version "0.0.7"
   resolved "https://registry.npmmirror.com/@transloadit/prettier-bytes/-/prettier-bytes-0.0.7.tgz"
@@ -2624,6 +2636,14 @@ esrecurse@^4.3.0:
   dependencies:
     estraverse "^5.2.0"
 
+esri-leaflet@^3.0.12:
+  version "3.0.12"
+  resolved "https://registry.npmjs.org/esri-leaflet/-/esri-leaflet-3.0.12.tgz"
+  integrity sha512-Yi7oH/mK4quOlCe920yuEYvUk0BjJRjmmE78ReAdJT5EbibW5wJoT9DtvG3JEJD22mQ0oF1LhcfL0Wb5jRhDAQ==
+  dependencies:
+    "@terraformer/arcgis" "^2.1.0"
+    tiny-binary-search "^1.0.3"
+
 estraverse@^4.1.1:
   version "4.3.0"
   resolved "https://r2.cnpmjs.org/estraverse/-/estraverse-4.3.0.tgz"
@@ -3995,7 +4015,7 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-leaflet@^1.9.4:
+leaflet@^1.0.0, leaflet@^1.9.4:
   version "1.9.4"
   resolved "https://registry.npmmirror.com/leaflet/-/leaflet-1.9.4.tgz"
   integrity sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==
@@ -6356,6 +6376,11 @@ timed-out@^4.0.0:
   version "4.0.1"
   resolved "https://registry.npmjs.org/timed-out/-/timed-out-4.0.1.tgz"
   integrity sha512-G7r3AhovYtr5YKOWQkta8RKAPb+J9IsO4uVmzjl8AZwfhs8UcUwTiD6gcJYSgOtzyjvQKrKYn41syHbUWMkafA==
+
+tiny-binary-search@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/tiny-binary-search/-/tiny-binary-search-1.0.3.tgz"
+  integrity sha512-STSHX/L5nI9WTLv6wrzJbAPbO7OIISX83KFBh2GVbX1Uz/vgZOU/ANn/8iV6t35yMTpoPzzO+3OQid3mifE0CA==
 
 tiny-emitter@^2.0.0:
   version "2.1.0"
