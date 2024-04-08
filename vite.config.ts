@@ -78,6 +78,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         // }
       },
     },
+    base: './',
     // 生产环境打包配置
     //去除 console debugger
     // esbuild: {

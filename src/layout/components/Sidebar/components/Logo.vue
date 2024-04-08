@@ -2,11 +2,11 @@
   <div class="sidebar-logo-container">
     <transition name="sidebarLogoFadeCl">
       <router-link v-if="isCollapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img src="@/assets/image/logo.png" class="sidebar-logo" />
+        <img src="@/assets/image/logo1.png" class="sidebar-logo" />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img src="@/assets/image/logo.png" class="sidebar-logo" />
-        <h1 class="sidebar-title">Vue Admin Perfect</h1>
+        <img src="@/assets/image/logo1.png" class="sidebar-logo" />
+        <h1 class="sidebar-title">公房监测管理平台</h1>
       </router-link>
     </transition>
   </div>

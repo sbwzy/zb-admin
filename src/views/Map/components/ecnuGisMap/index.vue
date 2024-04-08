@@ -23,24 +23,35 @@
         format: 'image/png',
         transparent: true,
         BBOX: bbox,
+        maxZoom: 22,
         version: '1.3.0',
         crs: L.CRS.EPSG4326,
         SRS: 'EPSG:4326',
         REQUEST: 'GetMap',
         WIDTH: '600',
         HEIGHT: '400',
+        updateInterval: 1000, //在平移时，瓦片将会在 updateInterval 毫秒内最多只更新一次。
+        keepBuffer: 10, //平移地图时，在卸载之前保留这么多行和列的图块。
+        cache: true,
       })
       .addTo(map)
 
     // 绑定地图视图变化事件，当视图发生变化时更新动态瓦片图层
-    map.on('moveend', () => {
-      const bounds = map.getBounds()
-      const ne = bounds.getNorthEast()
-      const sw = bounds.getSouthWest()
-      const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`
+    // map.on('moveend', () => {
+    //   const bounds = map.getBounds()
+    //   const ne = bounds.getNorthEast()
+    //   const sw = bounds.getSouthWest()
+    //   const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`
+    //   wmsLayer.setParams({ bbox })
+    // })
 
-      wmsLayer.setParams({ bbox })
-    })
+    // map.on('moveend', L.Util.THROTTLE(function() {
+    // 	const bounds = map.getBounds();
+    // 	const ne = bounds.getNorthEast();
+    // 	const sw = bounds.getSouthWest();
+    // 	const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
+    // 	wmsLayer.setParams({ bbox });
+    // }, 100));
 
     // 添加缩放控件
     L.control

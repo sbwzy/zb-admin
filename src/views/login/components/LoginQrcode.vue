@@ -1,7 +1,7 @@
 <template>
   <div class="login-qrcode">
-    <h2 class="title">Vue-Admin-Perfect</h2>
-    <vue-qr text="https://github.com/zouzhibin/vue-admin-perfect"></vue-qr>
+    <h2 class="title">公房监测管理平台</h2>
+    <vue-qr text="https://dev.ccgis.cn/wuyegl/leafletMap/index.html"></vue-qr>
   </div>
 </template>
 
