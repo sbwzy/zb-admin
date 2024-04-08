@@ -4,24 +4,24 @@
     <h2 class="title">公房监测管理平台</h2>
   </div>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules">
-    <el-form-item label="" prop="username">
+    <el-form-item label="" prop="phone">
       <el-input
-        v-model="ruleForm.username"
+        v-model="ruleForm.phone"
         placeholder="请输入手机号"
         auto-complete="on"
         style="position: relative"
         @keyup.enter="submitForm(ruleFormRef)"
       >
-        <template #prefix>
+        <!-- <template #prefix>
           <el-icon class="el-input__icon"><UserFilled /></el-icon>
-        </template>
+        </template> -->
       </el-input>
     </el-form-item>
 
-    <el-form-item label="" prop="password">
-      <el-input
-        v-model="ruleForm.password"
-        placeholder="请输入密码2"
+    <el-form-item label="" prop="code">
+      <!-- <el-input
+        v-model="ruleForm.code"
+        placeholder="请输入验证码"
         auto-complete="on"
         :type="passwordType"
         @keyup.enter="submitForm(ruleFormRef)"
@@ -34,7 +34,15 @@
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </div>
         </template>
-      </el-input>
+      </el-input> -->
+      <el-row :gutter="0" style="width: 100%">
+        <el-col :span="14">
+          <el-input v-model="ruleForm.code" placeholder="请输入验证码" style="position: relative"></el-input>
+        </el-col>
+        <el-col :span="10" class="button-col">
+          <el-button type="primary">发送验证码</el-button>
+        </el-col>
+      </el-row>
     </el-form-item>
 
     <el-form-item style="width: 100%">
@@ -57,14 +65,17 @@
   const loading = ref(false)
 
   const rules = reactive({
-    password: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-    username: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    phone: [
+      { required: true, message: '请输入手机号', trigger: 'blur' },
+      { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' },
+    ],
+    code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
   })
 
   // 表单数据
   const ruleForm = reactive({
-    username: 'admin',
-    password: '123456',
+    phone: '',
+    code: '',
   })
 
   // 显示密码图标

@@ -140,6 +140,13 @@ $dark_gray: #889aa4;
   font-size: 16px;
 }
 
+.button-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+}
+
 @media (max-width: 850px) {
   .login-container {
     padding: 10px;
@@ -154,5 +161,8 @@ $dark_gray: #889aa4;
   }
   .login-left {
     display: none;
+  }
+  .button-col .el-button {
+    width: 100%;
   }
 }
