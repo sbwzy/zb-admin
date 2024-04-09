@@ -1,11 +1,10 @@
 <template>
-  <div class="m-check-card app-container">
-    <leafletMap />
+  <div class="app-container">
+    <div class="app-container-inner">
+      <router-view v-slot="{ Component }">
+        <component :is="Component"></component>
+      </router-view>
+    </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-  import leafletMap from './components/ecnuGisMap/index'
-</script>
-
-<style lang="scss" scoped></style>
+<script lang="ts" setup name="Map"></script>

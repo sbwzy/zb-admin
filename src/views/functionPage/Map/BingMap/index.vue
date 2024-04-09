@@ -2,13 +2,13 @@
   <div id="map" style="height: 600px"></div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="ecnuGisMap">
   import { onMounted } from 'vue'
   import L from 'leaflet'
   import 'leaflet/dist/leaflet.css'
 
   const initMap = () => {
-    const map = L.map('map').setView([31.24534249284388, 121.47915601730348], 18)
+    const map = L.map('map').setView([31.44534249284388, 121.47915601730348], 11)
 
     const bounds = map.getBounds()
     const ne = bounds.getNorthEast()
