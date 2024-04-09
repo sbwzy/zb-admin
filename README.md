@@ -1,18 +1,8 @@
 ## 简介
-vue-element-perfect 是一个后台前端解决方案,它使用了最新的前端技术栈、动态路由，权限验证，并且有着丰富的组件,企业级中后台解决方案，可免费商用，同时支持PC、平板、手机
+是一个后台前端解决方案,它使用了最新的前端技术栈、动态路由，权限验证，并且有着丰富的组件,企业级中后台解决方案，可免费商用，同时支持PC、平板、手机
 本项目也参考了很多开源的项目、
-### 在线预览
-- gitee国内访问地址：https://yuanzbz.gitee.io/vue-admin-perfect/#/home
-- github site : https://zouzhibin.github.io/vue-admin-perfect/
-
-- 基础功能版本预览：https://yuanzbz.gitee.io/vue-admin-simple
 
 
-
-### git仓库(欢迎 Star⭐)
-- Gitee： —— [https://gitee.com/yuanzbz/vue-admin-perfect](https://gitee.com/yuanzbz/vue-admin-perfect)
-- GitHub： —— [https://github.com/zouzhibin/vue-admin-perfect](https://github.com/zouzhibin/vue-admin-perfect)
-- 基础功能版本： —— [https://gitee.com/yuanzbz/vue-admin-simple](https://gitee.com/yuanzbz/vue-admin-simple)
 
 ## 项目功能
 - 使用Vue3.0开发，单文件组件采用＜script setup＞
@@ -27,13 +17,6 @@ vue-element-perfect 是一个后台前端解决方案,它使用了最新的前�
 - 表单、表格、水印、多标签显示、打印功能，图片打印、表格打印、普通打印、二维码、拖拽、markdown、头像裁剪、图片上传...
 - 使用 Prettier 统一格式化代码，集成 Eslint、代码校验规范
 
-## 安装
-```
-  # GitHub
-  git clone https://github.com/zouzhibin/vue-admin-perfect.git
-  # Gitee
-  git clone https://gitee.com/yuanzbz/vue-admin-perfect.git
-```
 
 ## 分支管理
 - master 技术采用 vite + vue3.0 + Typescript + pinia
@@ -43,17 +26,7 @@ vue-element-perfect 是一个后台前端解决方案,它使用了最新的前�
 - webpack 技术采用 webpack + vue3.0 + Typescript + vuex
 - uniapp uniapp版本 uniapp +vuex +element scss
   ```
-  # 本地开发 启动项目
-  借助hbuilder工具运行浏览器启动
-  ```
 
-## 下载依赖
-```
- npm install
- cnpm install
- yarn 
- # npm install 安装失败，请升级 nodejs 到 16 以上，或尝试使用以下命令：
-  npm install --registry=https://registry.npm.taobao.org
 ```
 ## 运行打包
 ```
@@ -104,11 +77,6 @@ vue-admin-perfect
 ├─ tsconfig.json          # typescript 全局配置
 └─ vite.config.ts         # vite 配置
 ```
-
-### 微信交流群
-|                                      微信二维码                                      |
-| :----------------------------------------------------------------------------------: |
-| <img src="http://182.61.5.190:8889/we.png" width=170/> |
 
 
 

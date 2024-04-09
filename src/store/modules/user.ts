@@ -25,6 +25,16 @@ export const useUserStore = defineStore({
         resolve(username)
       })
     },
+    //手机登录
+    login1(userInfo) {
+      const { phone, yzm } = userInfo
+      return new Promise(async (resolve, reject) => {
+        this.token = phone
+        this.userInfo = userInfo
+        await this.getRoles()
+        resolve(phone)
+      })
+    },
     // 获取用户授权角色信息，实际应用中 可以通过token通过请求接口在这里获取用户信息
     getRoles() {
       return new Promise((resolve, reject) => {

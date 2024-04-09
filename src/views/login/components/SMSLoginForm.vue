@@ -1,6 +1,6 @@
 <template>
   <div class="login-title">
-    <img class="icon" src="@/assets/image/logo.png" alt="logo" />
+    <img class="icon" src="@/assets/image/logo1.png" alt="logo" />
     <h2 class="title">公房监测管理平台</h2>
   </div>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules">
@@ -18,9 +18,9 @@
       </el-input>
     </el-form-item>
 
-    <el-form-item label="" prop="code">
+    <el-form-item label="" prop="yzm">
       <!-- <el-input
-        v-model="ruleForm.code"
+        v-model="ruleForm.yzm"
         placeholder="请输入验证码"
         auto-complete="on"
         :type="passwordType"
@@ -37,7 +37,7 @@
       </el-input> -->
       <el-row :gutter="0" style="width: 100%">
         <el-col :span="14">
-          <el-input v-model="ruleForm.code" placeholder="请输入验证码" style="position: relative"></el-input>
+          <el-input v-model="ruleForm.yzm" placeholder="请输入验证码" style="position: relative"></el-input>
         </el-col>
         <el-col :span="10" class="button-col">
           <el-button type="primary">发送验证码</el-button>
@@ -57,11 +57,12 @@
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
+  import { login } from '@/api/user'
 
   const router = useRouter()
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
-  const passwordType = ref('password')
+  //const passwordType = ref('password')
   const loading = ref(false)
 
   const rules = reactive({
@@ -69,28 +70,27 @@
       { required: true, message: '请输入手机号', trigger: 'blur' },
       { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' },
     ],
-    code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+    yzm: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
   })
 
   // 表单数据
   const ruleForm = reactive({
     phone: '',
-    code: '',
+    yzm: '',
   })
-
-  // 显示密码图标
-  const showPwd = () => {
-    passwordType.value = passwordType.value === 'password' ? '' : 'password'
-  }
 
   const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
       if (valid) {
         loading.value = true
+        login(ruleForm).then((res) => {
+          console.log('打印', res)
+          //把后面代码写在这里面
+        })
         // 登录
         setTimeout(async () => {
-          await UserStore.login(ruleForm)
+          await UserStore.login1(ruleForm)
           await router.push({
             path: '/',
           })

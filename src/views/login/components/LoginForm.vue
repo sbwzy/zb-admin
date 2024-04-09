@@ -1,6 +1,6 @@
 <template>
   <div class="login-title">
-    <img class="icon" src="@/assets/image/logo.png" alt="logo" />
+    <img class="icon" src="@/assets/image/logo1.png" alt="logo" />
     <h2 class="title">公房监测管理平台</h2>
   </div>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules">

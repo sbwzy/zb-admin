@@ -71,11 +71,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       cors: true,
       // 代理跨域（模拟示例）
       proxy: {
-        // "/api": {
-        //   target: "", // easymock
-        //   changeOrigin: true,
-        //   rewrite: path => path.replace(/^\/api/, "")
-        // }
+        '/api': {
+          target: 'https://dev.ccgis.cn', // easymock
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
       },
     },
     base: './',
