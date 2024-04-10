@@ -40,7 +40,9 @@
           <el-input v-model="ruleForm.yzm" placeholder="请输入验证码" style="position: relative"></el-input>
         </el-col>
         <el-col :span="10" class="button-col">
-          <el-button type="primary">发送验证码</el-button>
+          <el-button type="primary" :disabled="countdown > 0" @click="sendCode">
+            发送验证码{{ countdown > 0 ? `(${countdown}s)` : '' }}
+          </el-button>
         </el-col>
       </el-row>
     </el-form-item>
@@ -51,7 +53,7 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, onUnmounted } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { ElNotification } from 'element-plus'
   import { useRouter } from 'vue-router'
@@ -107,6 +109,33 @@
         return false
       }
     })
+  }
+
+  const countdown = ref(0)
+  let intervalId = null
+
+  const sendCode = () => {
+    if (countdown.value > 0) {
+      return
+    }
+    countdown.value = 60
+    intervalId = setInterval(() => {
+      countdown.value--
+      if (countdown.value === 0) {
+        clearInterval(intervalId)
+      }
+    }, 1000)
+
+    onUnmounted(() => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    })
+
+    return {
+      countdown,
+      sendCode,
+    }
   }
 </script>
 
