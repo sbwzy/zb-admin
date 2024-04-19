@@ -8,7 +8,7 @@ const service = axios.create({
   // 设置接口访问超时时间
   timeout: 3000000, // request timeout，
   // 跨域时候允许携带凭证
-  withCredentials: true,
+  withCredentials: false,
 })
 
 //  request interceptor 接口请求拦截
