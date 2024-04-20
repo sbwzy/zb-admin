@@ -7,7 +7,10 @@
       </div>
       <div class="login-form">
         <div class="info-qrcode">{{ accountLogin ? '短信登录' : '账号登录' }}</div>
-        <img src="@/assets/image/login/qrcode-icon.png" class="qrcode" @click="handleClick" />
+        <div>
+          <img v-if="accountLogin" src="@/assets/image/login/smsLogin-icon.png" class="qrcode" @click="handleClick" />
+          <img v-else src="@/assets/image/login/accountLogin-icon.png" class="qrcode" @click="handleClick" />
+        </div>
         <!-- <el-button-group class="button-group">
           <el-button type="info" @click="switchForm('LoginForm')">账号登录</el-button>
           <el-button type="info" @click="switchForm('LoginQrcode')">二维码登录</el-button>
