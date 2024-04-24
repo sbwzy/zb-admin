@@ -4,35 +4,18 @@
 
 <script lang="ts" setup name="ecnuGisMap">
   import { onMounted } from 'vue'
-  import L from 'leaflet'
+  import * as L from 'leaflet'
+  import 'leaflet-bing-layer'
   import 'leaflet/dist/leaflet.css'
 
   const initMap = () => {
     const map = L.map('map').setView([31.44534249284388, 121.47915601730348], 11)
+    // 添加Bing Aerial图层
 
-    const bounds = map.getBounds()
-    const ne = bounds.getNorthEast()
-    const sw = bounds.getSouthWest()
-    const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`
-
-    const wmsLayer = L.tileLayer
-      .wms('http://webgis.ecnu.edu.cn/qgis/qgis_mapserv.fcgi.exe', {
-        service: 'WMS',
-        map: '../projects/youli/youli.qgs',
-        layers: 'BingImage,sh_buildings,yuli_points',
-        format: 'image/png',
-        transparent: true,
-        BBOX: bbox,
-        maxZoom: 22,
-        version: '1.3.0',
-        crs: L.CRS.EPSG4326,
-        SRS: 'EPSG:4326',
-        REQUEST: 'GetMap',
-        WIDTH: '600',
-        HEIGHT: '400',
-        updateInterval: 1000, //在平移时，瓦片将会在 updateInterval 毫秒内最多只更新一次。
-        keepBuffer: 10, //平移地图时，在卸载之前保留这么多行和列的图块。
-        cache: true,
+    const bingLayer = L.tileLayer
+      .bing({
+        bingMapsKey: 'AqzBjYlesV15mVBeg32goM6Ey2RBXVP6YPMs-MxfuPayEtgizvyyqi_P1y1YzOzh', // 替换为你的Bing Maps密钥
+        imagerySet: 'Aerial', // 使用航空影像
       })
       .addTo(map)
 

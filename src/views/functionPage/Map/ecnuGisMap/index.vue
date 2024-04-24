@@ -20,7 +20,7 @@
         service: 'WMS',
         map: '../projects/youli/youli.qgs',
         layers: 'BingImage,sh_buildings,yuli_points',
-        format: 'image/png',
+        format: 'image/png', //format: 'image/jpeg',
         transparent: true,
         BBOX: bbox,
         maxZoom: 22,
@@ -28,10 +28,9 @@
         crs: L.CRS.EPSG4326,
         SRS: 'EPSG:4326',
         REQUEST: 'GetMap',
-        WIDTH: '600',
-        HEIGHT: '400',
-        updateInterval: 1000, //在平移时，瓦片将会在 updateInterval 毫秒内最多只更新一次。
-        keepBuffer: 10, //平移地图时，在卸载之前保留这么多行和列的图块。
+        timeout: 200,
+        updateInterval: 200, //在平移时，瓦片将会在 updateInterval 毫秒内最多只更新一次。
+        //keepBuffer: 10, //平移地图时，在卸载之前保留这么多行和列的图块。
         cache: true,
       })
       .addTo(map)

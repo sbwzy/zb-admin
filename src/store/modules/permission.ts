@@ -14,6 +14,43 @@ export const usePermissionStore = defineStore({
     addRoutes: [],
     // 缓存路由
     cacheRoutes: {},
+
+    //动态权限配置
+    Profile: {
+      permissionName: 'administrator',
+      modules: [
+        {
+          name: 'InforCollectionModule',
+          description: '信息采集模块',
+        },
+        {
+          name: 'ApproveModule',
+          description: '审批模块',
+        },
+        {
+          name: 'EarlyWarningModule',
+          description: '预警模块',
+        },
+        {
+          name: 'HomeModule',
+          description: '主页',
+        },
+      ],
+      PermissionActions: [
+        {
+          actionName: 'HomeModule_ShowSetting',
+          action: 'true',
+        },
+        {
+          actionName: 'InforCollectionModule_BuildingNameAccess',
+          action: 'Read',
+        },
+        {
+          actionName: 'InforCollectionModule_WLMPictureAccess',
+          action: 'Edit',
+        },
+      ],
+    },
   }),
   getters: {
     permission_routes: (state) => {
@@ -23,7 +60,10 @@ export const usePermissionStore = defineStore({
       return filterKeepAlive(asyncRoutes)
     },
   },
-  // 可以同步 也可以异步
+  //
+  /****
+    路由权限（模块可见性权限），模块读写权限，字段的细分编辑权限
+  ****/
   actions: {
     // 生成路由
     generateRoutes(roles) {
