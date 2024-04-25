@@ -7,3 +7,11 @@ export function login(data) {
     data,
   })
 }
+
+export function getLocationInfo(data) {
+  return request({
+    url: '/webapi/caijiOK1',
+    method: 'post',
+    data,
+  })
+}
