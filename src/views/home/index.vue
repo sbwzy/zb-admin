@@ -3,97 +3,21 @@
     <el-row class="row-bg" :gutter="10">
       <el-col :xs="24" :sm="12" :lg="8">
         <el-card class="box-card" style="height: 100%">
-          <!--          <el-image-->
-          <!--              class="wechat" -->
-          <!--              :src="weLogo"-->
-          <!--              :preview-src-list="[weLogo]"-->
-          <!--              style="max-width: 200px"-->
-          <!--              :data-resid="Date.now()"-->
-          <!--          />-->
-          <div class="personal">
-            <div>
-              <el-avatar :size="50" :src="AvatarLogo" />
-            </div>
-            <div class="name"></div>
-            <div class="description"></div>
-            <div class="list">
-              <div>昵称：小狼</div>
-              <div>职业：前端</div>
-              <div>公司：小公司</div>
-              <div>年龄：~~</div>
-              <div>性别：男</div>
-              <div>现住址：中国-浙江-杭州</div>
-              <div>邮箱：1135957121@qq.com</div>
-              <div>微信：19550102670(欢迎加微信入群,群员已超200)</div>
-              <div>技术栈：JavaScript、HTML、CSS、Vue、Node、React</div>
-            </div>
-            <el-divider></el-divider>
-            <div style="margin-bottom: 15px"><h5>个性标签</h5></div>
-            <div>
-              <el-tag style="margin-right: 10px">怕麻烦</el-tag>
-              <el-tag style="margin-right: 10px">健身运动</el-tag>
-              <el-tag style="margin-right: 10px">睡觉</el-tag>
-              <el-tag style="margin-right: 10px">漫威</el-tag>
-              <el-tag>向往</el-tag>
-            </div>
-            <el-divider></el-divider>
-            <div style="margin-bottom: 15px"><h5>最喜欢的一句话</h5></div>
-            <div>---------- 开心最重要</div>
-            <el-divider></el-divider>
-            <div style="margin-bottom: 15px"
-              ><h5>如果对你有帮助的话，可以麻烦点一颗 Star、Fork、Watch! 你的鼓励是我继续优化的动力~~</h5></div
-            >
+          <div>
+            <gauge-charts id="bar4" height="300px" width="100%"></gauge-charts>
+          </div>
+          <div>
+            <candlestick-charts id="bar2" height="300px" width="100%"></candlestick-charts>
+          </div>
+          <div>
+            <funnel-charts id="bar3" height="300px" width="100%"></funnel-charts>
+          </div>
+          <div>
+            <line-charts id="bar6" height="300px" width="100%"></line-charts>
           </div>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="12" :lg="16">
-        <el-row class="custom" :gutter="10">
-          <el-col :xs="24" :sm="12" :lg="8">
-            <el-card style="margin-bottom: 10px">
-              <div class="grid-content">
-                <div class="left"
-                  ><el-icon style="font-size: 24px; color: white"><user /></el-icon
-                ></div>
-                <div class="right">
-                  <div class="h2" style="color: #2d8cf0"
-                    ><count-to :start-val="0" :end-val="5268" :duration="2000" :autoplay="true"></count-to
-                  ></div>
-                  <div>用户访问量 </div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :xs="24" :sm="12" :lg="8">
-            <el-card style="margin-bottom: 10px">
-              <div class="grid-content">
-                <div class="left" style="background: #64d572"
-                  ><el-icon style="font-size: 24px; color: white"><user /></el-icon
-                ></div>
-                <div class="right">
-                  <div class="h2" style="color: #64d572"
-                    ><count-to :start-val="0" :end-val="9599" :duration="2000" :autoplay="true"></count-to
-                  ></div>
-                  <div>系统消息 </div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :xs="24" :sm="12" :lg="8">
-            <el-card style="margin-bottom: 10px">
-              <div class="grid-content">
-                <div class="left" style="background: #f25e43"
-                  ><el-icon style="font-size: 24px; color: white"><user /></el-icon
-                ></div>
-                <div class="right">
-                  <div class="h2" style="color: #f25e43"
-                    ><count-to :start-val="0" :end-val="595453" :duration="2000" :autoplay="true"></count-to
-                  ></div>
-                  <div>数量 </div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
@@ -125,7 +49,19 @@
             </div>
           </template>
           <div>
+            <stacked-horizontal-bar-charts id="bar8" height="300px" width="100%"></stacked-horizontal-bar-charts>
+          </div>
+          <div>
+            <graph-charts id="bar5" height="300px" width="100%"></graph-charts>
+          </div>
+          <div>
+            <pictorial-bar-charts id="bar7" height="300px" width="100%"></pictorial-bar-charts>
+          </div>
+          <div>
             <bar-charts id="bar1" height="300px" width="100%"></bar-charts>
+          </div>
+          <div>
+            <stacked-horizontal-bar-charts id="bar8" height="300px" width="100%"></stacked-horizontal-bar-charts>
           </div>
         </el-card>
       </el-col>
@@ -139,6 +75,13 @@
   import weLogo from '@/assets/image/we.png'
   import CountTo from '@/components/CountTo/index.vue'
   import BarCharts from '@/views/echarts/simple/components/bar.vue'
+  import CandlestickCharts from '@/views/echarts/simple/components/candlestick.vue'
+  import FunnelCharts from '@/views/echarts/simple/components/funnel.vue'
+  import GaugeCharts from '@/views/echarts/simple/components/gauge.vue'
+  import GraphCharts from '@/views/echarts/simple/components/graph.vue'
+  import LineCharts from '@/views/echarts/simple/components/line.vue'
+  import PictorialBarCharts from '@/views/echarts/simple/components/pictorialBar.vue'
+  import StackedHorizontalBarCharts from '@/views/echarts/simple/components/stackedHorizontalBar.vue'
 
   const goTo = (url) => {
     window.open(url, '_blank')
