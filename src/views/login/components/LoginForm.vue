@@ -40,10 +40,11 @@
     <el-form-item style="width: 100%">
       <el-button :loading="loading" class="login-btn" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
     </el-form-item>
+    <el-link class="register" type="primary" @click="onRegister">注册账号</el-link>
   </el-form>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, defineProps } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { ElNotification } from 'element-plus'
   import { useRouter } from 'vue-router'
@@ -97,6 +98,10 @@
       }
     })
   }
+
+  const props = defineProps({
+    onRegister: Function,
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -112,6 +112,7 @@ $dark_gray: #889aa4;
   cursor: pointer;
   width: 30px;
 }
+
 .login-qrcode {
   width: 100%;
   display: flex;
@@ -124,6 +125,12 @@ $dark_gray: #889aa4;
   .title {
   }
 }
+
+.register {
+  // display: block;
+  // margin: auto;
+}
+
 .button-group {
   width: 100%;
   display: flex;
