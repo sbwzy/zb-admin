@@ -1,6 +1,7 @@
 import request from './request'
 
-export function login(data) {
+//获取验证码
+export function getYZM(data) {
   return request({
     url: '/webapi/getYZM',
     method: 'post',
@@ -8,10 +9,14 @@ export function login(data) {
   })
 }
 
+//注册模块获取区街镇集团物业公司等信息
 export function getLocationInfo(data) {
   return request({
-    url: '/webapi/caijiOK1',
-    method: 'post',
+    url: '/webapi/quzhenWY',
+    method: 'get',
     data,
   })
 }
+
+//登录接口
+//注册接口
