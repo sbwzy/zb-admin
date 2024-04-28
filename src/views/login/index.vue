@@ -11,9 +11,9 @@
           <img v-if="accountLogin" src="@/assets/image/login/smsLogin-icon.png" class="qrcode" @click="handleClick" />
           <img v-else src="@/assets/image/login/accountLogin-icon.png" class="qrcode" @click="handleClick" />
         </div>
-        <LoginForm v-if="accountLogin" :on-register="handleRegister" />
+        <SMSLoginForm v-if="accountLogin" :on-register="handleRegister" />
         <ResignForm v-else-if="resignPage" />
-        <SMSLoginForm v-else :on-register="handleRegister" />
+        <LoginForm v-else :on-register="handleRegister" />
       </div>
     </div>
   </div>
@@ -30,13 +30,13 @@
   const resignPage = ref<boolean>(false)
 
   const handleClick = () => {
-    console.log('=======', accountLogin)
     accountLogin.value = !accountLogin.value
     resignPage.value = false
   }
 
   const handleRegister = () => {
     resignPage.value = true
+    accountLogin.value = false
   }
   defineExpose({
     handleRegister,

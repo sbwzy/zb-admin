@@ -61,7 +61,7 @@
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
-  import { login } from '@/api/user'
+  import { getYZM } from '@/api/user'
 
   const router = useRouter()
   const UserStore = useUserStore()
@@ -88,7 +88,7 @@
     formEl.validate((valid) => {
       if (valid) {
         loading.value = true
-        login(ruleForm).then((res) => {
+        getYZM(ruleForm).then((res) => {
           console.log('打印', res)
           //把后面代码写在这里面
         })
