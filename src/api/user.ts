@@ -12,7 +12,7 @@ export function getYZM(data) {
 //注册模块获取区街镇集团物业公司等信息
 export function getLocationInfo(data) {
   return request({
-    url: '/webapi/quzhenWY',
+    url: '/webapi/youligf.quzhenWY',
     method: 'get',
     data,
   })
