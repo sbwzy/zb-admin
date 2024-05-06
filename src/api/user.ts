@@ -13,7 +13,7 @@ export function getYZM(data) {
 export function getLocationInfo(data) {
   return request({
     url: '/webapi/youligf.quzhenWY',
-    method: 'get',
+    method: 'post',
     data,
   })
 }
