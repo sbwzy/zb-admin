@@ -118,7 +118,7 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, onMounted } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { ElNotification } from 'element-plus'
   import { useRouter } from 'vue-router'
@@ -188,6 +188,20 @@
     // 在这里处理点击事件
     console.log('点击注册')
   }
+
+  onMounted(async () => {
+    console.log('mounted')
+    // try {
+    const data = {
+      // 在这里添加请求参数
+    }
+    // const response = await getLocationInfo(data)
+    getLocationInfo(data).then((res) => {
+      console.log('打印', res)
+      //把后面代码写在这里面
+    })
+    // console.log(response)
+  })
 </script>
 
 <style lang="scss" scoped>
