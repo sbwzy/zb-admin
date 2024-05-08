@@ -4,16 +4,51 @@
       <SearchForm :columns="baseFormColumns" @submit="onSubmit" />
     </div>
 
-    <!----------底部---------------------->
+    <!--底部-->
     <div class="footer">
-      <!-----------工具栏操作工具----------------->
+      <!--工具栏操作工具-->
       <div class="operator">
         <slot name="btn"></slot>
       </div>
 
-      <!-- ------------表格--------------->
+      <!--表格-->
       <div class="table">
         <el-table
+          :data="tableData"
+          row-key="id"
+          :border="parentBorder"
+          :default-expanded-keys="defaultExpandedKeys"
+          :expand-row-keys="defaultExpandedKeys"
+          style="width: 100%"
+        >
+          <el-table-column type="expand">
+            <template #default="props">
+              <div m="4">
+                <p m="t-0 b-2">State: {{ props.row.state }}</p>
+                <p m="t-0 b-2">City: {{ props.row.city }}</p>
+                <p m="t-0 b-2">Address: {{ props.row.address }}</p>
+                <p m="t-0 b-2">Zip: {{ props.row.zip }}</p>
+                <!-- <h3>Family</h3> -->
+                <!-- <el-table :data="props.row.family" :border="childBorder">
+		              <el-table-column label="Name" prop="name" />
+		              <el-table-column label="State" prop="state" />
+		              <el-table-column label="City" prop="city" />
+		              <el-table-column label="Address" prop="address" />
+		              <el-table-column label="Zip" prop="zip" />
+		            </el-table> -->
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="Date" prop="date" />
+          <el-table-column label="Name" prop="name" />
+          <el-table-column fixed="right" label="操作" width="100">
+            <template #default>
+              <el-button link type="primary" size="small" @click="handleClick"> 驳回 </el-button>
+              <el-button link type="primary" size="small">同意</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <el-table
           v-loading="loading"
           class="zb-table"
           :data="list"
@@ -28,9 +63,9 @@
             </el-table-column>
             <el-table-column v-else v-bind="{ ...item, ...{ prop: item.name } }" />
           </template>
-        </el-table>
+        </el-table> -->
       </div>
-      <!-- ------------分页--------------->
+      <!--分页-->
       <div class="pagination">
         <el-pagination
           v-model:currentPage="pagination.currentPage"
@@ -46,11 +81,86 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import SearchForm from '@/components/SearchForm/index.vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import type { FormInstance } from 'element-plus'
   const ruleFormRef = ref<FormInstance>()
+  const parentBorder = ref(false)
+  const childBorder = ref(false)
+
+  const tableData = [
+    {
+      id: 1,
+      date: '2016-05-03',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 2,
+      date: '2016-05-02',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 3,
+      date: '2016-05-04',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 4,
+      date: '2016-05-01',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 5,
+      date: '2016-05-08',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 6,
+      date: '2016-05-06',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+    {
+      id: 7,
+      date: '2016-05-07',
+      name: 'Tom',
+      state: 'California',
+      city: 'San Francisco',
+      address: '3650 21st St, San Francisco',
+      zip: 'CA 94114',
+    },
+  ]
+
+  const defaultExpandedKeys = tableData.map((item) => item.id)
+
+  const handleClick = () => {
+    console.log('click')
+  }
+
   const emit = defineEmits(['reset', 'onSubmit', 'selection-change'])
   let props = defineProps({
     columns: {
@@ -144,11 +254,13 @@
   .edit-input {
     padding-right: 100px;
   }
+
   .cancel-btn {
     position: absolute;
     right: 15px;
     top: 10px;
   }
+
   .zb-pro-table {
     width: 100%;
     height: 100%;
@@ -162,10 +274,12 @@
       border-radius: 4px;
       background: white;
       box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+
       :deep(.advancedForm) {
         flex: 1;
       }
     }
+
     .footer {
       flex: 1;
       display: flex;
@@ -176,18 +290,22 @@
       background: white;
       box-shadow: 0 0 12px rgb(0 0 0 / 5%);
       min-height: 300px;
+
       .operator {
         margin-bottom: 15px;
       }
+
       .table {
         position: relative;
         flex: 1;
       }
+
       .zb-table {
         position: absolute;
         height: 100%;
       }
     }
+
     ::v-deep {
       .el-table__header th {
         font-size: 15px;
@@ -195,6 +313,7 @@
         color: #252525;
       }
     }
+
     .pagination {
       width: 100%;
       display: flex;
