@@ -20,6 +20,12 @@ const systemRouter = [
         meta: { title: '用户管理', icon: 'MenuIcon' },
       },
       {
+        path: '/system/appro',
+        component: () => import('@/views/system/appro/index.vue'),
+        name: 'appro',
+        meta: { title: '审批管理', icon: 'MenuIcon' },
+      },
+      {
         path: '/system/dept',
         component: () => import('@/views/system/dept/index.vue'),
         name: 'dept',
