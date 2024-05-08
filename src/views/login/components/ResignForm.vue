@@ -189,6 +189,8 @@
     console.log('点击注册')
   }
 
+  const locationInfo = ref([])
+
   onMounted(async () => {
     console.log('mounted')
     // try {
@@ -197,8 +199,8 @@
     }
     // const response = await getLocationInfo(data)
     getLocationInfo(data).then((res) => {
-      console.log('打印', res)
-      //把后面代码写在这里面
+      console.log(res.data.quZhen)
+      locationInfo.value = res.data.quZhen
     })
     // console.log(response)
   })
