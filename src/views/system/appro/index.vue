@@ -7,13 +7,29 @@
       <!-- 信息列表组件 seniorList:高管数组信息 -->
       <spListView :bz-list="bzList"></spListView>
     </div>
+    <!--分页-->
+    <div class="pagination">
+      <el-pagination
+        v-model:currentPage="pagination.currentPage"
+        small
+        :hide-on-single-page="onlyOne"
+        :page-size="10"
+        background
+        layout="total, sizes, prev, pager, next"
+        :total="bzList.length"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </view>
 </template>
 
 <script lang="ts" setup>
-  import spListView from './components/ListView.vue'
-  import menuView from './components/Menu.vue'
+  import spListView from '@/components/Table/ListTable/ListView.vue'
+  import menuView from '@/components/Table/ListTable/menu.vue'
+  import { computed, onMounted, ref, reactive } from 'vue'
 
+  const onlyOne = ref(false)
   const bztabs = [
     {
       name: '全部',
@@ -36,6 +52,12 @@
       content: '预警',
     },
   ]
+
+  const pagination = reactive({
+    currentPage: 1,
+    pageSize: 10,
+  })
+
   const bzList = [
     {
       id: '2',
@@ -67,6 +89,19 @@
       recommended: '推荐',
     },
   ]
+
+  const handleSizeChange = (val: number) => {
+    console.log(`${val} items per page`)
+  }
+  const handleCurrentChange = (val: number) => {
+    console.log(`current page: ${val}`)
+    pagination.currentPage = val
+  }
+
+  const list = computed(() => {
+    let arr = JSON.parse(JSON.stringify(props.data))
+    return arr.splice((pagination.currentPage - 1) * 10, 10)
+  })
 </script>
 
 <style scoped lang="scss">
@@ -96,5 +131,12 @@
     background-color: white;
     padding-left: 0px;
     padding-bottom: 20px;
+  }
+  .pagination {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    box-sizing: border-box;
   }
 </style>

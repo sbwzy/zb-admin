@@ -8,7 +8,8 @@
     <!-- 渲染一个“元组件”为动态组件。依 is 的值，来决定哪个组件被渲染 -->
     <component :is="LayoutComponents[themeConfig.mode]" v-else />
     <!--上方和右侧按钮-->
-    <Theme />
+    <!--主题关闭-->
+    <!--Theme /-->
   </div>
 </template>
 
