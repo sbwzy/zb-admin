@@ -20,3 +20,12 @@ export function getLocationInfo(data) {
 
 //登录接口
 //注册接口
+
+// 获取详情
+export function collectionInfo(data) {
+  return request({
+    url: '/webapi/youligf.youliCJXQ1',
+    method: 'post',
+    data,
+  })
+}
