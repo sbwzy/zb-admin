@@ -1,40 +1,31 @@
 <template>
   <div class="header">
-    <el-drawer v-model="drawer" :direction="direction" size="40%" style="height: auto !important" :show-close="false" :with-header="false">
+    <el-drawer v-model="drawer" :direction="direction" size="60%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
           <el-form label-position="left" label-width="80px">
-            <!-- 采集状态筛选 -->
-            <el-form-item label="采集状态">
-              <el-select v-model="filters.price" placeholder="请选择">
-                <el-option label="未采集" value="未采集"></el-option>
-                <el-option label="采集中" value="采集中"></el-option>
-                <el-option label="待审核" value="待审核"></el-option>
-                <el-option label="已审核" value="已审核"></el-option>
+            <!-- 动态筛选选项 -->
+            <el-form-item v-for="(filter, index) in dynamicFilters" :key="index" :label="filter.label">
+              <el-select v-if="filter.type === 'select'" v-model="filters[filter.key]" :placeholder="filter.placeholder">
+                <el-option v-for="option in filter.options" :key="option.value" :label="option.label" :value="option.value" />
               </el-select>
+              <el-radio-group v-else-if="filter.type === 'radio'" v-model="filters[filter.key]">
+                <el-radio v-for="option in filter.options" :key="option.value" :label="option.value">{{ option.label }}</el-radio>
+              </el-radio-group>
+              <el-input v-else-if="filter.type === 'text'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
+              <el-cascader
+                v-else-if="filter.type === 'cascader'"
+                v-model="filters[filter.key]"
+                :options="filter.options"
+                :placeholder="filter.placeholder"
+              />
+              <el-checkbox-group v-else-if="filter.type === 'checkbox'" v-model="filters[filter.key]">
+                <el-checkbox v-for="option in filter.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
+              </el-checkbox-group>
+              <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
+              <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
 
-            <!-- 区筛选 -->
-            <el-form-item label="区">
-              <el-select v-model="filters.rating" placeholder="请选择">
-                <el-option label="黄浦" value="黄浦"></el-option>
-                <el-option label="徐汇" value="徐汇"></el-option>
-                <el-option label="长宁区" value="长宁区"></el-option>
-                <el-option label="静安区" value="静安区"></el-option>
-                <el-option label="普陀区" value="普陀区"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <!-- 街道筛选 -->
-            <el-form-item label="街道类型">
-              <el-select v-model="filters.type" placeholder="请选择">
-                <el-option label="南京东路街道" value="南京东路街道"></el-option>
-                <el-option label="外滩街道" value="外滩街道"></el-option>
-                <el-option label="半淞园路街道" value="半淞园路街道"></el-option>
-                <el-option label="小东门" value="小东门"></el-option>
-                <el-option label="豫园街道" value="豫园街道"></el-option>
-              </el-select>
-            </el-form-item>
             <div>
               <el-space wrap>
                 <el-check-tag :checked="checked1" title="花园住宅" type="primary" @change="checked1 = !checked1">花园住宅</el-check-tag>
@@ -86,7 +77,14 @@
     rating: 'all',
     type: 'all',
   })
-
+  let props = defineProps({
+    dynamicFilters: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
+  })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
   const SettingStore = useSettingStore()
