@@ -1,57 +1,57 @@
 <template>
   <div class="app-container">
-    <div class="app-container-inner">
+    <div class="app-container-inner right-align-inputs">
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" status-icon label-position="left">
         <el-form-item label="建筑名称">
-          <el-input v-model="ruleForm.standartName" />
+          <el-input v-model="ruleForm.standartName" readonly />
         </el-form-item>
 
         <el-form-item label="授权地址">
-          <el-input v-model="ruleForm.shouQuanDZ" />
+          <el-input v-model="ruleForm.shouQuanDZ" readonly />
         </el-form-item>
 
         <el-form-item label="物业联系人员">
-          <el-input v-model="ruleForm.wyName" />
+          <el-input v-model="ruleForm.wyName" readonly />
         </el-form-item>
 
         <el-form-item label="物业联系方式">
-          <el-input v-model="ruleForm.wyPhone" />
+          <el-input v-model="ruleForm.wyPhone" readonly />
         </el-form-item>
         <el-form-item label="房屋类型">
-          <el-input v-model="ruleForm.standardType" />
+          <el-input v-model="ruleForm.standardType" readonly />
         </el-form-item>
         <el-form-item label="原产业状态">
-          <el-input v-model="ruleForm.IndustrStatusOld" />
+          <el-input v-model="ruleForm.IndustrStatusOld" readonly />
         </el-form-item>
         <el-form-item label="当前产业状态">
-          <el-input v-model="ruleForm.IndustrStatus" />
+          <el-input v-model="ruleForm.IndustrStatus" readonly />
         </el-form-item>
         <el-form-item label="原房屋用途">
-          <el-input v-model="ruleForm.fangWuYTOld" />
+          <el-input v-model="ruleForm.fangWuYTOld" readonly />
         </el-form-item>
         <el-form-item label="当前房屋用途">
-          <el-input v-model="ruleForm.fangWuYT" />
+          <el-input v-model="ruleForm.fangWuYT" readonly />
         </el-form-item>
         <el-form-item label="建筑现状">
-          <el-input v-model="ruleForm.desc2" />
+          <el-input v-model="ruleForm.desc2" readonly />
         </el-form-item>
         <el-form-item label="现场是否有铭牌">
-          <el-input v-model="ruleForm.sfmpqs" />
+          <el-input v-model="ruleForm.sfmpqs" readonly />
         </el-form-item>
         <el-form-item label="保护铭牌内容">
-          <el-input v-model="ruleForm.bhmpCont" />
+          <el-input v-model="ruleForm.bhmpCont" readonly />
         </el-form-item>
         <el-form-item label="使用人-">
-          <el-input v-model="ruleForm.shiYongROld" />
+          <el-input v-model="ruleForm.shiYongROld" readonly />
         </el-form-item>
         <el-form-item label="现场带看情况">
-          <el-input v-model="ruleForm.dkdesc" />
+          <el-input v-model="ruleForm.dkdesc" readonly />
         </el-form-item>
         <el-form-item label="外业巡查情况备注">
-          <el-input v-model="ruleForm.desc" />
+          <el-input v-model="ruleForm.desc" readonly />
         </el-form-item>
         <el-form-item label="审核意见">
-          <el-input v-model="ruleForm.descShenHe" />
+          <el-input v-model="ruleForm.descShenHe" readonly />
         </el-form-item>
 
         <el-form-item label="手机号码" prop="phone">
@@ -93,8 +93,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
   import type { FormInstance, FormRules } from 'element-plus'
+  // 在这里引入接口
+  import { collectionInfo } from '@/api/user'
   import {
     validatorMethod,
     verifyPhone,
@@ -184,15 +186,31 @@
     if (!value) keyword.value = text
     else keyword.value = verifyTextColor(value, text)
   }
+
+  const gfIDList = {
+    gfID: '1',
+  }
+
+  onMounted(() => {
+    collectionInfo(gfIDList).then((res) => {
+      console.log(res)
+    })
+  })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .app-container {
     color: #606266;
   }
+
   ::v-deep(.item-form) {
     .el-form-item__label {
       margin-bottom: 0 !important;
     }
+  }
+
+  .right-align-inputs .el-form-item .el-input__inner {
+    text-align: right;
+    background-color: transparent;
   }
 </style>

@@ -62,7 +62,7 @@
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
   import { getYZM } from '@/api/user'
-
+  import { collectionInfo } from '@/api/user'
   const router = useRouter()
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
@@ -83,15 +83,23 @@
     yzm: '',
   })
 
+  const gfIDList = {
+    gfID: '1',
+  }
+
   const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
       if (valid) {
         loading.value = true
-        getYZM(ruleForm).then((res) => {
-          console.log('打印', res)
-          //把后面代码写在这里面
+
+        collectionInfo(gfIDList).then((res) => {
+          console.log(res)
         })
+        // getYZM(ruleForm).then((res) => {
+        //   console.log('打印', res)
+        //   //把后面代码写在这里面
+        // })
         // 登录
         setTimeout(async () => {
           await UserStore.login1(ruleForm)
