@@ -19,6 +19,7 @@ function resolve(dir) {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   return {
+    //envDir: resolve(__dirname,'env'),
     plugins: [
       vue(),
       vueSetupExtend(),
@@ -67,13 +68,15 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       host: '0.0.0.0',
       port: 8080,
       open: true,
-      https: false,
+      //https: false,
       cors: true,
       // 代理跨域（模拟示例）
       proxy: {
         '/api': {
           target: 'https://dev.ccgis.cn', // easymock
           changeOrigin: true,
+          secure: true,
+          protocolRewrite: 'https',
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },

@@ -187,18 +187,15 @@
     else keyword.value = verifyTextColor(value, text)
   }
 
-  // 初始化方法
-  const init = () => {
-    // 在这里添加你的初始化代码
-    console.log('初始化完成')
-    let gfIDList = {
-      gfID: 1,
-    }
+  const gfIDList = {
+    gfID: '1',
+  }
+
+  onMounted(() => {
     collectionInfo(gfIDList).then((res) => {
       console.log(res)
     })
-  }
-  onMounted(init)
+  })
 </script>
 
 <style lang="scss">
