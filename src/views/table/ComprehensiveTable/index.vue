@@ -8,7 +8,7 @@
       @reset="reset"
       @on-submit="onSubmit"
     >
-      <template #btn>
+      <!-- <template #btn>
         <div style="display: flex; justify-content: flex-end">
           <el-button type="primary" @click="add"
             ><el-icon><plus /></el-icon> 添加</el-button
@@ -17,15 +17,15 @@
             ><el-icon><delete /></el-icon>删除</el-button
           >
         </div>
-      </template>
-      <template #sex="scope">{{ scope.row.sex ? '男' : '女' }}</template>
+      </template> -->
+      <!-- <template #sex="scope">{{ scope.row.sex ? '男' : '女' }}</template>
       <template #operation="scope">
         <el-button type="primary" size="small" icon="Edit" @click="edit(scope.row)"> 编辑 </el-button>
         <el-button type="danger" size="small" icon="Delete" @click="del(scope.row)"> 删除 </el-button>
-      </template>
+      </template> -->
     </PropTable>
 
-    <el-dialog v-model="dialogVisible" :title="title" width="50%">
+    <!-- <el-dialog v-model="dialogVisible" :title="title" width="50%">
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm" :size="formSize">
         <el-form-item label="活动名称" prop="name">
           <el-input v-model="ruleForm.name" />
@@ -46,7 +46,7 @@
           <el-button type="primary" @click="handleClose(ruleFormRef)">确定</el-button>
         </span>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script lang="ts" setup name="comprehensive">

@@ -1,8 +1,8 @@
 <template>
   <div class="zb-pro-table">
-    <div class="header">
+    <!-- <div class="header">
       <SearchForm :columns="baseFormColumns" @submit="onSubmit" />
-    </div>
+    </div> -->
 
     <!--底部-->
     <div class="footer">
@@ -13,32 +13,16 @@
 
       <!--表格-->
       <div class="table">
-        <el-table
-          :data="tableData"
-          row-key="id"
-          :border="parentBorder"
-          :default-expanded-keys="defaultExpandedKeys"
-          :expand-row-keys="defaultExpandedKeys"
-          style="width: 100%"
-        >
-          <el-table-column type="expand">
-            <template #default="props">
-              <div m="4">
-                <p m="t-0 b-2">State: {{ props.row.state }}</p>
-                <p m="t-0 b-2">City: {{ props.row.city }}</p>
-                <p m="t-0 b-2">Address: {{ props.row.address }}</p>
-                <p m="t-0 b-2">Zip: {{ props.row.zip }}</p>
-                <!-- <h3>Family</h3> -->
-                <!-- <el-table :data="props.row.family" :border="childBorder">
-		              <el-table-column label="Name" prop="name" />
-		              <el-table-column label="State" prop="state" />
-		              <el-table-column label="City" prop="city" />
-		              <el-table-column label="Address" prop="address" />
-		              <el-table-column label="Zip" prop="zip" />
-		            </el-table> -->
-              </div>
-            </template>
-          </el-table-column>
+        <!-- <el-table
+		    :data="tableData"
+		    row-key="id"
+		    :border="parentBorder"
+		    :default-expanded-keys="defaultExpandedKeys"
+		    :expand-row-keys="defaultExpandedKeys"
+		    style="width: 100%"
+		  > -->
+        <el-table :data="tableData" row-key="id" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" />
           <el-table-column label="Date" prop="date" />
           <el-table-column label="Name" prop="name" />
           <el-table-column fixed="right" label="操作" width="100">
