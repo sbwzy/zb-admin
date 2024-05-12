@@ -49,6 +49,12 @@ const systemRouter = [
         name: 'dictionary',
         meta: { title: '字典管理', icon: 'MenuIcon' },
       },
+      {
+        path: '/system/task',
+        component: () => import('@/views/system/task/index.vue'),
+        name: 'task',
+        meta: { title: '任务管理', icon: 'MenuIcon' },
+      },
     ],
   },
 ]
