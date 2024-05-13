@@ -1,18 +1,24 @@
 <template>
   <div style="margin-top: 10px">
-    <div v-for="(item, index) in bzList" :key="item.id" class="uni-list-cell" hover-class="uni-list-cell-hover" @click="goProDetail(item)">
+    <div
+      v-for="(item, index) in bzList"
+      :key="item.notemsg"
+      class="uni-list-cell"
+      hover-class="uni-list-cell-hover"
+      @click="goProDetail(item)"
+    >
       <div style="display: flex">
-        <div class="topTitleV">{{ item.standardName }}</div>
+        <div class="topTitleV">{{ item.xiaoQu }}</div>
         <div
           :style="{
-            marginLeft: (4 - item.standardState.length) * 10 + 'px',
-            width: item.standardState.length * 10.5 + 'px !important',
-            color: item.standardState == '即将实施' ? '#1890FF' : '#39b54a',
-            'border-color': item.standardState == '即将实施' ? '#1890FF' : '#39b54a',
+            marginLeft: (4 - item.jieZhen.length) * 10 + 'px',
+            width: item.jieZhen.length * 14 + 'px !important',
+            color: item.jieZhen == '即将实施' ? '#1890FF' : '#39b54a',
+            'border-color': item.jieZhen == '即将实施' ? '#1890FF' : '#39b54a',
           }"
           class="rigFlagV"
         >
-          {{ item.standardState }}
+          {{ item.jieZhen }}
         </div>
       </div>
       <div style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)">
@@ -22,19 +28,19 @@
         </div>
       </div>
       <div style="display: flex">
-        <div class="titleV">标准号:</div>
-        <div class="detailV">{{ item.standardNo }}</div>
+        <div class="titleV">授权地址:</div>
+        <div class="detailV">{{ item.shouQuanDZ }}</div>
       </div>
       <div style="display: flex">
-        <div class="titleV">起草单位:</div>
+        <div class="titleV">类型:</div>
         <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
-          {{ item.createUnit }}
+          {{ item.standardType }}
           <span style="color: #333333; margin-left: 2px"></span>
         </div>
       </div>
       <div style="display: flex">
-        <div class="titleV">发布日期:</div>
-        <div class="detailV">{{ item.publishTime }}</div>
+        <div class="titleV">房屋用途:</div>
+        <div class="detailV">{{ item.fangWuYTOld }}</div>
       </div>
     </div>
   </div>
@@ -54,7 +60,7 @@
   const goProDetail = (item) => {}
 
   const bindTag = (item) => {
-    return [item.standardType, item.recommended]
+    return [item.standardType, item.fangWuYTOld]
   }
 
   onMounted(() => {})
@@ -116,7 +122,7 @@
     font-size: 12px;
     height: 26px;
     line-height: 26px;
-    width: auto !important;
+    width: 30%;
   }
 
   .detailV {

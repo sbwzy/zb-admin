@@ -4,49 +4,12 @@
       :loading="loading"
       :columns="baseColumns"
       :data="list"
+      :filters="dynamicFilters"
       @selection-change="selectionChange"
       @reset="reset"
       @on-submit="onSubmit"
     >
-      <!-- <template #btn>
-        <div style="display: flex; justify-content: flex-end">
-          <el-button type="primary" @click="add"
-            ><el-icon><plus /></el-icon> 添加</el-button
-          >
-          <el-button type="danger" @click="batchDelete"
-            ><el-icon><delete /></el-icon>删除</el-button
-          >
-        </div>
-      </template> -->
-      <!-- <template #sex="scope">{{ scope.row.sex ? '男' : '女' }}</template>
-      <template #operation="scope">
-        <el-button type="primary" size="small" icon="Edit" @click="edit(scope.row)"> 编辑 </el-button>
-        <el-button type="danger" size="small" icon="Delete" @click="del(scope.row)"> 删除 </el-button>
-      </template> -->
     </PropTable>
-
-    <!-- <el-dialog v-model="dialogVisible" :title="title" width="50%">
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm" :size="formSize">
-        <el-form-item label="活动名称" prop="name">
-          <el-input v-model="ruleForm.name" />
-        </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="ruleForm.sex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="价格" prop="price">
-          <el-input v-model="ruleForm.price" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleClose(ruleFormRef)">确定</el-button>
-        </span>
-      </template>
-    </el-dialog> -->
   </div>
 </template>
 <script lang="ts" setup name="comprehensive">
@@ -75,6 +38,77 @@
       zip: 200333,
     })
   }
+  const dynamicFilters = ref([
+    {
+      label: '采集状态',
+      key: 'collectionStatus',
+      type: 'select',
+      placeholder: '请选择采集状态',
+      options: [
+        { label: '未采集', value: '未采集' },
+        { label: '采集中', value: '采集中' },
+        { label: '待审核', value: '待审核' },
+        { label: '已审核', value: '已审核' },
+      ],
+    },
+    {
+      label: '区',
+      key: 'district',
+      type: 'select',
+      placeholder: '请选择区',
+      options: [
+        { label: '黄浦', value: '黄浦' },
+        { label: '徐汇', value: '徐汇' },
+        { label: '长宁区', value: '长宁区' },
+        { label: '静安区', value: '静安区' },
+        { label: '普陀区', value: '普陀区' },
+      ],
+    },
+    {
+      label: '街道类型',
+      key: 'streetType',
+      type: 'radio',
+      options: [
+        { label: '南京东路街道', value: '南京东路街道' },
+        { label: '外滩街道', value: '外滩街道' },
+        { label: '半淞园路街道', value: '半淞园路街道' },
+        { label: '小东门', value: '小东门' },
+        { label: '豫园街道', value: '豫园街道' },
+      ],
+    },
+    {
+      label: '建筑名称',
+      key: 'buildingName',
+      type: 'text',
+      placeholder: '请输入建筑名称',
+    },
+    {
+      label: '区域选择',
+      key: 'region',
+      type: 'cascader',
+      placeholder: '请选择区域',
+      options: [
+        {
+          value: '黄浦',
+          label: '黄浦区',
+          children: [
+            { value: '南京东路街道', label: '南京东路街道' },
+            { value: '外滩街道', label: '外滩街道' },
+            // 街道选项...
+          ],
+        },
+        {
+          value: '徐汇',
+          label: '徐汇区',
+          children: [
+            { value: '徐家汇街道', label: '徐家汇街道' },
+            { value: '田林街道', label: '田林街道' },
+            // 街道选项...
+          ],
+        },
+      ],
+    },
+  ])
   let baseColumns = reactive(columns)
   const list = ref(data)
 

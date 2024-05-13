@@ -1,15 +1,15 @@
 <template>
   <div class="zb-pro-table">
-    <!-- <div class="header">
-      <SearchForm :columns="baseFormColumns" @submit="onSubmit" />
-    </div> -->
+    <div class="header">
+      <filterView :filters="filters"></filterView>
+    </div>
 
     <!--底部-->
     <div class="footer">
       <!--工具栏操作工具-->
-      <div class="operator">
+      <!-- <div class="operator">
         <slot name="btn"></slot>
-      </div>
+      </div> -->
 
       <!--表格-->
       <div class="table">
@@ -21,7 +21,7 @@
 		    :expand-row-keys="defaultExpandedKeys"
 		    style="width: 100%"
 		  > -->
-        <el-table :data="tableData" row-key="id" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="list" row-key="id" style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column label="Date" prop="date" />
           <el-table-column label="Name" prop="name" />
@@ -54,8 +54,9 @@
         <el-pagination
           v-model:currentPage="pagination.currentPage"
           :page-size="10"
+          small
           background
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="total, prev, pager"
           :total="data.length"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -69,77 +70,12 @@
   import SearchForm from '@/components/SearchForm/index.vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import type { FormInstance } from 'element-plus'
+  import filterView from '@/components/Table/ListTable/FilterView.vue'
   const ruleFormRef = ref<FormInstance>()
-  const parentBorder = ref(false)
-  const childBorder = ref(false)
+  //const parentBorder = ref(false)
+  //const childBorder = ref(false)
 
-  const tableData = [
-    {
-      id: 1,
-      date: '2016-05-03',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 2,
-      date: '2016-05-02',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 3,
-      date: '2016-05-04',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 4,
-      date: '2016-05-01',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 5,
-      date: '2016-05-08',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 6,
-      date: '2016-05-06',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-    {
-      id: 7,
-      date: '2016-05-07',
-      name: 'Tom',
-      state: 'California',
-      city: 'San Francisco',
-      address: '3650 21st St, San Francisco',
-      zip: 'CA 94114',
-    },
-  ]
-
-  const defaultExpandedKeys = tableData.map((item) => item.id)
+  //const defaultExpandedKeys = tableData.map((item) => item.id)
 
   const handleClick = () => {
     console.log('click')
@@ -148,6 +84,10 @@
   const emit = defineEmits(['reset', 'onSubmit', 'selection-change'])
   let props = defineProps({
     columns: {
+      type: Array,
+      default: () => [],
+    },
+    filters: {
       type: Array,
       default: () => [],
     },
@@ -302,7 +242,7 @@
       width: 100%;
       display: flex;
       justify-content: center;
-      padding-top: 20px;
+      padding-top: 10px;
       box-sizing: border-box;
     }
   }

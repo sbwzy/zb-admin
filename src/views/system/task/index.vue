@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 筛选列表 -->
-    <filterView :dynamic-filters="dynamicFilters"></filterView>
+    <filterView :filters="dynamicFilters"></filterView>
     <view class="content">
       <div class="mui-content-padded">
         <!-- 信息列表组件 seniorList:高管数组信息 -->
@@ -12,9 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-  import filterView from './components/FilterView.vue'
-  import spListView from './components/ListView.vue'
-  import menuView from './components/Menu.vue'
+  import filterView from '@/components/Table/ListTable/FilterView.vue'
+  //import spListView from './components/ListView.vue'
+  //import menuView from './components/Menu.vue'
+  import spListView from '@/components/Table/ListTable/ListView.vue'
+  import menuView from '@/components/Table/ListTable/menu.vue'
+
   import { onMounted, reactive, computed, ref } from 'vue'
 
   //
