@@ -22,15 +22,16 @@
 		    style="width: 100%"
 		  > -->
         <el-table :data="list" row-key="id" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" />
-          <el-table-column label="Date" prop="date" />
-          <el-table-column label="Name" prop="name" />
-          <el-table-column fixed="right" label="操作" width="100">
+          <el-table-column :reserve-selection="true" type="selection" width="55" />
+          <el-table-column label="授权地址" prop="shouQuanDZ" />
+          <el-table-column label="类型" prop="standardType" />
+          <el-table-column show-overflow-tooltip label="房屋类型" prop="fangWuYTOld" />
+          <!-- <el-table-column fixed="right" label="操作" width="100">
             <template #default>
               <el-button link type="primary" size="small" @click="handleClick"> 驳回 </el-button>
               <el-button link type="primary" size="small">同意</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <!-- <el-table
           v-loading="loading"
@@ -75,11 +76,9 @@
   //const parentBorder = ref(false)
   //const childBorder = ref(false)
 
-  //const defaultExpandedKeys = tableData.map((item) => item.id)
-
-  const handleClick = () => {
-    console.log('click')
-  }
+  //const defaultExpandedKeys = tableData.map((item) => item.id) selectedRow
+  const selectedRow = ref([])
+  const multipleSelection = ref([])
 
   const emit = defineEmits(['reset', 'onSubmit', 'selection-change'])
   let props = defineProps({
@@ -101,6 +100,11 @@
     },
   })
 
+  const handleSelectionChange = (val) => {
+    console.log(val)
+    multipleSelection.value = val
+  }
+
   // 过滤调需要进行搜索选择的
   const baseFormColumns = computed(() => {
     return props.columns.filter((item) => item.valueType && item.search)
@@ -111,9 +115,13 @@
     pageSize: 10,
   })
 
+  const getRowKeys = (row) => {
+    return row.id
+  }
   const currentPage = ref(1)
   // 收缩展开
-  const isExpand = ref(false)
+  //const isExpand = ref(false)
+
   const handleSizeChange = (val: number) => {
     console.log(`${val} items per page`)
   }
@@ -122,8 +130,10 @@
     pagination.currentPage = val
   }
 
+  //当前页面的list  勾选记录时需要需要存下来
   const list = computed(() => {
     let arr = JSON.parse(JSON.stringify(props.data))
+    let gxarr = multipleSelection
     return arr.splice((pagination.currentPage - 1) * 10, 10)
   })
 

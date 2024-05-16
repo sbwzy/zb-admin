@@ -22,20 +22,16 @@
   const appContainer = ref(null)
   import PropTable from '@/components/Table/PropTable/index.vue'
   const data = []
-  for (let i = 0; i < 100; i++) {
+
+  for (let i = 0; i < 30; i++) {
     data.push({
-      date: '2016-05-02',
-      name: '王五' + i,
-      price: 1 + i,
-      province: '上海',
-      admin: 'admin',
-      sex: i % 2 ? 1 : 0,
-      checked: true,
       id: i + 1,
-      age: 0,
-      city: '普陀区',
-      address: '上海市普上海',
-      zip: 200333,
+      xiaoQu: '福世花园',
+      jieZhen: '江苏路街道',
+      shouQuanDZ: '安化路200弄' + i + '号',
+      standardType: '花园住宅',
+      fangWuYTOld: '非居住办公用房11',
+      notemsg: '00004',
     })
   }
   const dynamicFilters = ref([
@@ -258,6 +254,7 @@
   .edit-input {
     padding-right: 100px;
   }
+
   .app-container {
     flex: 1;
     display: flex;
@@ -265,6 +262,7 @@
     padding: 16px;
     box-sizing: border-box;
   }
+
   .cancel-btn {
     position: absolute;
     right: 15px;

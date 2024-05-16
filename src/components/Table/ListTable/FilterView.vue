@@ -130,9 +130,9 @@
   }
   .header {
     display: flex;
-    padding: 16px 16px 0px 16px;
-    margin-bottom: 16px;
-    border-radius: 4px;
+    padding: 8px 8px 0px 8px;
+    margin-bottom: 2px;
+    border-radius: 2px;
     background: white;
     box-shadow: 0 0 12px rgb(0 0 0 / 5%);
   }

@@ -51,7 +51,7 @@
         <TagsView v-if="themeConfig.showTag" />
       </div>
       <Main />
-      <Footer />
+      <!--Footer /-->
     </div>
   </div>
 </template>
