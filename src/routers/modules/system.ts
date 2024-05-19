@@ -29,7 +29,7 @@ const systemRouter = [
         path: '/system/dept',
         component: () => import('@/views/system/dept/index.vue'),
         name: 'dept',
-        meta: { title: '部门管理', icon: 'MenuIcon' },
+        meta: { title: '巡查任务管理', icon: 'MenuIcon' },
       },
       {
         path: '/system/role',
@@ -53,7 +53,7 @@ const systemRouter = [
         path: '/system/task',
         component: () => import('@/views/system/task/index.vue'),
         name: 'task',
-        meta: { title: '任务管理', icon: 'MenuIcon' },
+        meta: { title: '建筑信息管理', icon: 'MenuIcon' },
       },
     ],
   },

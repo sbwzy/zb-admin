@@ -2,14 +2,14 @@
   <div id="map" style="height: 600px"></div>
 </template>
 
-<script lang="ts" setup name="ecnuGisMap">
+<script lang="ts" setup name="bingMap">
   import { onMounted } from 'vue'
   import * as L from 'leaflet'
   import 'leaflet-bing-layer'
   import 'leaflet/dist/leaflet.css'
 
   const initMap = () => {
-    const map = L.map('map').setView([31.44534249284388, 121.47915601730348], 11)
+    const map = L.map('map').setView([31.31334249284388, 121.47915601730348], 11)
     // 添加Bing Aerial图层
 
     const bingLayer = L.tileLayer
@@ -37,15 +37,16 @@
     // }, 100));
 
     // 添加缩放控件
-    L.control
-      .zoom({
-        position: 'topright',
-      })
-      .addTo(map)
+    // L.control
+    //   .zoom({
+    //     position: 'topright',
+    //   })
+    //   .addTo(map)
   }
 
   onMounted(() => {
     initMap()
+    console.log('打印bing')
   })
 </script>
 
@@ -56,5 +57,10 @@
     width: 100%;
     max-width: 100%;
     max-height: 100%;
+  }
+
+  /* 隐藏 Leaflet 的 Logo */
+  #map .leaflet-control-attribution {
+    display: none;
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <div style="margin-bottom: 2px">
-      <filterView :filters="dynamicFilters"></filterView>
+    <div style="margin-bottom: 5px">
+      <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
     </div>
     <div>
       <el-button style="float: right" type="primary" @click="addHandler">
@@ -11,8 +11,9 @@
         新增巡查
       </el-button>
     </div>
-    <spListView :bz-list="dataList" :list-type="listType"></spListView>
-    <!-- <DeptDialog ref="deptDialog" /> -->
+    <div>
+      <spListView :bz-list="dataList" :listtype="listType"></spListView>
+    </div>
   </div>
 </template>
 
@@ -24,7 +25,7 @@
   import DeptDialog from './components/deptDialog.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import spListView from '@/components/Table/ListTable/ListView.vue'
-
+  import { useRouter } from 'vue-router'
   const tableData = ref(deptData)
   const loading = ref(true)
   const deptDialog = ref()
@@ -36,52 +37,61 @@
       loading.value = false
     }, 500)
   })
-
-  const listType = 'build'
-  // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项）
+  const router = useRouter()
+  const listType = 'xcrw'
+  // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项） //数据库配置
   const dynamicFilters = [
     {
-      label: '采集状态',
+      label: '任务名称',
+      key: 'xcrwName',
+      type: 'text',
+      placeholder: '请输入任务名称',
+    },
+    {
+      label: '巡查类型',
       key: 'collectionStatus',
       type: 'select',
-      placeholder: '请选择采集状态',
+      placeholder: '请选择巡查类型',
       options: [
-        { label: '未采集', value: '未采集' },
-        { label: '采集中', value: '采集中' },
-        { label: '待审核', value: '待审核' },
-        { label: '已审核', value: '已审核' },
+        { label: '年度中心巡查', value: '年度中心巡查' },
+        { label: '季度中心巡查', value: '季度中心巡查' },
+        { label: '季度集团巡查', value: '季度集团巡查' },
+        { label: '特殊情况巡查', value: '特殊情况任务' },
       ],
     },
     {
-      label: '区',
+      label: '区域',
       key: 'district',
-      type: 'select',
-      placeholder: '请选择区',
+      type: 'checkbox',
+      placeholder: '请选择区域',
       options: [
-        { label: '黄浦', value: '黄浦' },
-        { label: '徐汇', value: '徐汇' },
+        { label: '黄浦区', value: '黄浦区' },
+        { label: '徐汇区', value: '徐汇区' },
         { label: '长宁区', value: '长宁区' },
         { label: '静安区', value: '静安区' },
         { label: '普陀区', value: '普陀区' },
       ],
     },
     {
-      label: '街道类型',
-      key: 'streetType',
-      type: 'radio',
+      label: '创建单位',
+      key: 'dwType',
+      type: 'select',
       options: [
-        { label: '南京东路街道', value: '南京东路街道' },
-        { label: '外滩街道', value: '外滩街道' },
-        { label: '半淞园路街道', value: '半淞园路街道' },
-        { label: '小东门', value: '小东门' },
-        { label: '豫园街道', value: '豫园街道' },
+        { label: '虹房集团', value: '虹房集团' },
+        { label: '南房集团', value: '南房集团' },
+        { label: '浦房集团', value: '浦房集团' },
+        { label: '卫百辛集团', value: '卫百辛集团' },
+        { label: '西部集团', value: '西部集团' },
+        { label: '新长宁集团', value: '新长宁集团' },
+        { label: '永业集团', value: '永业集团' },
+        { label: '金外滩集团', value: '金外滩集团' },
       ],
     },
     {
-      label: '建筑名称',
-      key: 'buildingName',
+      label: '创建人',
+      key: 'createPerson',
       type: 'text',
-      placeholder: '请输入建筑名称',
+      placeholder: '请输入创建人',
     },
     {
       label: '区域选择',
@@ -142,7 +152,7 @@
     },
     {
       id: 3,
-      renwuName: '24年度第二季度巡查任务',
+      renwuName: '24年度第二季度重点巡查任务',
       xcsjS: '2024-6月',
       xcsjE: '2024-6月',
       type: '特殊巡查',
@@ -172,7 +182,7 @@
   }
 
   const addHandler = () => {
-    deptDialog.value.show()
+    router.push('/form/validateForm')
   }
   const editHandler = (row) => {
     deptDialog.value.show(row)
@@ -202,5 +212,15 @@
 </script>
 
 <style scoped lang="scss">
-  @import './index';
+  .app-container {
+    height: auto;
+  }
+  .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    box-sizing: border-box;
+  }
+  // @import './index';
 </style>

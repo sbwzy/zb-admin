@@ -1,11 +1,11 @@
 <template>
   <div class="header">
-    <el-drawer v-model="drawer" :direction="direction" size="60%" style="height: auto !important" :show-close="false" :with-header="false">
+    <el-drawer v-model="drawer" :direction="direction" size="50%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
-          <el-form label-position="left" label-width="80px">
+          <el-form label-position="left" label-width="60px">
             <!-- 动态筛选选项 -->
-            <el-form-item v-for="(filter, index) in dynamicFilters" :key="index" :label="filter.label">
+            <el-form-item v-for="(filter, index) in filterss" :key="index" :label="filter.label">
               <el-select v-if="filter.type === 'select'" v-model="filters[filter.key]" :placeholder="filter.placeholder">
                 <el-option v-for="option in filter.options" :key="option.value" :label="option.label" :value="option.value" />
               </el-select>
@@ -26,7 +26,7 @@
               <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
 
-            <div>
+            <div v-if="listtype == 'build'">
               <el-space wrap>
                 <el-check-tag :checked="checked1" title="花园住宅" type="primary" @change="checked1 = !checked1">花园住宅</el-check-tag>
                 <el-check-tag :checked="checked2" title="优历公房" type="primary" @change="checked2 = !checked2">优历公房</el-check-tag>
@@ -37,16 +37,21 @@
       </template>
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="reset(ruleFormRef)">重置</el-button>
+          <el-button @click="reset()">重置</el-button>
           <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
         </div>
       </template>
     </el-drawer>
 
     <el-form ref="ruleFormRef" :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item label="建筑名称" prop="roleName">
+      <el-form-item v-if="listtype == 'build'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
-          <el-input placeholder="请输入建筑名称" />
+          <el-input v-model="formInline.jzName" placeholder="请输入建筑名称" />
+        </div>
+      </el-form-item>
+      <el-form-item v-else-if="listtype == 'xcrw'" label="任务名称" prop="wName">
+        <div class="flex gap-1 mt-4">
+          <el-input v-model="formInline.rwName" placeholder="请输入任务名称" />
         </div>
       </el-form-item>
       <el-form-item prop="sift" style="float: right; margin-right: 0px">
@@ -57,7 +62,7 @@
 
       <el-form-item>
         <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
-        <el-button @click="reset(ruleFormRef)">重置</el-button>
+        <el-button @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -77,10 +82,16 @@
     type: 'all',
   })
   let props = defineProps({
-    dynamicFilters: {
+    filterss: {
       type: Array,
       default() {
         return []
+      },
+    },
+    listtype: {
+      type: String,
+      default() {
+        return ''
       },
     },
   })
@@ -92,7 +103,10 @@
 
   const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
-  const formInline = reactive({})
+  const formInline = ref({
+    jzName: '', //建筑名称
+    rwName: '', //任务名称
+  })
   const checked1 = ref(false)
   const checked2 = ref(false)
 
@@ -103,15 +117,19 @@
       loading.value = false
     }, 500)
   }
-
-  const reset = (formEl: FormInstance | undefined) => {
+  //重置方法没做好
+  const reset = () => {
     loading.value = true
+    formInline.value.rwName = ''
+
     setTimeout(() => {
       loading.value = false
     }, 500)
   }
 
   onMounted(() => {
+    console.log(props.filterss)
+    console.log(props.listtype)
     setTimeout(() => {
       loading.value = false
     }, 500)

@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <!-- 筛选列表 -->
-    <filterView :filters="dynamicFilters"></filterView>
+    <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
     <view class="content">
       <div class="mui-content-padded">
         <!-- 信息列表组件 seniorList:高管数组信息 -->
-        <spListView :bz-list="dataList"></spListView>
+        <spListView :bz-list="dataList" :listtype="listType"></spListView>
       </div>
     </view>
   </div>
@@ -29,6 +29,7 @@
 
   const loading = ref(true)
 
+  const listType = 'build'
   // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项）
   const dynamicFilters = ref([
     {

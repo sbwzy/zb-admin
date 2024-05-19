@@ -51,11 +51,24 @@
         <div class="detailV">{{ item.cjr }}</div>
       </div>
     </div>
+    <!-- <div class="pagination">
+        <el-pagination
+          v-model:currentPage="pagination.currentPage"
+          :page-size="2"
+          small
+          background
+          layout="total,prev,pager,next"
+          :total="bzList.length"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
+  import { onMounted, reactive } from 'vue'
+  import { useRouter } from 'vue-router'
 
   let props = defineProps({
     bzList: {
@@ -71,12 +84,28 @@
       },
     },
   })
-  const goProDetail = (item) => {}
+
+  const pagination = reactive({
+    currentPage: 1,
+    pageSize: 10,
+  })
+
+  const router = useRouter()
+  const goProDetail = (item) => {
+    router.push('/table/comprehensive')
+  }
 
   const bindTag = (item) => {
     return [item.standardType, item.fangWuYTOld]
   }
 
+  const handleSizeChange = (val: number) => {
+    console.log(`${val} items per page`)
+  }
+  const handleCurrentChange = (val: number) => {
+    console.log(`current page: ${val}`)
+    pagination.currentPage = val
+  }
   onMounted(() => {
     console.log('打印', props.listtype)
     console.log(typeof props.bzList[0])
@@ -91,6 +120,7 @@
     background-color: white;
     padding: 8px 12px;
   }
+
   .topTitleV {
     align-items: center;
     height: 36px;
@@ -151,6 +181,7 @@
     line-height: 26px;
     width: calc(100vw - 108px);
   }
+
   .util {
     margin-bottom: 5px;
     display: flex;
