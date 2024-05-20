@@ -1,16 +1,22 @@
 <template>
   <bingmap />
-  <!-- <div class="overlay">
-		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
-	</div> -->
+  <el-button
+    style="position: absolute; top: 220px; left: 12px; z-index: 1000; width: 30px; height: 30px"
+    color="#f4f4f4"
+    :icon="Search"
+    @click="onSubmit"
+  ></el-button>
+  <div v-if="menuDIV == true" class="overlay">
+    <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
+  </div>
 </template>
 
 <script lang="ts" setup name="bingMap">
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
-
+  import { Search } from '@element-plus/icons-vue'
   const listType = 'xcrw'
-
+  let menuDIV = false
   const dynamicFilters = [
     {
       label: '任务名称',
@@ -91,6 +97,11 @@
       ],
     },
   ]
+
+  const onSubmit = () => {
+    menuDIV = !menuDIV
+    console.log(menuDIV)
+  }
 </script>
 
 <style>
@@ -101,6 +112,6 @@
     width: 100%;
     height: 200px;
     pointer-events: none;
-    z-index: 1000;
+    z-index: 600;
   }
 </style>
