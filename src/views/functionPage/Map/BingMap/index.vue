@@ -8,9 +8,9 @@
 <script lang="ts" setup name="bingMap">
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
-
+  import { Search } from '@element-plus/icons-vue'
   const listType = 'xcrw'
-
+  let menuDIV = false
   const dynamicFilters = [
     {
       label: '任务名称',
@@ -91,17 +91,27 @@
       ],
     },
   ]
+
+  const onSubmit = () => {
+    menuDIV = !menuDIV
+    console.log(menuDIV)
+  }
 </script>
 
 <style>
-  .overlay {
-    position: absolute;
-    top: 90px;
-    left: 0;
-    width: 100%;
-    height: 200px;
-    pointer-events: auto !important;
-    z-index: 1000;
-    display: contents;
-  }
+    .overlay {
+      position: absolute;
+      top: 90px;
+      left: 0;
+      width: 100%;
+      height: 200px;
+  <<<<<<< HEAD
+      pointer-events: auto !important;
+      z-index: 1000;
+      display: contents;
+  =======
+      pointer-events: none;
+      z-index: 600;
+  >>>>>>> 1cc93522aade85944453cfc518d72f0501f912ec
+    }
 </style>

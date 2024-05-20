@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup name="bingMap">
-  import { onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
   import * as L from 'leaflet'
   //bing地图
   import 'leaflet-bing-layer'
@@ -15,6 +15,8 @@
   import 'leaflet-draw'
   import 'leaflet-draw/dist/leaflet.draw.css'
 
+  const screenHeight = ref(0)
+  const mapContainer = ref(null)
   const initMap = () => {
     const map = L.map('map').setView([31.31334249284388, 121.47915601730348], 11)
     // 添加Bing Aerial图层
@@ -41,7 +43,7 @@
         polyline: false, //绘制线
         polygon: true, //绘制多边形
         rectangle: false, //绘制矩形
-        circle: true, //绘制圆
+        circle: false, //绘制圆
         marker: false, //绘制标注
         circlemarker: false, //绘制圆形标注
       },
@@ -174,15 +176,23 @@
     })
   }
   onMounted(() => {
+    // // 获取屏幕高度
+    // screenHeight.value = window.innerHeight;
+
+    // // 监听窗口大小变化，更新屏幕高度
+    // window.addEventListener('resize', () => {
+    // 	screenHeight.value = window.innerHeight;
+    // });
+    // console.log("屏幕高度",screenHeight.value)
     initMap()
-    console.log('打印bing')
   })
 </script>
 
 <style>
   /* 必要的Leaflet CSS重置 */
   .leaflet-container {
-    height: 400px;
+    /* 将高度绑定到计算属性 */
+    height: 600px;
     width: 100%;
     max-width: 100%;
     max-height: 100%;
@@ -207,7 +217,7 @@
   }
 
   .leaflet-marker-icon {
-    width: 10px important!;
-    height: 10px important!;
+    width: 10px important !;
+    height: 10px important !;
   }
 </style>
