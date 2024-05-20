@@ -99,19 +99,14 @@
 </script>
 
 <style>
-    .overlay {
-      position: absolute;
-      top: 90px;
-      left: 0;
-      width: 100%;
-      height: 200px;
-  <<<<<<< HEAD
-      pointer-events: auto !important;
-      z-index: 1000;
-      display: contents;
-  =======
-      pointer-events: none;
-      z-index: 600;
-  >>>>>>> 1cc93522aade85944453cfc518d72f0501f912ec
-    }
+  .overlay {
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    pointer-events: auto !important;
+    z-index: 1000;
+    display: contents;
+  }
 </style>
