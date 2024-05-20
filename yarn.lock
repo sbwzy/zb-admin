@@ -4783,6 +4783,11 @@ leaflet-bing-layer@^3.3.1:
     fetch-jsonp "^1.0.0"
     leaflet "^1.0.0-beta.2"
 
+leaflet-draw@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/leaflet-draw/-/leaflet-draw-1.0.4.tgz"
+  integrity sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==
+
 leaflet@^1.0.0, leaflet@^1.0.0-beta.2, leaflet@^1.9.4:
   version "1.9.4"
   resolved "https://registry.npmmirror.com/leaflet/-/leaflet-1.9.4.tgz"

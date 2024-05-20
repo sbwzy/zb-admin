@@ -1,66 +1,106 @@
 <template>
-  <div id="map" style="height: 600px"></div>
+  <bingmap />
+  <!-- <div class="overlay">
+		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
+	</div> -->
 </template>
 
 <script lang="ts" setup name="bingMap">
-  import { onMounted } from 'vue'
-  import * as L from 'leaflet'
-  import 'leaflet-bing-layer'
-  import 'leaflet/dist/leaflet.css'
+  import bingmap from './components/bingmap.vue'
+  import filterView from '@/components/Table/ListTable/FilterView.vue'
 
-  const initMap = () => {
-    const map = L.map('map').setView([31.31334249284388, 121.47915601730348], 11)
-    // 添加Bing Aerial图层
+  const listType = 'xcrw'
 
-    const bingLayer = L.tileLayer
-      .bing({
-        bingMapsKey: 'AqzBjYlesV15mVBeg32goM6Ey2RBXVP6YPMs-MxfuPayEtgizvyyqi_P1y1YzOzh', // 替换为你的Bing Maps密钥
-        imagerySet: 'Aerial', // 使用航空影像
-      })
-      .addTo(map)
-
-    // 绑定地图视图变化事件，当视图发生变化时更新动态瓦片图层
-    // map.on('moveend', () => {
-    //   const bounds = map.getBounds()
-    //   const ne = bounds.getNorthEast()
-    //   const sw = bounds.getSouthWest()
-    //   const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`
-    //   wmsLayer.setParams({ bbox })
-    // })
-
-    // map.on('moveend', L.Util.THROTTLE(function() {
-    // 	const bounds = map.getBounds();
-    // 	const ne = bounds.getNorthEast();
-    // 	const sw = bounds.getSouthWest();
-    // 	const bbox = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
-    // 	wmsLayer.setParams({ bbox });
-    // }, 100));
-
-    // 添加缩放控件
-    // L.control
-    //   .zoom({
-    //     position: 'topright',
-    //   })
-    //   .addTo(map)
-  }
-
-  onMounted(() => {
-    initMap()
-    console.log('打印bing')
-  })
+  const dynamicFilters = [
+    {
+      label: '任务名称',
+      key: 'xcrwName',
+      type: 'text',
+      placeholder: '请输入任务名称',
+    },
+    {
+      label: '巡查类型',
+      key: 'collectionStatus',
+      type: 'select',
+      placeholder: '请选择巡查类型',
+      options: [
+        { label: '年度中心巡查', value: '年度中心巡查' },
+        { label: '季度中心巡查', value: '季度中心巡查' },
+        { label: '季度集团巡查', value: '季度集团巡查' },
+        { label: '特殊情况巡查', value: '特殊情况任务' },
+      ],
+    },
+    {
+      label: '区域',
+      key: 'district',
+      type: 'checkbox',
+      placeholder: '请选择区域',
+      options: [
+        { label: '黄浦区', value: '黄浦区' },
+        { label: '徐汇区', value: '徐汇区' },
+        { label: '长宁区', value: '长宁区' },
+        { label: '静安区', value: '静安区' },
+        { label: '普陀区', value: '普陀区' },
+      ],
+    },
+    {
+      label: '创建单位',
+      key: 'dwType',
+      type: 'select',
+      options: [
+        { label: '虹房集团', value: '虹房集团' },
+        { label: '南房集团', value: '南房集团' },
+        { label: '浦房集团', value: '浦房集团' },
+        { label: '卫百辛集团', value: '卫百辛集团' },
+        { label: '西部集团', value: '西部集团' },
+        { label: '新长宁集团', value: '新长宁集团' },
+        { label: '永业集团', value: '永业集团' },
+        { label: '金外滩集团', value: '金外滩集团' },
+      ],
+    },
+    {
+      label: '创建人',
+      key: 'createPerson',
+      type: 'text',
+      placeholder: '请输入创建人',
+    },
+    {
+      label: '区域选择',
+      key: 'region',
+      type: 'cascader',
+      placeholder: '请选择区域',
+      options: [
+        {
+          value: '黄浦',
+          label: '黄浦区',
+          children: [
+            { value: '南京东路街道', label: '南京东路街道' },
+            { value: '外滩街道', label: '外滩街道' },
+            // 街道选项...
+          ],
+        },
+        {
+          value: '徐汇',
+          label: '徐汇区',
+          children: [
+            { value: '徐家汇街道', label: '徐家汇街道' },
+            { value: '田林街道', label: '田林街道' },
+            // 街道选项...
+          ],
+        },
+      ],
+    },
+  ]
 </script>
 
 <style>
-  /* 必要的Leaflet CSS重置 */
-  .leaflet-container {
-    height: 400px;
+  .overlay {
+    position: absolute;
+    top: 90px;
+    left: 0;
     width: 100%;
-    max-width: 100%;
-    max-height: 100%;
-  }
-
-  /* 隐藏 Leaflet 的 Logo */
-  #map .leaflet-control-attribution {
-    display: none;
+    height: 200px;
+    pointer-events: none;
+    z-index: 1000;
   }
 </style>
