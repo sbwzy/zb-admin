@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="height: 600px"></div>
+  <div id="map" style="height: 100%"></div>
   <!-- <div class="overlay">
 		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
 	</div> -->
@@ -191,6 +191,9 @@
   /* 隐藏 Leaflet 的 Logo */
   #map .leaflet-control-attribution {
     display: none;
+  }
+  .app-main .app-main-inner[data-v-abb6a809] {
+    flex-direction: column-reverse !important;
   }
 
   .overlay {

@@ -1,8 +1,8 @@
 <template>
   <bingmap />
-  <!-- <div class="overlay">
-		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
-	</div> -->
+  <div class="overlay">
+    <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
+  </div>
 </template>
 
 <script lang="ts" setup name="bingMap">
@@ -100,7 +100,8 @@
     left: 0;
     width: 100%;
     height: 200px;
-    pointer-events: none;
+    pointer-events: auto !important;
     z-index: 1000;
+    display: contents;
   }
 </style>
