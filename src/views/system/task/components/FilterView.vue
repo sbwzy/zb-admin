@@ -25,20 +25,13 @@
               <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
               <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
-
-            <div>
-              <el-space wrap>
-                <el-check-tag :checked="checked1" title="花园住宅" type="primary" @change="checked1 = !checked1">花园住宅</el-check-tag>
-                <el-check-tag :checked="checked2" title="优历公房" type="primary" @change="checked2 = !checked2">优历公房</el-check-tag>
-              </el-space>
-            </div>
           </el-form>
         </div>
       </template>
       <template #footer>
         <div style="flex: auto">
           <el-button @click="reset(ruleFormRef)">重置</el-button>
-          <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
+          <el-button type="primary" :icon="Search" @click="onSubmit">应用</el-button>
         </div>
       </template>
     </el-drawer>
@@ -91,6 +84,7 @@
   // 配置全局组件大小
   const size = computed((): string => SettingStore.themeConfig.globalComSize)
 
+  const isExpanded = ref(false)
   const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
   const formInline = reactive({})

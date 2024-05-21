@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="height: 100%"></div>
+  <div id="map" style="height: 100%; z-index: 20"></div>
   <!-- <div class="overlay">
 		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
 	</div> -->

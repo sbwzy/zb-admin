@@ -1,5 +1,22 @@
 <template>
-  <div class="header">
+  <!-- 展开/收起按钮 -->
+  <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-chevron-down"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+  <div class="header" :style="{ paddingTop: (isExpanded ? 8 : 0) + 'px !important' }">
     <el-drawer v-model="drawer" :direction="direction" size="50%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
@@ -43,7 +60,7 @@
       </template>
     </el-drawer>
 
-    <el-form ref="ruleFormRef" :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item v-if="listtype == 'build'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
           <el-input v-model="formInline.jzName" placeholder="请输入建筑名称" />
@@ -64,6 +81,23 @@
         <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
         <el-button @click="reset">重置</el-button>
       </el-form-item>
+      <!-- 展开/收起按钮 -->
+      <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevron-up"
+        >
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
     </el-form>
   </div>
 </template>
@@ -95,6 +129,8 @@
       },
     },
   })
+
+  const isExpanded = ref(false)
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
   const SettingStore = useSettingStore()
@@ -137,6 +173,42 @@
 </script>
 
 <style scoped lang="scss">
+  #btnup {
+    z-index: 21;
+    margin-left: 43%;
+    display: block;
+    width: 60px;
+    border-radius: 6px 6px 0 0;
+    height: 12px;
+    border: 0;
+    border-left: 1px solid rgb(23, 32, 43, 0.2);
+    background: #409eff;
+    color: #fff;
+    cursor: pointer;
+  }
+  #btndown {
+    position: absolute; /* 设置绝对定位 */
+    top: 92px; /* 根据需要调整距离顶部的位置 */
+    left: 50%; /* 使按钮左侧居中 */
+    transform: translateX(-50%);
+    z-index: 21;
+    display: block;
+    width: 60px;
+    border-radius: 0 0 6px 6px;
+    height: 12px;
+    border: 0;
+    border-left: 1px solid rgb(23, 32, 43, 0.2);
+    background: #409eff;
+    color: #fff;
+    cursor: pointer;
+  }
+  #btnup:hover {
+    background: #409eff; /* 鼠标悬停时的颜色 */
+  }
+  #btndown:hover {
+    background: #409eff; /* 鼠标悬停时的颜色 */
+  }
+
   .filter-container {
     margin: 20px;
   }
