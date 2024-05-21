@@ -1,12 +1,6 @@
 <template>
-  <bingmap />
-  <el-button
-    style="position: absolute; top: 220px; left: 12px; z-index: 1000; width: 30px; height: 30px"
-    color="#f4f4f4"
-    :icon="Search"
-    @click="onSubmit"
-  ></el-button>
-  <div v-if="menuDIV == true" class="overlay">
+  <bingmap :points="pointslist" />
+  <div class="overlay">
     <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
   </div>
 </template>
@@ -17,6 +11,13 @@
   import { Search } from '@element-plus/icons-vue'
   const listType = 'xcrw'
   let menuDIV = false
+
+  const pointslist = [
+    [31.26119881827799, 121.4253616333008],
+    [31.227455080309365, 121.45179748535158],
+    [31.265305928272795, 121.45935058593751],
+    [31.281439272614506, 121.4473342895508],
+  ]
   const dynamicFilters = [
     {
       label: '任务名称',
@@ -111,7 +112,8 @@
     left: 0;
     width: 100%;
     height: 200px;
-    pointer-events: none;
-    z-index: 600;
+    pointer-events: auto !important;
+    z-index: 1000;
+    display: contents;
   }
 </style>

@@ -1,12 +1,9 @@
 <template>
-  <div id="map" style="600px"></div>
-  <!-- <div class="overlay">
-		<filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
-	</div> -->
+  <div id="map" style="height: 100%"></div>
 </template>
 
 <script lang="ts" setup name="bingMap">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, onUnmounted } from 'vue'
   import * as L from 'leaflet'
   //bing地图
   import 'leaflet-bing-layer'
@@ -15,10 +12,18 @@
   import 'leaflet-draw'
   import 'leaflet-draw/dist/leaflet.draw.css'
 
-  const screenHeight = ref(0)
-  const mapContainer = ref(null)
+  let props = defineProps({
+    points: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
+  })
+  let map = null
+
   const initMap = () => {
-    const map = L.map('map').setView([31.31334249284388, 121.47915601730348], 11)
+    map = L.map('map').setView([31.31334249284388, 121.47915601730348], 11)
     // 添加Bing Aerial图层
 
     const bingLayer = L.tileLayer
@@ -165,26 +170,61 @@
       //获取绘制图层
       let drawlayer = e.layer
       console.log('type', type, 'drawlayer', drawlayer)
-      if (type === 'marker') {
-        L.icon({
-          iconUrl: require('@/assets/image/login/accountLogin-icon.png'),
-          iconSize: [50, 50],
-        })
-        drawlayer.bindPopup('标记')
-      }
+
+      console.log(props.points)
+      let pointsList = props.points
+      let latlngs = drawlayer.editing.latlngs[0]
+      let latlngss = []
+      console.log(latlngs)
+      latlngs[0].forEach((el) => {
+        let latlngsss = []
+        latlngsss = [el.lat, el.lng]
+        latlngss.push(latlngsss)
+      })
+      console.log(latlngss)
+      //let polygon1 = L.polygon(latlngss)
+      pointsList.forEach((el) => {
+        let latlngtrue = isInsidePolygon(latlngss, el)
+        console.log('打印', latlngtrue)
+        if (latlngtrue) {
+          var latlng = L.marker(el).addTo(drawItems)
+        }
+      })
       drawItems.addLayer(drawlayer)
     })
+
+    map.on(L.Draw.Event.DELETED, function (e) {
+      console.log('del', e)
+    })
+
+    drawItems.on('click', (e) => {
+      console.log(e.layer._latlngs)
+    })
+  }
+
+  const isInsidePolygon = (points, point) => {
+    var x = point[0],
+      y = point[1]
+    var inside = false
+    for (var i = 0, j = points.length - 1; i < points.length; j = i++) {
+      var xi = points[i][0],
+        yi = points[i][1]
+      var xj = points[j][0],
+        yj = points[j][1]
+      var intersect = yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi
+      if (intersect) inside = !inside
+    }
+    return inside
   }
   onMounted(() => {
-    // // 获取屏幕高度
-    // screenHeight.value = window.innerHeight;
-
-    // // 监听窗口大小变化，更新屏幕高度
-    // window.addEventListener('resize', () => {
-    // 	screenHeight.value = window.innerHeight;
-    // });
-    // console.log("屏幕高度",screenHeight.value)
     initMap()
+  })
+
+  onUnmounted(() => {
+    if (map) {
+      map.remove()
+      map = null
+    }
   })
 </script>
 
@@ -196,11 +236,16 @@
     width: 100%;
     max-width: 100%;
     max-height: 100%;
+    z-index: 20 !important;
   }
 
   /* 隐藏 Leaflet 的 Logo */
   #map .leaflet-control-attribution {
     display: none;
+  }
+
+  .app-main .app-main-inner[data-v-abb6a809] {
+    flex-direction: column-reverse !important;
   }
 
   .overlay {
