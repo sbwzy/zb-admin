@@ -219,6 +219,8 @@
     margin: 10px;
   }
   .header {
+    justify-content: center; // 水平居中
+    align-items: center; // 垂直居中，如果需要的话
     display: flex;
     padding: 8px 8px 0px 8px;
     margin-bottom: 2px;
