@@ -14,15 +14,28 @@
               </el-radio-group>
               <el-input v-else-if="filter.type === 'text'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
               <el-cascader
-                v-else-if="filter.type === 'cascader'"
+                v-else-if="filter.type === 'cascader' && listtype == 'xcmap'"
                 v-model="filters[filter.key]"
                 :options="filter.options"
                 :placeholder="filter.placeholder"
               />
-              <el-checkbox-group v-else-if="filter.type === 'checkbox'" v-model="filters[filter.key]">
+              <el-checkbox-group v-else-if="filter.type === 'checkbox' && listtype == 'build'" v-model="filters[filter.key]">
                 <el-checkbox v-for="option in filter.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
               </el-checkbox-group>
               <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
+              <el-cascader
+                v-else-if="filter.type === 'duoxuan'"
+                ref="cascaderRef"
+                v-model="filters[filter.key]"
+                size="small"
+                :options="filter.options"
+                :props="propss"
+                collapse-tags
+                :show-all-levels="false"
+                collapse-tags-tooltip
+                clearable
+              />
+
               <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
 
@@ -44,7 +57,7 @@
     </el-drawer>
 
     <el-form ref="ruleFormRef" :inline="true" :model="formInline" class="demo-form-inline">
-      <el-form-item v-if="listtype == 'build'" label="建筑名称" prop="jzName">
+      <el-form-item v-if="listtype == 'build' || listtype == 'xcmap'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
           <el-input v-model="formInline.jzName" placeholder="请输入建筑名称" />
         </div>
@@ -61,7 +74,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
+        <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
+        <el-button type="primary" :icon="Search" @click="parentTypeMethod(formInline)">查询</el-button>
         <el-button @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
@@ -74,12 +88,13 @@
   import { Search } from '@element-plus/icons-vue'
 
   import { useSettingStore } from '@/store/modules/setting'
-
+  const propss = { multiple: true }
+  const stype = ref(3)
   // 筛选条件状态
   const filters = reactive({
-    price: 'all',
-    rating: 'all',
-    type: 'all',
+    collectionStatus: '',
+    regionmap: '',
+    type: '',
   })
   let props = defineProps({
     filterss: {
@@ -94,7 +109,12 @@
         return ''
       },
     },
+    parentTypeMethod: {
+      type: Function,
+      default: () => {},
+    },
   })
+
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
   const SettingStore = useSettingStore()
@@ -112,6 +132,7 @@
 
   const onSubmit = () => {
     console.log('submit!', formInline)
+    console.log(filters)
     loading.value = true
     setTimeout(() => {
       loading.value = false
