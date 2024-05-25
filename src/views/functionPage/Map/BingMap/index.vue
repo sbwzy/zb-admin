@@ -10,6 +10,9 @@
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
+
+  import { buildListinfo } from '@/api/user'
+
   const listType = 'xcmap'
   let menuDIV = false
   const pointslist1 = [
@@ -93,6 +96,9 @@
       pointslist.value = pointslist1
     }
     console.log(pointslist.value)
+    buildListinfo(el).then((res) => {
+      console.log('打印结果', res)
+    })
   }
 </script>
 
