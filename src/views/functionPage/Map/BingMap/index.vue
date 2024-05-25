@@ -106,5 +106,8 @@
     pointer-events: auto !important;
     z-index: 1000;
     display: contents;
+    pointer-events: auto !important;
+    z-index: 1000;
+    display: contents;
   }
 </style>
