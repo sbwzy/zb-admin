@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="app-container-inner right-align-inputs">
+    <div class="app-container-local right-align-inputs">
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" status-icon label-position="left">
         <el-form-item label="建筑名称">
           <el-input v-model="ruleForm.standartName" readonly />
@@ -54,7 +54,7 @@
           <el-input v-model="ruleForm.descShenHe" readonly />
         </el-form-item>
 
-        <el-form-item label="手机号码" prop="phone">
+        <!-- <el-form-item label="手机号码" prop="phone">
           <el-input v-model="ruleForm.phone" placeholder="请输入手机号码" />
         </el-form-item>
 
@@ -86,8 +86,39 @@
         <el-form-item label="邮箱" prop="email" class="item-form">
           <div>是否是正确的邮箱</div>
           <el-input v-model="ruleForm.email" placeholder="请输入邮箱" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
+
+      <!-- 图片模块 -->
+      <div class="itemCloum" title="">
+        <div title="">
+          <!--照片类型-->
+          <div class="bg-white nav">
+            <div class="cu-item">
+              <span class="margin-right-xs"></span>
+            </div>
+          </div>
+
+          <!-- 自定义弹出框组件 -->
+          <div class="tooltip-popup"> </div>
+
+          <!--照片库-->
+          <div>
+            <div class="example-body">
+              <div></div>
+              <div>
+                <div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-sp-area">
+            <button class="mini-btn">取消</button>
+            <button class="mini-btn">暂存</button>
+            <button class="mini-btn">保存并提交</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -96,7 +127,8 @@
   import { onMounted, reactive, ref } from 'vue'
   import type { FormInstance, FormRules } from 'element-plus'
   // 在这里引入接口
-  import { collectionInfo } from '@/api/user'
+  import { collectionInfo, getLocationInfo } from '@/api/user'
+  import { useUserStore } from '@/store/modules/user'
   import {
     validatorMethod,
     verifyPhone,
@@ -192,9 +224,9 @@
   }
 
   onMounted(() => {
-    collectionInfo(gfIDList).then((res) => {
-      console.log(res)
-    })
+    // collectionInfo(gfIDList).then((res) => {
+    //   console.log(res)
+    // })
   })
 </script>
 
@@ -212,5 +244,18 @@
   .right-align-inputs .el-form-item .el-input__inner {
     text-align: right;
     background-color: transparent;
+  }
+
+  .right-align-inputs .el-form-item {
+    margin-bottom: 9px;
+  }
+
+  .app-container-local {
+    height: 100%;
+    width: 100%;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    background: white;
+    padding: 5px;
+    box-sizing: border-box;
   }
 </style>
