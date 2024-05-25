@@ -1,30 +1,33 @@
 <template>
-  <bingmap :points="pointslist" />
+  <bingmap :points="pointslist" :parent-type-method1="bingmapMethod" />
   <div class="overlay">
-    <filterView :filterss="dynamicFilters" :listtype="listType"></filterView>
+    <filterView :filterss="dynamicFilters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
   </div>
 </template>
 
 <script lang="ts" setup name="bingMap">
+  import { onMounted, reactive, computed, ref, watch } from 'vue'
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
-  const listType = 'xcrw'
+  const listType = 'xcmap'
   let menuDIV = false
-
-  const pointslist = [
+  const pointslist1 = [
     [31.26119881827799, 121.4253616333008],
-    [31.227455080309365, 121.45179748535158],
-    [31.265305928272795, 121.45935058593751],
-    [31.281439272614506, 121.4473342895508],
+    [31.22745508030936, 121.4517974853515],
+    [31.26530592827279, 121.4593505859375],
+    [31.2814392726145, 121.4473342895508],
   ]
-  const dynamicFilters = [
-    {
-      label: '任务名称',
-      key: 'xcrwName',
-      type: 'text',
-      placeholder: '请输入任务名称',
-    },
+  const pointslist = ref(pointslist1)
+
+  const pointslist2 = [
+    [31.27119881827799, 121.4253616333008],
+    [31.27455080309365, 121.4517974853515],
+    [31.27305928272795, 121.4593505859375],
+    [31.27439272614506, 121.4473342895508],
+    [31.27219881827323, 121.4253616333008],
+  ]
+  const dynamicFilters = ref([
     {
       label: '巡查类型',
       key: 'collectionStatus',
@@ -38,70 +41,58 @@
       ],
     },
     {
-      label: '区域',
-      key: 'district',
-      type: 'checkbox',
-      placeholder: '请选择区域',
-      options: [
-        { label: '黄浦区', value: '黄浦区' },
-        { label: '徐汇区', value: '徐汇区' },
-        { label: '长宁区', value: '长宁区' },
-        { label: '静安区', value: '静安区' },
-        { label: '普陀区', value: '普陀区' },
-      ],
-    },
-    {
-      label: '创建单位',
-      key: 'dwType',
-      type: 'select',
-      options: [
-        { label: '虹房集团', value: '虹房集团' },
-        { label: '南房集团', value: '南房集团' },
-        { label: '浦房集团', value: '浦房集团' },
-        { label: '卫百辛集团', value: '卫百辛集团' },
-        { label: '西部集团', value: '西部集团' },
-        { label: '新长宁集团', value: '新长宁集团' },
-        { label: '永业集团', value: '永业集团' },
-        { label: '金外滩集团', value: '金外滩集团' },
-      ],
-    },
-    {
-      label: '创建人',
-      key: 'createPerson',
-      type: 'text',
-      placeholder: '请输入创建人',
-    },
-    {
       label: '区域选择',
-      key: 'region',
-      type: 'cascader',
+      key: 'regionmap',
+      type: 'duoxuan',
       placeholder: '请选择区域',
       options: [
         {
-          value: '黄浦',
-          label: '黄浦区',
+          value: 1,
+          label: '静安区',
           children: [
-            { value: '南京东路街道', label: '南京东路街道' },
-            { value: '外滩街道', label: '外滩街道' },
-            // 街道选项...
+            { value: 2, label: '南京西路街道' },
+            { value: 3, label: '曹家渡街道' },
+            { value: 4, label: '江宁路街道' },
           ],
         },
         {
-          value: '徐汇',
+          value: 5,
           label: '徐汇区',
           children: [
-            { value: '徐家汇街道', label: '徐家汇街道' },
-            { value: '田林街道', label: '田林街道' },
-            // 街道选项...
+            { value: 6, label: '天平路街道' },
+            { value: 7, label: '湖南路街道' },
+            { value: 8, label: '徐家汇街道' },
+          ],
+        },
+        {
+          value: 9,
+          label: '普陀区',
+          children: [
+            { value: 10, label: '曹杨新村街道' },
+            { value: 11, label: '长寿路街道' },
           ],
         },
       ],
     },
-  ]
+  ])
 
   const onSubmit = () => {
     menuDIV = !menuDIV
     console.log(menuDIV)
+  }
+
+  const filterMethod = (el) => {
+    console.log('打印', el)
+  }
+
+  const bingmapMethod = (el) => {
+    console.log('打印点位', el)
+    if (el == 1) {
+      pointslist.value = pointslist2
+    } else {
+      pointslist.value = pointslist1
+    }
+    console.log(pointslist.value)
   }
 </script>
 
