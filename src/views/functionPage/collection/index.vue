@@ -89,33 +89,35 @@
         </el-form-item> -->
       </el-form>
 
-      <!-- 图片模块 -->
-      <div class="itemCloum" title="">
-        <div title="">
-          <!--照片类型-->
-          <div class="bg-white nav">
-            <div class="cu-item">
-              <span class="margin-right-xs"></span>
-            </div>
-          </div>
-
-          <!-- 自定义弹出框组件 -->
-          <div class="tooltip-popup"> </div>
-
-          <!--照片库-->
-          <div>
-            <div class="example-body">
-              <div></div>
-              <div>
-                <div></div>
+      <div v-if="componentType === 'patrol'">
+        <!-- 图片模块 -->
+        <div class="itemCloum" title="">
+          <div title="">
+            <!--照片类型-->
+            <div class="bg-white nav">
+              <div class="cu-item">
+                <span class="margin-right-xs"></span>
               </div>
             </div>
-          </div>
 
-          <div class="button-sp-area">
-            <button class="mini-btn">取消</button>
-            <button class="mini-btn">暂存</button>
-            <button class="mini-btn">保存并提交</button>
+            <!-- 自定义弹出框组件 -->
+            <div class="tooltip-popup"> </div>
+
+            <!--照片库-->
+            <div>
+              <div class="example-body">
+                <div></div>
+                <div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="button-sp-area">
+              <button class="mini-btn">取消</button>
+              <button class="mini-btn">暂存</button>
+              <button class="mini-btn">保存并提交</button>
+            </div>
           </div>
         </div>
       </div>
@@ -218,6 +220,15 @@
     if (!value) keyword.value = text
     else keyword.value = verifyTextColor(value, text)
   }
+
+  let props = defineProps({
+    componentType: {
+      type: String,
+      default() {
+        return ''
+      },
+    },
+  })
 
   const gfIDList = {
     gfID: '1',
