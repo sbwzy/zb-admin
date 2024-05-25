@@ -68,6 +68,8 @@
   import { MapLocation, View as IconView } from '@element-plus/icons-vue'
   import type { FormInstance } from 'element-plus'
   import Upload from './components/Upload.vue'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
 
   const formSize = ref('small')
   const ruleFormRef = ref<FormInstance>()
@@ -201,7 +203,7 @@
   }
 
   const inMap = () => {
-    console.log('进入地图')
+    router.push('/function-Page/Map/BingMap')
   }
 </script>
 <style lang="scss">
