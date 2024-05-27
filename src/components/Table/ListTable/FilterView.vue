@@ -94,6 +94,7 @@
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
         <el-button type="primary" :icon="Search" @click="parentTypeMethod(formInline)">查询</el-button>
         <el-button @click="reset">重置</el-button>
+        <button @click="callParentMethod1">切换已选和未选中的点</button>
       </el-form-item>
       <!-- 展开/收起按钮 -->
       <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
@@ -118,10 +119,20 @@
 
 <script lang="ts" setup>
   import { ElMessageBox, ElMessage, FormInstance, ComponentSize, DrawerProps } from 'element-plus'
-  import { onMounted, reactive, computed, ref } from 'vue'
+  import { onMounted, reactive, computed, ref, defineEmits } from 'vue'
   import { Search } from '@element-plus/icons-vue'
 
   import { useSettingStore } from '@/store/modules/setting'
+
+  // 定义事件
+  const emit = defineEmits(['parent-method1'])
+
+  // 调用父组件中的方法
+  const callParentMethod1 = () => {
+    console.log('1')
+    emit('parent-method1')
+  }
+
   const propss = { multiple: true }
   const stype = ref(3)
   // 筛选条件状态
