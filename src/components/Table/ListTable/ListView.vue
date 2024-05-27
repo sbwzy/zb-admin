@@ -6,18 +6,21 @@
         <div class="topTitleV">{{ listtype == 'build' ? item.xiaoQu : item.renwuName }}</div>
         <div
           :style="{
-            marginLeft: listtype == 'build' ? item.jieZhen.length : item.renwuName.length + 'px',
-            width: (listtype == 'build' ? item.jieZhen.length : item.renwuName.length) * 4 + 'px !important',
+            marginLeft: listtype == 'build' ? item.jieZhen.length : item.progress.length * 1 + 'px',
+            width: (listtype == 'build' ? item.jieZhen.length : item.progress.length) * 10 + 'px !important',
             color:
-              listtype == 'build' ? (item.jieZhen == '采集中' ? '#1890FF' : '#39b54a') : item.type == '常规巡查' ? '#1890FF' : '#aa0000',
+              listtype == 'build' ? (item.jieZhen == '采集中' ? '#1890FF' : '#39b54a') : item.progress == '进行中' ? '#1890FF' : '#aa0000',
             'border-color': item?.jieZhen == '采集中' ? '#1890FF' : '#39b54a',
           }"
           class="rigFlagV"
         >
-          {{ listtype == 'build' ? item.jieZhen : item.type }}
+          {{ listtype == 'build' ? item.jieZhen : item.progress }}
         </div>
       </div>
-      <div style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)">
+      <div
+        v-if="listtype == 'build'"
+        style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)"
+      >
         <!-- 自定义了一个data-id的属性,可以通过js获取到它的值!  hover-class 指定按下去的样式类-->
         <div v-for="(tagItem, index) in bindTag(item)" :key="index" class="celldiv">
           {{ tagItem }}

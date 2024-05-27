@@ -29,3 +29,12 @@ export function collectionInfo(data) {
     data,
   })
 }
+
+//获取建筑列表
+export function buildListinfo(data) {
+  return request({
+    url: '/webapi/youligf.youliQuery1',
+    method: 'post',
+    data,
+  })
+}

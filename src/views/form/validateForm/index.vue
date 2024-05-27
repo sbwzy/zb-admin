@@ -75,6 +75,17 @@
   const ruleFormRef = ref<FormInstance>()
   const props = { multiple: true }
   const cascaderRef = ref(null)
+
+  const pointslist1 = ref([
+    [31.26119881827799, 121.4253616333008],
+    [31.32745508030936, 121.3517974853515],
+    [31.36530592827279, 121.3593505859375],
+    [31.3814392726145, 121.3473342895508],
+    [31.21119881827799, 121.4253616333008],
+    [31.39745508030936, 121.3517974853515],
+    [31.31530592827279, 121.3593505859375],
+    [31.3114392726145, 121.3473342895508],
+  ])
   const options = [
     {
       value: 1,
@@ -203,7 +214,10 @@
   }
 
   const inMap = () => {
-    router.push('/function-Page/Map/BingMap')
+    router.push(
+      '/function-Page/Map/BingMap',
+      //,params:{list:JSON.stringify(pointslist1.value)}
+    )
   }
 </script>
 <style lang="scss">

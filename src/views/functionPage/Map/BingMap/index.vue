@@ -10,15 +10,18 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-  import { onMounted, defineAsyncComponent, reactive, computed, ref, watch } from 'vue'
+<script lang="ts" setup name="bingMap">
+  import { onMounted, defineAsyncComponent, reactive, computed, ref, watch, toRefs } from 'vue'
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
+  import { useRoute } from 'vue-router'
+  import { buildListinfo } from '@/api/user'
+  const route = useRoute()
+  //const { params } = toRefs(route)
 
   const bingmapRef = ref<InstanceType<typeof bingmap>>()
   const asyncBingmap = defineAsyncComponent(() => import('./components/bingmap.vue'))
-
   //将bingmap中的方法提供给FilterView调用
   const bingmapMethod1 = () => {
     console.log('2')
@@ -26,7 +29,6 @@
     // 调用bingmap组件的方法1
     bingmapRef.value?.customeMethod1()
   }
-
   const listType = 'xcmap'
   let menuDIV = false
   const pointslist1 = [
@@ -92,7 +94,8 @@
       ],
     },
   ])
-
+  //const xcrwList = params.value.list
+  //console.log("地图",xcrwList)
   const onSubmit = () => {
     menuDIV = !menuDIV
     console.log(menuDIV)
@@ -109,7 +112,22 @@
     } else {
       pointslist.value = pointslist1
     }
+    //let datalist = ref([])
     console.log(pointslist.value)
+    // buildListinfo(el).then((res) => {
+    // 	console.log('打印结果', res)
+    // 	let data = res.data.caiJiList1.data;
+    // 	console.log(data)
+    // 	console.log(typeof data)
+    // 	//data.foreach()
+    // 	let dataa = ref([])
+    // 	data.forEach((item) => {
+    // 		dataa.value.push([item.tdtY,item.tdtx])
+    // 	})
+    // 	pointslist.value = dataa.value
+
+    // })
+    // console.log(pointslist.value)
   }
 </script>
 <style>

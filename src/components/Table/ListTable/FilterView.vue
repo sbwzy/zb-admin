@@ -36,7 +36,7 @@
                 :options="filter.options"
                 :placeholder="filter.placeholder"
               />
-              <el-checkbox-group v-else-if="filter.type === 'checkbox' && listtype == 'build'" v-model="filters[filter.key]">
+              <el-checkbox-group v-else-if="filter.type === 'checkbox' && listtype == 'xcrw'" v-model="filters[filter.key]">
                 <el-checkbox v-for="option in filter.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
               </el-checkbox-group>
               <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
@@ -68,20 +68,20 @@
       <template #footer>
         <div style="flex: auto">
           <el-button @click="reset()">重置</el-button>
-          <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button>
+          <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
         </div>
       </template>
     </el-drawer>
 
-    <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
       <el-form-item v-if="listtype == 'build' || listtype == 'xcmap'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
-          <el-input v-model="formInline.jzName" placeholder="请输入建筑名称" />
+          <el-input v-model="filters.jzName" placeholder="请输入建筑名称" />
         </div>
       </el-form-item>
       <el-form-item v-else-if="listtype == 'xcrw'" label="任务名称" prop="wName">
         <div class="flex gap-1 mt-4">
-          <el-input v-model="formInline.rwName" placeholder="请输入任务名称" />
+          <el-input v-model="filters.rwName" placeholder="请输入任务名称" />
         </div>
       </el-form-item>
       <el-form-item prop="sift" style="float: right; margin-right: 0px">
@@ -92,7 +92,7 @@
 
       <el-form-item>
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
-        <el-button type="primary" :icon="Search" @click="parentTypeMethod(formInline)">查询</el-button>
+        <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
         <el-button @click="reset">重置</el-button>
         <button @click="callParentMethod1">切换已选和未选中的点</button>
       </el-form-item>
@@ -135,12 +135,7 @@
 
   const propss = { multiple: true }
   const stype = ref(3)
-  // 筛选条件状态
-  const filters = reactive({
-    collectionStatus: '',
-    regionmap: '',
-    type: '',
-  })
+
   let props = defineProps({
     filterss: {
       type: Array,
@@ -160,7 +155,15 @@
     },
   })
 
-  const isExpanded = ref(false)
+  // 筛选条件状态
+  const filters = reactive({
+    listtype: props.listtype, //类型
+    collectionStatus: '',
+    regionmap: '',
+    type: '',
+    jzName: '', //建筑名称
+    rwName: '', //任务名称
+  })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
   const SettingStore = useSettingStore()
@@ -169,15 +172,15 @@
 
   const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
-  const formInline = ref({
-    jzName: '', //建筑名称
-    rwName: '', //任务名称
-  })
+  // const formInline = ref({
+  // jzName: '', //建筑名称
+  // rwName: '', //任务名称
+  // })
   const checked1 = ref(false)
   const checked2 = ref(false)
 
   const onSubmit = () => {
-    console.log('submit!', formInline)
+    console.log('submit!', filters)
     console.log(filters)
     loading.value = true
     setTimeout(() => {
@@ -187,7 +190,7 @@
   //重置方法没做好
   const reset = () => {
     loading.value = true
-    formInline.value.rwName = ''
+    filters.rwName = ''
 
     setTimeout(() => {
       loading.value = false
@@ -243,12 +246,15 @@
   .filter-container {
     margin: 20px;
   }
+
   .el-overlay {
     top: 90px !important;
   }
+
   .scrollbar-demo-item {
     margin: 10px;
   }
+
   .header {
     justify-content: center; // 水平居中
     align-items: center; // 垂直居中，如果需要的话
@@ -259,6 +265,7 @@
     background: white;
     box-shadow: 0 0 12px rgb(0 0 0 / 5%);
   }
+
   .footer {
     flex: 1;
     display: flex;
@@ -270,16 +277,19 @@
     box-shadow: 0 0 12px rgb(0 0 0 / 5%);
     position: relative;
     box-sizing: border-box;
+
     .util {
       margin-bottom: 15px;
       display: flex;
       justify-content: flex-end;
       flex-shrink: 0;
     }
+
     .table-inner {
       flex: 1;
       position: relative;
     }
+
     .table {
       position: absolute;
       left: 0;
