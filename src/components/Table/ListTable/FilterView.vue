@@ -6,7 +6,12 @@
           <el-form label-position="left" label-width="60px">
             <!-- 动态筛选选项 -->
             <el-form-item v-for="(filter, index) in filterss" :key="index" :label="filter.label">
-              <el-select v-if="filter.type === 'select'" v-model="filters[filter.key]" :placeholder="filter.placeholder">
+              <el-select
+                v-if="filter.type === 'select'"
+                v-model="filters[filter.key]"
+                :multiple="listtype === 'xcrw'"
+                :placeholder="filter.placeholder"
+              >
                 <el-option v-for="option in filter.options" :key="option.value" :label="option.label" :value="option.value" />
               </el-select>
               <el-radio-group v-else-if="filter.type === 'radio'" v-model="filters[filter.key]">
@@ -118,6 +123,7 @@
     type: '',
     jzName: '', //建筑名称
     rwName: '', //任务名称
+    district: null,
   })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
@@ -145,7 +151,10 @@
   //重置方法没做好
   const reset = () => {
     loading.value = true
-    filters.rwName = ''
+    // 将响应式对象置空
+    Object.keys(filters).forEach((key) => {
+      filters[key] = ''
+    })
 
     setTimeout(() => {
       loading.value = false

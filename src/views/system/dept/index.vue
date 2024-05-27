@@ -26,6 +26,8 @@
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import spListView from '@/components/Table/ListTable/ListView.vue'
   import { useRouter } from 'vue-router'
+
+  import { useSettingStore } from '@/store/modules/setting'
   //const tableData = ref(deptData)
   //const loading = ref(true)
   const deptDialog = ref()
@@ -58,7 +60,7 @@
     {
       label: '区域',
       key: 'district',
-      type: 'checkbox',
+      type: 'select',
       placeholder: '请选择区域',
       options: [
         { label: '黄浦区', value: '黄浦区' },
