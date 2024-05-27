@@ -1,12 +1,17 @@
 <template>
-  <bingmap :points="pointslist" :parent-type-method1="bingmapMethod" />
+  <async-bingmap ref="bingmapRef" :points="pointslist" :parent-type-method1="bingmapMethod" />
   <div class="overlay">
-    <filterView :filterss="dynamicFilters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
+    <filterView
+      :filterss="dynamicFilters"
+      :listtype="listType"
+      :parent-type-method="filterMethod"
+      @parent-method1="bingmapMethod1"
+    ></filterView>
   </div>
 </template>
 
 <script lang="ts" setup name="bingMap">
-  import { onMounted, reactive, computed, ref, watch, toRefs } from 'vue'
+  import { onMounted, defineAsyncComponent, reactive, computed, ref, watch, toRefs } from 'vue'
   import bingmap from './components/bingmap.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
@@ -14,6 +19,16 @@
   import { buildListinfo } from '@/api/user'
   const route = useRoute()
   //const { params } = toRefs(route)
+
+  const bingmapRef = ref<InstanceType<typeof bingmap>>()
+  const asyncBingmap = defineAsyncComponent(() => import('./components/bingmap.vue'))
+  //将bingmap中的方法提供给FilterView调用
+  const bingmapMethod1 = () => {
+    console.log('2')
+    console.log(bingmapRef)
+    // 调用bingmap组件的方法1
+    bingmapRef.value?.customeMethod1()
+  }
   const listType = 'xcmap'
   let menuDIV = false
   const pointslist1 = [
@@ -115,7 +130,6 @@
     // console.log(pointslist.value)
   }
 </script>
-
 <style>
   .overlay {
     position: absolute;

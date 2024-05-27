@@ -1,5 +1,22 @@
 <template>
-  <div class="header">
+  <!-- 展开/收起按钮 -->
+  <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-chevron-down"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+  <div class="header" :style="{ paddingTop: (isExpanded ? 8 : 0) + 'px !important' }">
     <el-drawer v-model="drawer" :direction="direction" size="50%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
@@ -61,7 +78,7 @@
       </template>
     </el-drawer>
 
-    <el-form ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
+    <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
       <el-form-item v-if="listtype == 'build' || listtype == 'xcmap'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
           <el-input v-model="filters.jzName" placeholder="请输入建筑名称" />
@@ -82,17 +99,45 @@
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
         <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
         <el-button @click="reset">重置</el-button>
+        <button @click="callParentMethod1">切换已选和未选中的点</button>
       </el-form-item>
+      <!-- 展开/收起按钮 -->
+      <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-chevron-up"
+        >
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
     </el-form>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ElMessageBox, ElMessage, FormInstance, ComponentSize, DrawerProps } from 'element-plus'
-  import { onMounted, reactive, computed, ref } from 'vue'
+  import { onMounted, reactive, computed, ref, defineEmits } from 'vue'
   import { Search } from '@element-plus/icons-vue'
 
   import { useSettingStore } from '@/store/modules/setting'
+
+  // 定义事件
+  const emit = defineEmits(['parent-method1'])
+
+  // 调用父组件中的方法
+  const callParentMethod1 = () => {
+    console.log('1')
+    emit('parent-method1')
+  }
+  const isExpanded = ref(false)
   const propss = { multiple: true }
   const stype = ref(3)
 
@@ -171,6 +216,42 @@
 </script>
 
 <style scoped lang="scss">
+  #btnup {
+    z-index: 21;
+    margin-left: 43%;
+    display: block;
+    width: 60px;
+    border-radius: 6px 6px 0 0;
+    height: 12px;
+    border: 0;
+    border-left: 1px solid rgb(23, 32, 43, 0.2);
+    background: #409eff;
+    color: #fff;
+    cursor: pointer;
+  }
+  #btndown {
+    position: absolute; /* 设置绝对定位 */
+    top: 92px; /* 根据需要调整距离顶部的位置 */
+    left: 50%; /* 使按钮左侧居中 */
+    transform: translateX(-50%);
+    z-index: 21;
+    display: block;
+    width: 60px;
+    border-radius: 0 0 6px 6px;
+    height: 12px;
+    border: 0;
+    border-left: 1px solid rgb(23, 32, 43, 0.2);
+    background: #409eff;
+    color: #fff;
+    cursor: pointer;
+  }
+  #btnup:hover {
+    background: #409eff; /* 鼠标悬停时的颜色 */
+  }
+  #btndown:hover {
+    background: #409eff; /* 鼠标悬停时的颜色 */
+  }
+
   .filter-container {
     margin: 20px;
   }
@@ -184,6 +265,8 @@
   }
 
   .header {
+    justify-content: center; // 水平居中
+    align-items: center; // 垂直居中，如果需要的话
     display: flex;
     padding: 8px 8px 0px 8px;
     margin-bottom: 2px;
