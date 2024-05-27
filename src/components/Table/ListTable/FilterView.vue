@@ -73,7 +73,7 @@
       </template>
     </el-drawer>
 
-    <el-form ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
+    <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
       <el-form-item v-if="listtype == 'build' || listtype == 'xcmap'" label="建筑名称" prop="jzName">
         <div class="flex gap-1 mt-4">
           <el-input v-model="filters.jzName" placeholder="请输入建筑名称" />
@@ -132,7 +132,7 @@
     console.log('1')
     emit('parent-method1')
   }
-
+  const isExpanded = ref(false)
   const propss = { multiple: true }
   const stype = ref(3)
 
