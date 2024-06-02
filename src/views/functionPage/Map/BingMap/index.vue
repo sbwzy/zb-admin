@@ -1,9 +1,15 @@
 <template>
-  <async-bingmap ref="bingmapRef" :points="pointslist" :parent-type-method1="bingmapMethod" />
+  <async-bingmap
+    ref="bingmapRef"
+    :points="pointslist"
+    :entry-build-id="buildId"
+    :entry-type="entryType"
+    :parent-type-method1="bingmapMethod"
+  />
   <div class="overlay">
     <filterView
       :filterss="dynamicFilters"
-      :listtype="listType"
+      :listtype="entryType"
       :parent-type-method="filterMethod"
       @parent-method1="bingmapMethod1"
     ></filterView>
@@ -13,12 +19,16 @@
 <script lang="ts" setup name="bingMap">
   import { onMounted, defineAsyncComponent, reactive, computed, ref, watch, toRefs } from 'vue'
   import bingmap from './components/bingmap.vue'
+  import FixedCrosshair from './components/FixedCrosshair.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
   import { useRoute } from 'vue-router'
   import { buildListinfo } from '@/api/user'
   const route = useRoute()
-  //const { params } = toRefs(route)
+
+  const buildId = route.params.id
+  const entryType = route.params.type
+  //const { params } = toRefs(route) :entryBuildId="buildId" :entryType="entryType"
 
   const bingmapRef = ref<InstanceType<typeof bingmap>>()
   const asyncBingmap = defineAsyncComponent(() => import('./components/bingmap.vue'))

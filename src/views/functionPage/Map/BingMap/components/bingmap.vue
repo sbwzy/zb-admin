@@ -9,7 +9,6 @@
   import 'leaflet-bing-layer'
   import 'leaflet/dist/leaflet.css'
   import dadianSvg from '@/src/icons/svg/dadian.svg'
-
   import { youlizrz } from '../../../../../api/youlizrz'
 
   // 切换方法，提供给父组件调用
@@ -48,6 +47,18 @@
       type: Array,
       default() {
         return []
+      },
+    },
+    entryType: {
+      type: String,
+      default() {
+        return ''
+      },
+    },
+    entryBuildId: {
+      type: String,
+      default() {
+        return ''
       },
     },
     parentTypeMethod1: {
@@ -106,6 +117,7 @@
         position: 'bottomright',
       })
       .addTo(map.value)
+
     //添加绘制图层
 
     //添加一个控制按钮 设置一下 在不同地图组件放置自然幢的勾边

@@ -20,7 +20,7 @@
     <el-drawer v-model="drawer" :direction="direction" size="50%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
-          <el-form label-position="left" label-width="60px">
+          <el-form label-position="left" label-width="80px">
             <!-- 动态筛选选项 -->
             <el-form-item v-for="(filter, index) in filterss" :key="index" :label="filter.label">
               <el-select
@@ -47,26 +47,37 @@
               <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
               <el-cascader
                 v-else-if="filter.type === 'duoxuan'"
-                ref="cascaderRef"
                 v-model="filters[filter.key]"
                 size="small"
                 :options="filter.options"
                 :props="propss"
+                class="custom-cascader"
                 collapse-tags
-                :show-all-levels="false"
                 collapse-tags-tooltip
+                :max-collapse-tags="3"
                 clearable
               />
+              <!-- <el-cascader
+					v-else-if="filter.type === 'duoxuan'"
+			        :options="filter.options"
+			        :props="propss"
+			        collapse-tags
+			        collapse-tags-tooltip
+			        :max-collapse-tags="3"
+			        clearable
+			      /> -->
 
               <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
 
-            <div v-if="listtype == 'build'">
-              <el-space wrap>
-                <el-check-tag :checked="checked1" title="花园住宅" type="primary" @change="checked1 = !checked1">花园住宅</el-check-tag>
-                <el-check-tag :checked="checked2" title="优历公房" type="primary" @change="checked2 = !checked2">优历公房</el-check-tag>
-              </el-space>
-            </div>
+            <!-- div v-if="listtype == 'build'">
+							<el-space wrap>
+								<el-check-tag :checked="checked1"  title="花园住宅"
+									type="primary" @change="funcchecked1">花园住宅</el-check-tag>
+								<el-check-tag :checked="checked2" title="优历公房"
+									type="primary" @change="funcchecked2">优历公房</el-check-tag>
+							</el-space>
+						</div> -->
           </el-form>
         </div>
       </template>
@@ -99,7 +110,7 @@
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
         <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
         <el-button @click="reset">重置</el-button>
-        <button @click="callParentMethod1">切换已选和未选中的点</button>
+        <button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</button>
       </el-form-item>
       <!-- 展开/收起按钮 -->
       <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
@@ -138,6 +149,7 @@
     emit('parent-method1')
   }
   const isExpanded = ref(false)
+
   const propss = { multiple: true }
   const stype = ref(3)
 
@@ -159,16 +171,19 @@
       default: () => {},
     },
   })
-
+  let checked1 = ref(false)
+  let checked2 = ref(false)
   // 筛选条件状态
   const filters = reactive({
     listtype: props.listtype, //类型
-    collectionStatus: '',
+    collectionStatus: '采集中',
     regionmap: '',
     type: '',
     jzName: '', //建筑名称
     rwName: '', //任务名称
-    district: null,
+    district: null, //区域
+    checked1: false,
+    checked2: false,
   })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
@@ -182,9 +197,13 @@
   // jzName: '', //建筑名称
   // rwName: '', //任务名称
   // })
-  const checked1 = ref(false)
-  const checked2 = ref(false)
 
+  const funcchecked1 = (status: boolean) => {
+    filters.checked1 = status
+  }
+  const funcchecked2 = (status: boolean) => {
+    filters.checked2 = status
+  }
   const onSubmit = () => {
     console.log('submit!', filters)
     console.log(filters)
@@ -200,10 +219,11 @@
     Object.keys(filters).forEach((key) => {
       filters[key] = ''
     })
-
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
+    //暂时
+    ;(filters['collectionStatus'] = '采集中'),
+      setTimeout(() => {
+        loading.value = false
+      }, 500)
   }
 
   onMounted(() => {
@@ -215,7 +235,27 @@
   })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+  .custom-cascader .el-cascader-panel .el-scrollbar {
+    width: 60px !important;
+    /* 设置你想要的宽度 */
+  }
+
+  .el-cascader-menu {
+    min-width: 80px !important;
+    /* 设置每个级别节点的宽度 */
+  }
+
+  .custom-cascader .el-cascader-panel .el-cascader-node {
+    width: 60% !important;
+    /* 设置每个级别节点的宽度 */
+  }
+
+  .custom-cascader .el-cascader-panel .el-cascader-node:hover {
+    background-color: #f5f7fa !important;
+    /* 鼠标悬停时的背景色 */
+  }
+
   #btnup {
     z-index: 21;
     margin-left: 43%;
@@ -229,10 +269,14 @@
     color: #fff;
     cursor: pointer;
   }
+
   #btndown {
-    position: absolute; /* 设置绝对定位 */
-    top: 92px; /* 根据需要调整距离顶部的位置 */
-    left: 50%; /* 使按钮左侧居中 */
+    position: absolute;
+    /* 设置绝对定位 */
+    top: 92px;
+    /* 根据需要调整距离顶部的位置 */
+    left: 50%;
+    /* 使按钮左侧居中 */
     transform: translateX(-50%);
     z-index: 21;
     display: block;
@@ -245,11 +289,15 @@
     color: #fff;
     cursor: pointer;
   }
+
   #btnup:hover {
-    background: #409eff; /* 鼠标悬停时的颜色 */
+    background: #409eff;
+    /* 鼠标悬停时的颜色 */
   }
+
   #btndown:hover {
-    background: #409eff; /* 鼠标悬停时的颜色 */
+    background: #409eff;
+    /* 鼠标悬停时的颜色 */
   }
 
   .filter-container {

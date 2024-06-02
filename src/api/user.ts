@@ -31,9 +31,18 @@ export function collectionInfo(data) {
 }
 
 //获取建筑列表
-export function buildListinfo(data) {
+export function buildListinfo1(data) {
   return request({
     url: '/webapi/youligf.youliQuery1',
+    method: 'post',
+    data,
+  })
+}
+
+//获取建筑列表
+export function buildListinfo(data) {
+  return request({
+    url: '/webapi/youligf.youliQuery',
     method: 'post',
     data,
   })

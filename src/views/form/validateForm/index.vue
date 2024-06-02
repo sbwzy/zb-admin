@@ -6,18 +6,7 @@
           <el-input v-model="ruleForm.name" />
         </el-form-item>
         <el-form-item label="任务区域" prop="delivery">
-          <el-link :icon="MapLocation" type="primary" @click="inMap">进入地图</el-link>
-          <!-- <el-cascader
-            ref="cascaderRef"
-            v-model="ruleForm.region"
-            size="small"
-            :options="options"
-            :props="props"
-            collapse-tags
-            :show-all-levels="false"
-            collapse-tags-tooltip
-            clearable
-          /> -->
+          <!-- <el-link :icon="MapLocation" type="primary" @click="inMap">进入地图</el-link> -->
         </el-form-item>
         <el-form-item label="任务团队分配" prop="clubType">
           <el-select v-model="ruleForm.clubType" placeholder="请选择一个团队">
@@ -40,17 +29,6 @@
             </el-form-item>
           </el-col>
         </el-form-item>
-        <!-- <el-form-item label="任务性质" prop="type">
-          <el-checkbox-group v-model="ruleForm.type">
-            <el-checkbox label="美食/餐厅线上活动" name="type" />
-            <el-checkbox label="地推活动" name="type" />
-            <el-checkbox label="线下主题活动" name="type" />
-            <el-checkbox label="单纯品牌曝光" name="type" />
-          </el-checkbox-group>
-        </el-form-item> -->
-        <!-- <el-form-item label="上传文件" prop="img">
-          <Upload v-model="ruleForm.img" />
-        </el-form-item> -->
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" />
         </el-form-item>
@@ -215,7 +193,7 @@
 
   const inMap = () => {
     router.push(
-      '/function-Page/Map/BingMap',
+      { name: 'BingMap', params: { id: '0', type: 'xcmap' } },
       //,params:{list:JSON.stringify(pointslist1.value)}
     )
   }

@@ -14,7 +14,7 @@ const functionPageRouter = [
     },
     children: [
       {
-        path: '/function-page/collection',
+        path: '/function-page/collection/:id',
         component: () => import('@/views/functionPage/collection/index.vue'),
         name: 'collection',
         meta: { title: '信息采集', keepAlive: true, icon: 'MenuIcon' },
@@ -50,7 +50,7 @@ const functionPageRouter = [
             meta: { title: 'ESRI地图', keepAlive: true, icon: 'MenuIcon' },
           },
           {
-            path: '/function-page/Map/BingMap',
+            path: '/function-page/Map/BingMap/:id/:type',
             component: () => import('@/views/functionPage/Map/BingMap/index.vue'),
             name: 'BingMap',
             meta: { title: 'Bing地图', keepAlive: true, icon: 'MenuIcon' },
