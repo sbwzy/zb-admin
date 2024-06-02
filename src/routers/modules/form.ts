@@ -27,6 +27,12 @@ const formRouter = [
         meta: { title: '巡查任务列表', icon: 'MenuIcon' },
       },
       {
+        path: '/form/displayForm',
+        component: () => import('@/views/form/displayForm/index.vue'),
+        name: 'displayForm',
+        meta: { title: '巡查任务详情', icon: 'MenuIcon' },
+      },
+      {
         path: '/form/appendForm',
         component: () => import('@/views/form/appendForm/index.vue'),
         name: 'appendForm',
