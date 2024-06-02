@@ -2,18 +2,19 @@
   <async-bingmap
     ref="bingmapRef"
     :points="pointslist"
+    :build-info="info"
     :entry-build-id="buildId"
     :entry-type="entryType"
     :parent-type-method1="bingmapMethod"
   />
-  <div class="overlay">
+  <!-- <div class="overlay">
     <filterView
       :filterss="dynamicFilters"
       :listtype="entryType"
       :parent-type-method="filterMethod"
       @parent-method1="bingmapMethod1"
     ></filterView>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup name="bingMap">
@@ -47,6 +48,13 @@
     [31.26530592827279, 121.4593505859375],
     [31.2814392726145, 121.4473342895508],
   ]
+
+  const info = {
+    id: '1',
+    locX: '31.24534249284188',
+    locY: '121.47915601730348',
+  }
+
   const pointslist = ref(pointslist1)
 
   const pointslist2 = [
@@ -143,7 +151,7 @@
 <style>
   .overlay {
     position: absolute;
-    top: 90px;
+    bottom: 0px;
     left: 0;
     width: 100%;
     height: 200px;

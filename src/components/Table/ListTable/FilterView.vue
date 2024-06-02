@@ -1,6 +1,6 @@
 <template>
   <!-- 展开/收起按钮 -->
-  <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
+  <button v-if="listtype != ':type' || !isExpanded" id="btndown" @click="isExpanded = true">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -100,7 +100,7 @@
           <el-input v-model="filters.rwName" placeholder="请输入任务名称" />
         </div>
       </el-form-item>
-      <el-form-item prop="sift" style="float: right; margin-right: 0px">
+      <el-form-item v-if="listtype != ':type' && listtype != 'buildmap'" prop="sift" style="float: right; margin-right: 0px">
         <div class="flex gap-2 mt-4">
           <SvgIcon icon-class="listType" class-name="icon" @click="drawer = true" />
         </div>
@@ -108,9 +108,14 @@
 
       <el-form-item>
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
-        <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
-        <el-button @click="reset">重置</el-button>
-        <button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</button>
+        <el-button v-if="listtype != ':type' && listtype != 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(filters)"
+          >查询</el-button
+        >
+        <el-button v-if="listtype == ':type' || listtype == 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(filters)"
+          >签到打卡</el-button
+        >
+        <el-button v-if="listtype == 'xcmap'" @click="reset">重置</el-button>
+        <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button>
       </el-form-item>
       <!-- 展开/收起按钮 -->
       <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
@@ -163,7 +168,7 @@
     listtype: {
       type: String,
       default() {
-        return ''
+        return 'buildmap' //build xcmap
       },
     },
     parentTypeMethod: {
@@ -173,6 +178,8 @@
   })
   let checked1 = ref(false)
   let checked2 = ref(false)
+
+  console.log('111', props.listtype)
   // 筛选条件状态
   const filters = reactive({
     listtype: props.listtype, //类型

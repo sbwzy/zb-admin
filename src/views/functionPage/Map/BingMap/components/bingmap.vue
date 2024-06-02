@@ -1,4 +1,9 @@
 <template>
+  <div class="cover-view1">
+    <!-- <el-icon><ArrowLeftBold/></el-icon>    -->
+    <el-button type="primary" @click="save()">打卡定位</el-button>
+  </div>
+
   <div ref="mapContainer" style="height: 100%; z-index: 20"></div>
 </template>
 
@@ -47,6 +52,12 @@
       type: Array,
       default() {
         return []
+      },
+    },
+    buildInfo: {
+      type: Object,
+      default() {
+        return {}
       },
     },
     entryType: {
@@ -196,7 +207,9 @@
     })
     console.log('打印数量', points.value)
   }
-
+  const save = () => {
+    console.log('保存')
+  }
   //挂载地图
   onMounted(() => {
     initMap()
@@ -248,5 +261,13 @@
   .leaflet-marker-icon {
     width: 10px important !;
     height: 10px important !;
+  }
+
+  .cover-view1 {
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    height: 40px;
+    top: 0px;
   }
 </style>
