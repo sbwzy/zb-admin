@@ -77,7 +77,7 @@
       default: () => {},
     },
   })
-
+  let crosshairLines = null
   let isChoosed = false
   //const { points, parentTypeMethod1 } = toRefs(props)
   const map = ref(null)
@@ -273,12 +273,26 @@
   //挂载地图
   onMounted(() => {
     initMap()
+    // 创建十字线
+    const center = map.value.getCenter()
+    crosshairLines = [
+      L.polyline([center, L.latLng(center.lat, center.lng + 0.01)], { color: 'red' }).addTo(map.value),
+      L.polyline([center, L.latLng(center.lat + 0.01, center.lng)], { color: 'red' }).addTo(map.value),
+    ]
+
+    // 监听地图的移动事件
+    map.value.on('move', () => {
+      const newCenter = map.value.getCenter()
+      crosshairLines[0].setLatLngs([newCenter, L.latLng(newCenter.lat, newCenter.lng + 0.01)])
+      crosshairLines[1].setLatLngs([newCenter, L.latLng(newCenter.lat + 0.01, newCenter.lng)])
+    })
   })
   //销毁地图
   onUnmounted(() => {
     if (map.value) {
       map.value.remove()
       map.value = null
+      map.value.off('move')
     }
   })
   //监测到值已经变动了 但是数据没有被刷新
