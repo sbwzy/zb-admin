@@ -26,7 +26,7 @@
 
     drawItems.value.clearLayers()
     paths.value = []
-    pointsList = points.value
+    pointsList = props.points
     pointsList.forEach((item) => {
       if (isChoosed && item[2] == true) {
         var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
@@ -79,47 +79,99 @@
   })
 
   let isChoosed = false
-  const { points, parentTypeMethod1 } = toRefs(props)
+  //const { points, parentTypeMethod1 } = toRefs(props)
   const map = ref(null)
   const mapContainer = ref(null)
   let pointsList = reactive([])
   let polygonList = reactive([])
+  polygonList = youlizrz
   const drawItems = ref(null)
   let path = ref([])
   let paths = ref([])
-  let pointslist2 = reactive([
-    [31.27119881827799, 121.4253616333008],
-    [31.27745508030936, 121.4517974853515],
-    [31.27530592827279, 121.4593505859375],
-    [31.2714392726145, 121.4473342895508],
-    [31.27219881827799, 121.4253616333008],
-  ])
-  //const markerLayer = new L.FeatureGroup();
+  let jsonData = ref([])
   //待选择图标
   const dxzicon = L.divIcon({
     className: 'my-div-icon',
-    iconSize: [15, 15],
-    html: `<div style="width: 6px; height: 6px; background-color: #00DD2C; border-radius: 100%"></div>`,
+    iconSize: [12, 12],
+    html: `<div style="width: 10px; height: 10px; background-color: #00DD2C; border-radius: 100%"></div>`,
   })
   //00FF00  已选择图标
   //已选择图标
   const yxzicon = L.divIcon({
     className: 'my-div-icon',
-    iconSize: [5, 5],
-    html: `<div style="width: 6px; height: 6px; background-color: #00DD2C; border-radius: 100%"></div>`,
+    iconSize: [12, 12],
+    html: `<div style="width: 12px; height: 12px; background-color: #FFAD33; border-radius: 100%"></div>`,
   })
+
+  var greenIcon = new L.Icon({
+    iconUrl: '../../../../../src/assets/image/loc.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [30, 36],
+    iconAnchor: [18, 20],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  })
+
+  var greenIcon1 = new L.Icon({
+    iconUrl: '../../../../../src/assets/image/job_icon2.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [30, 36],
+    iconAnchor: [18, 20],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  })
+
   const initMap = () => {
-    map.value = L.map(mapContainer.value).setView([31.26334249284388, 121.47915601730348], 11)
+    //建筑原规划点位信息 //原规划点位与签到位置的判断
+    //if(props.buildInfo.locX == props.buildInfo.tdtX){
+    //设置原建筑规划点位marker
+    var marker1 = L.marker([props.buildInfo.locX, props.buildInfo.locY], { icon: dxzicon }).bindPopup('原建筑点位')
+    //}
+    //上次打点位置信息
+    var marker2 = L.marker([props.buildInfo.tdtX, props.buildInfo.tdtY], { icon: yxzicon }).bindPopup('上次巡查位置')
+    //上次签到位置
+    var marker3 = L.marker([props.buildInfo.qianDaoX, props.buildInfo.qianDaoY], { icon: greenIcon1 }).bindPopup('上次签到位置')
+
+    polygonList.forEach((item) => {
+      var item1 = item.geometry.coordinates
+      //console.log(item1);
+      var item2 = item1[0][0]
+      item2.forEach((item) => {
+        var x = item[0]
+        item[0] = item[1]
+        item[1] = x
+      })
+    })
+    polygonList.forEach((item) => {
+      path.value = item.geometry.coordinates
+      var polygon = L.polygon(path.value, {
+        color: 'red',
+        opacity: 0.5,
+      }) //.addTo(this.map);
+      paths.value.push(polygon)
+    })
+    var polygonGroup = L.featureGroup(paths.value)
+
     // 添加Bing Aerial图层
 
-    const bingLayer = L.tileLayer
-      .bing({
-        bingMapsKey: 'AqzBjYlesV15mVBeg32goM6Ey2RBXVP6YPMs-MxfuPayEtgizvyyqi_P1y1YzOzh', // 替换为你的Bing Maps密钥
-        imagerySet: 'Aerial', // 使用航空影像
-        maxNativeZoom: 20,
-        maxZoom: 22,
-      })
-      .addTo(map.value)
+    const bingLayer = L.tileLayer.bing({
+      bingMapsKey: 'AqzBjYlesV15mVBeg32goM6Ey2RBXVP6YPMs-MxfuPayEtgizvyyqi_P1y1YzOzh', // 替换为你的Bing Maps密钥
+      imagerySet: 'Aerial', // 使用航空影像
+      maxNativeZoom: 20,
+      maxZoom: 22,
+    })
+    let tiandiMap = {}
+    tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1, marker2, marker3])
+
+    //.addTo(map.value)
+    map.value = L.map(mapContainer.value, {
+      center: [props.buildInfo.locX, props.buildInfo.locY],
+      zoom: 19,
+      layers: tiandiMap,
+    })
+
+    // .setView(, 19)
+
     map.value.zoomControl.remove()
     map.value.setMaxZoom(19)
     //添加缩放控件
@@ -129,83 +181,91 @@
       })
       .addTo(map.value)
 
-    //添加绘制图层
+    //console.log(points)
+    // pointsList = points.value
+    // pointsList.forEach((item) => {
+    //   item[2] = false
+    //   var marker1 = L.marker(item, { icon: dxzicon, opacity: 1 })
 
-    //添加一个控制按钮 设置一下 在不同地图组件放置自然幢的勾边
-    //let jsonData = youlizrz;
-    // const path = ref([]);
-    // const paths = ref([]);
-    // const pathss = ref([]);
+    //   paths.value.push(marker1)
+    // })
 
-    console.log(points)
-    pointsList = points.value
-    pointsList.forEach((item) => {
-      item[2] = false
-      var marker1 = L.marker(item, { icon: dxzicon, opacity: 1 })
+    // console.log(paths.value.length)
+    // drawItems.value = L.featureGroup(paths.value)
 
-      paths.value.push(marker1)
-    })
-
-    console.log(paths.value.length)
-    drawItems.value = L.featureGroup(paths.value)
-
-    map.value.addLayer(drawItems.value)
+    // map.value.addLayer(drawItems.value)
 
     // 自定义按钮的点击事件
-    function customIconClickHandler(e) {
-      // 执行你的自定义逻辑
-      console.log('paths.value.length')
-      console.log(pointsList)
-      isChoosed = !isChoosed
+    // function customIconClickHandler(e) {
+    //   // 执行你的自定义逻辑
+    //   console.log('paths.value.length')
+    //   console.log(pointsList)
+    //   isChoosed = !isChoosed
 
-      drawItems.value.clearLayers()
-      paths.value = []
-      pointsList = points.value
-      pointsList.forEach((item) => {
-        if (isChoosed && item[2] == true) {
-          var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
-          paths.value.push(marker1)
-        }
-        if (!isChoosed && item[2] != true) {
-          var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
-          paths.value.push(marker1)
-        }
-      })
-      drawItems.value = L.featureGroup(paths.value)
+    //   drawItems.value.clearLayers()
+    //   paths.value = []
+    //   pointsList = points.value
+    //   pointsList.forEach((item) => {
+    //     if (isChoosed && item[2] == true) {
+    //       var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
+    //       paths.value.push(marker1)
+    //     }
+    //     if (!isChoosed && item[2] != true) {
+    //       var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
+    //       paths.value.push(marker1)
+    //     }
+    //   })
+    //   drawItems.value = L.featureGroup(paths.value)
 
-      map.value.addLayer(drawItems.value)
-    }
+    //   map.value.addLayer(drawItems.value)
+    // }
+    // 创建十字线
+    const center = map.value.getCenter()
+    const crosshairLines = [
+      L.polyline([center, L.latLng(center.lat, center.lng + 100)], { color: 'red' }).addTo(map.value),
+      L.polyline([center, L.latLng(center.lat + 100, center.lng)], { color: 'red' }).addTo(map.value),
+      L.polyline([center, L.latLng(center.lat, center.lng - 100)], { color: 'red' }).addTo(map.value),
+      L.polyline([center, L.latLng(center.lat - 100, center.lng)], { color: 'red' }).addTo(map.value),
+    ]
 
-    // 获取leaflet-draw的按钮容器
-    const toolbarContainer = document.querySelector('.leaflet-draw-toolbar')
-    if (toolbarContainer) {
-      // 创建自定义图标链接
-      const customIconLink = document.createElement('a')
-      customIconLink.className = 'leaflet-draw-draw-custom'
-      customIconLink.style = 'background-image: none;'
-      customIconLink.title = '自定义图标链接'
+    // 监听地图的移动事件
+    map.value.on('move', () => {
+      const newCenter = map.value.getCenter()
+      crosshairLines[0].setLatLngs([newCenter, L.latLng(newCenter.lat, newCenter.lng + 100)])
+      crosshairLines[1].setLatLngs([newCenter, L.latLng(newCenter.lat + 100, newCenter.lng)])
+      crosshairLines[2].setLatLngs([newCenter, L.latLng(newCenter.lat, newCenter.lng - 100)])
+      crosshairLines[3].setLatLngs([newCenter, L.latLng(newCenter.lat - 100, newCenter.lng)])
+    })
+    // // 获取leaflet-draw的按钮容器
+    // const toolbarContainer = document.querySelector('.leaflet-draw-toolbar')
+    // if (toolbarContainer) {
+    //   // 创建自定义图标链接
+    //   const customIconLink = document.createElement('a')
+    //   customIconLink.className = 'leaflet-draw-draw-custom'
+    //   customIconLink.style = 'background-image: none;'
+    //   customIconLink.title = '自定义图标链接'
 
-      // 或者使用图片图标
-      customIconLink.innerHTML =
-        '<img src="../../../../../src/icons/svg/dadian.svg" style="height: 20px;width: 20px;padding: 5px;" alt="自定义图标" />'
+    //   // 或者使用图片图标
+    //   customIconLink.innerHTML =
+    //     '<img src="../../../../../src/icons/svg/dadian.svg" style="height: 20px;width: 20px;padding: 5px;" alt="自定义图标" />'
 
-      // 绑定点击事件到自定义图标链接
-      customIconLink.addEventListener('click', customIconClickHandler)
+    //   // 绑定点击事件到自定义图标链接
+    //   customIconLink.addEventListener('click', customIconClickHandler)
 
-      // 将自定义图标链接添加到leaflet-draw的按钮容器中
-      toolbarContainer.appendChild(customIconLink)
-    }
+    //   // 将自定义图标链接添加到leaflet-draw的按钮容器中
+    //   toolbarContainer.appendChild(customIconLink)
+    // }
 
     //图标点击事件
-    drawItems.value.on('click', (e) => {
-      console.log(e.latlng)
-    })
+    // drawItems.value.on('click', (e) => {
+    //   console.log(e.latlng)
+    // })
     // var currentZoom = map.value.getZoom();
     // console.log("当前缩放层数",currentZoom)
     map.value.on('zoomend', (e) => {
       console.log(e.target.getZoom())
     })
-    console.log('打印数量', points.value)
+    //console.log('打印数量', points.value)
   }
   const save = () => {
     console.log('保存')
@@ -222,7 +282,7 @@
     }
   })
   //监测到值已经变动了 但是数据没有被刷新
-  watch(points, (newValue, oldValue) => {
+  watch(props.points, (newValue, oldValue) => {
     console.log(newValue)
     console.log(oldValue)
   })
