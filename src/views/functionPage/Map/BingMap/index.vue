@@ -1,11 +1,14 @@
 <template>
   <async-bingmap
     ref="bingmapRef"
+    v-model:build-info="info"
     :points="pointslist"
-    :build-info="info"
     :entry-build-id="buildId"
     :entry-type="entryType"
     :parent-type-method1="bingmapMethod"
+    @update:build-infotdtx="updatebuildinfo"
+    @update:build-infoqiandaox="updatebuildinfo1"
+    @update:build-inforeason="updatebuildinfo2"
   />
   <!-- <div class="overlay">
     <filterView
@@ -48,7 +51,7 @@
     [31.26530592827279, 121.4593505859375],
     [31.2814392726145, 121.4473342895508],
   ]
-  const info = {
+  const info = ref({
     id: '1',
     locX: '31.1956946111755', //建筑原本建筑位置x 31.193838901816
     locY: '121.41569532646', //建筑原本建筑位置y 121.420338909884
@@ -56,7 +59,9 @@
     tdtY: '121.420338909884',
     qianDaoX: '31.193848902816',
     qianDaoY: '121.420438908884',
-  }
+    isMorm: true,
+    qiaoDaoReason: '当前gis信号差',
+  })
 
   const pointslist = ref(pointslist1)
 
@@ -122,6 +127,18 @@
     console.log(menuDIV)
   }
 
+  const updatebuildinfo = (val) => {
+    console.log('打印', val)
+    //info.value.qiaoDaoReason = val
+  }
+  const updatebuildinfo1 = (val) => {
+    console.log('打印1', val)
+    //info.value.qiaoDaoReason = val
+  }
+  const updatebuildinfo2 = (val) => {
+    console.log('打印2', val)
+    //info.value.qiaoDaoReason = val
+  }
   const filterMethod = (el) => {
     console.log('打印', el)
   }

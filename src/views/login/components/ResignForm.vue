@@ -171,7 +171,7 @@
           })
           ElNotification({
             title: getTimeStateStr(),
-            message: '欢迎登录 公房监测管理平台',
+            message: '欢迎登录 优历直管公房数据采集平台',
             type: 'success',
             duration: 3000,
           })

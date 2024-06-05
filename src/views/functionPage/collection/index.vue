@@ -53,43 +53,45 @@
         <el-form-item label="审核意见">
           <el-input v-model="ruleForm.descShenHe" readonly />
         </el-form-item>
-
-        <!-- <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="ruleForm.phone" placeholder="请输入手机号码" />
-        </el-form-item>
-
-        <el-form-item label="匹配文字变色（搜索时）" prop="keyword" class="item-form">
-          <div>示例：<span v-html="keyword"></span></div>
-          <el-input v-model="ruleForm.keyword" placeholder="请输入关键字" @input="onVerifyKeywordColor" />
-        </el-form-item>
-
-        <el-form-item label="身份证" prop="idCard" class="item-form">
-          <div>验证身份证是否正确</div>
-          <el-input v-model="ruleForm.idCard" placeholder="请输入身份证" />
-        </el-form-item>
-
-        <el-form-item label="网址" prop="website" class="item-form">
-          <div>验证url是否正确。</div>
-          <el-input v-model="ruleForm.website" placeholder="请输入url" />
-        </el-form-item>
-
-        <el-form-item label="html标签" prop="html" class="item-form">
-          <div>是否是html标签</div>
-          <el-input v-model="ruleForm.html" placeholder="请输入html标签" />
-        </el-form-item>
-
-        <el-form-item label="日期" prop="date" class="item-form">
-          <div>是否是正确的日期</div>
-          <el-input v-model="ruleForm.date" placeholder="请输入日期" />
-        </el-form-item>
-
-        <el-form-item label="邮箱" prop="email" class="item-form">
-          <div>是否是正确的邮箱</div>
-          <el-input v-model="ruleForm.email" placeholder="请输入邮箱" />
-        </el-form-item> -->
       </el-form>
 
-      <div v-if="componentType === 'patrol'">
+      <div>
+        <el-tabs type="border-card" class="demo-tabs">
+          <el-tab-pane>
+            <template #label>
+              <span class="custom-tabs-label">
+                <el-icon><calendar /></el-icon>
+                <span>照片1</span>
+              </span>
+            </template>
+            <!-- <div class="container">
+        <img src="../../../assets/image/avatar.png" alt="Your Image" class="image" />
+        <div class="text">
+            Lorem ipsum dolor sit ame
+        </div>
+      </div> -->
+            <el-row class="cardContainer" :gutter="20">
+              <el-col v-for="item in lists" :key="item" :xs="12" :sm="8" :md="6" :lg="{ span: '7' }">
+                <el-card
+                  class="card"
+                  shadow="hover"
+                  :body-style="{
+                    padding: '10px',
+                    boxSizing: 'border-box',
+                    width: '100%',
+                  }"
+                >
+                  <div class="content">
+                    <img :src="item.imgUrl" class="image" alt="图片" />
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="Config"> </el-tab-pane>
+          <el-tab-pane label="Role">Role</el-tab-pane>
+          <el-tab-pane label="Task">Task</el-tab-pane>
+        </el-tabs>
         <!-- 图片模块 -->
         <div class="itemCloum" title="">
           <div title="">
@@ -114,9 +116,9 @@
             </div>
 
             <div class="button-sp-area">
-              <button class="mini-btn">取消</button>
-              <button class="mini-btn">暂存</button>
-              <button class="mini-btn">保存并提交</button>
+              <el-button class="mini-btn">取消</el-button>
+              <el-button class="mini-btn">暂存</el-button>
+              <el-button class="mini-btn">保存并提交</el-button>
             </div>
           </div>
         </div>
@@ -141,9 +143,19 @@
     verifyDate,
     verifyEmail,
   } from '@/utils/validate'
+
+  interface ListItem {
+    imgUrl: string
+    name: string
+  }
+  const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
   let text = '只要自己不放弃，没有任何人可以打倒你'
   let keyword = ref<string>(text)
+  const currentDate = new Date().toDateString()
+
+  const lists = ref<ListItem[]>([])
+  const url = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
   const ruleForm = reactive({
     standartName: '测试名称',
     shouQuanDZ: '测试地址',
@@ -238,6 +250,20 @@
     // collectionInfo(gfIDList).then((res) => {
     //   console.log(res)
     // })
+    lists.value = [
+      {
+        imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        name: 'Deer',
+      },
+      {
+        imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+        name: 'Horse',
+      },
+      {
+        imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
+        name: 'Mountain Lion',
+      },
+    ]
   })
 </script>
 
@@ -268,5 +294,41 @@
     background: white;
     padding: 5px;
     box-sizing: border-box;
+  }
+
+  .demo-tabs > .el-tabs__content {
+    padding: 32px;
+    color: #6b778c;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  .demo-tabs .custom-tabs-label .el-icon {
+    vertical-align: middle;
+  }
+  .demo-tabs .custom-tabs-label span {
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+  }
+
+  .image {
+    width: 100px; /* 或者你需要的尺寸 */
+    height: 100px; /* 或者你需要的尺寸 */
+    margin-right: 20px; /* 图片和文本之间的距离 */
+  }
+  .el-card {
+    border: 0px;
+    margin-bottom: 40px;
+    .content {
+      img {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
   }
 </style>

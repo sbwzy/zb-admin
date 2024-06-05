@@ -1,6 +1,6 @@
 <template>
   <div class="login-qrcode">
-    <h2 class="title">公房监测管理平台</h2>
+    <h2 class="title">优历直管公房数据采集平台</h2>
     <vue-qr text="https://dev.ccgis.cn/wuyegl/leafletMap/index.html"></vue-qr>
   </div>
 </template>

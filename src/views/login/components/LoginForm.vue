@@ -1,7 +1,7 @@
 <template>
   <div class="login-title">
     <img class="icon" src="@/assets/image/logo1.png" alt="logo" />
-    <h2 class="title">公房监测管理平台</h2>
+    <h2 class="title">优历直管公房数据采集平台</h2>
   </div>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules">
     <el-form-item label="" prop="username">
@@ -86,7 +86,7 @@
           })
           ElNotification({
             title: getTimeStateStr(),
-            message: '欢迎登录 公房监测管理平台',
+            message: '欢迎登录 优历直管公房数据采集平台',
             type: 'success',
             duration: 3000,
           })

@@ -6,7 +6,7 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img src="@/assets/image/logo1.png" class="sidebar-logo" />
-        <h1 class="sidebar-title">公房监测管理平台</h1>
+        <h1 class="sidebar-title">优历直管公房数据采集</h1>
       </router-link>
     </transition>
   </div>
