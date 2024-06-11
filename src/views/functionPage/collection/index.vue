@@ -57,21 +57,15 @@
 
       <div>
         <el-tabs type="border-card" class="demo-tabs">
-          <el-tab-pane>
+          <el-tab-pane v-for="(tab, index) in tabs" :key="index">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><calendar /></el-icon>
-                <span>照片1</span>
+                <el-icon><component :is="tab.icon" /></el-icon>
+                <span>{{ tab.title }}</span>
               </span>
             </template>
-            <!-- <div class="container">
-        <img src="../../../assets/image/avatar.png" alt="Your Image" class="image" />
-        <div class="text">
-            Lorem ipsum dolor sit ame
-        </div>
-      </div> -->
             <el-row class="cardContainer" :gutter="20">
-              <el-col v-for="item in lists" :key="item" :xs="12" :sm="8" :md="6" :lg="{ span: '7' }">
+              <el-col v-for="item in tab.imglists" :key="item" :xs="12" :sm="8" :md="6" :lg="{ span: '7' }">
                 <el-card
                   class="card"
                   shadow="hover"
@@ -82,15 +76,12 @@
                   }"
                 >
                   <div class="content">
-                    <img :src="item.imgUrl" class="image" alt="图片" />
+                    <el-image :src="item.imgUrl" :preview-src-list="[item.imgUrl]" class="image" alt="图片"></el-image>
                   </div>
                 </el-card>
               </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="Config"> </el-tab-pane>
-          <el-tab-pane label="Role">Role</el-tab-pane>
-          <el-tab-pane label="Task">Task</el-tab-pane>
         </el-tabs>
         <!-- 图片模块 -->
         <div class="itemCloum" title="">
@@ -115,7 +106,7 @@
               </div>
             </div>
 
-            <div class="button-sp-area">
+            <div class="button-sp-area foot-button">
               <el-button class="mini-btn">取消</el-button>
               <el-button class="mini-btn">暂存</el-button>
               <el-button class="mini-btn">保存并提交</el-button>
@@ -128,10 +119,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, reactive, ref } from 'vue'
+  import { onMounted, reactive, ref, computed } from 'vue'
+  import { useRoute } from 'vue-router'
   import type { FormInstance, FormRules } from 'element-plus'
   // 在这里引入接口
-  import { collectionInfo, getLocationInfo } from '@/api/user'
+  import { youliCJXQGet, getLocationInfo } from '@/api/user'
   import { useUserStore } from '@/store/modules/user'
   import { youliCJXQGet } from '@/api/user'
   import {
@@ -144,18 +136,92 @@
     verifyDate,
     verifyEmail,
   } from '@/utils/validate'
-
-  interface ListItem {
-    imgUrl: string
-    name: string
+  interface Tab {
+    title: string
+    icon: string
+    imglists: any
+    // 其他属性...
   }
+  const route = useRoute()
+  const currentBuildingId = route.params.id
+
+  const tabs = ref<Tab[]>([
+    {
+      title: '建筑名称标识',
+      icon: 'Picture',
+      imglists: [
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+          name: 'Deer',
+        },
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+          name: 'Horse',
+        },
+        // 更多图片...
+      ],
+      // 其他属性...
+    },
+    {
+      title: '公安绿牌',
+      icon: 'Picture',
+      imglists: [
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
+          name: 'Mountain Lion',
+        },
+        // 更多图片...
+      ],
+      // 其他属性...
+    },
+    {
+      title: '外立面',
+      icon: 'Picture',
+      imglists: [
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+          name: 'Deer',
+        },
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+          name: 'Horse',
+        },
+        {
+          imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
+          name: 'Mountain Lion',
+        },
+        // 更多图片...
+      ],
+
+      // 其他属性...
+    },
+    {
+      title: '铭牌',
+      icon: 'Picture',
+      imglists: [
+        { imgUrl: 'https://example.com/image1.jpg' },
+        // 更多图片...
+      ],
+      // 其他属性...
+    },
+    {
+      title: '产业状态',
+      icon: 'Picture',
+      imglists: [
+        { imgUrl: 'https://example.com/image1.jpg' },
+        // 更多图片...
+      ],
+      // 其他属性...
+    },
+    // 更多标签页数据...
+  ])
+
   const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
   let text = '只要自己不放弃，没有任何人可以打倒你'
   let keyword = ref<string>(text)
   const currentDate = new Date().toDateString()
 
-  const lists = ref<ListItem[]>([])
   const url = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
   const ruleForm = reactive({
     standartName: '测试名称',
@@ -229,53 +295,21 @@
     ],
   })
 
-  const onVerifyKeywordColor = (value) => {
-    if (!value) keyword.value = text
-    else keyword.value = verifyTextColor(value, text)
-  }
-
-  let props = defineProps({
-    componentType: {
-      type: String,
-      default() {
-        return ''
-      },
-    },
-  })
-
-  const gfIDList = {
-    gfID: '1',
-  }
-
   onMounted(() => {
-    // collectionInfo(gfIDList).then((res) => {
-    //   console.log(res)
-    // })
-
-    // youliCJXQGet("1").then(res => {
-    //   console.log("11111")
-    //   console.log(res)
-    // })
-    lists.value = [
-      {
-        imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-        name: 'Deer',
-      },
-      {
-        imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
-        name: 'Horse',
-      },
-      {
-        imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-        name: 'Mountain Lion',
-      },
-    ]
+    //获取
+    youliCJXQGet(currentBuildingId).then((res) => {
+      console.log('res')
+      console.log(res)
+    })
   })
 </script>
 
 <style lang="scss">
   .app-container {
     color: #606266;
+  }
+  .foot-button {
+    text-align: center;
   }
 
   ::v-deep(.item-form) {
@@ -322,8 +356,6 @@
   }
 
   .image {
-    width: 100px; /* 或者你需要的尺寸 */
-    height: 100px; /* 或者你需要的尺寸 */
     margin-right: 20px; /* 图片和文本之间的距离 */
   }
   .el-card {
@@ -331,8 +363,6 @@
     margin-bottom: 40px;
     .content {
       img {
-        width: 100%;
-        height: 100%;
         display: block;
       }
     }
