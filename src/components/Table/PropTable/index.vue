@@ -1,9 +1,8 @@
 <template>
   <div class="zb-pro-table">
     <div class="header">
-      <filterView :filters="filters"></filterView>
+      <filterView :filterss="filters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
     </div>
-
     <!--底部-->
     <div class="footer">
       <!--工具栏操作工具-->
@@ -21,11 +20,21 @@
 		    :expand-row-keys="defaultExpandedKeys"
 		    style="width: 100%"
 		  > -->
-        <el-table :data="list" row-key="id" style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column :reserve-selection="true" type="selection" width="55" />
-          <el-table-column label="授权地址" prop="shouQuanDZ" />
-          <el-table-column label="类型" prop="standardType" />
-          <el-table-column show-overflow-tooltip label="房屋类型" prop="fangWuYTOld" />
+        <el-table
+          ref="tableRef"
+          :data="list"
+          row-key="id"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          @select="selectchange"
+          @select-all="selectAllchange"
+        >
+          <el-table-column :reserve-selection="true" type="selection" width="40" />
+          <el-table-column label="区域" prop="qu" width="55" />
+          <el-table-column show-overflow-tooltip label="街道" prop="jieZhen" width="65" />
+          <el-table-column v-if="props.listType == 'newxcrw'" show-overflow-tooltip label="房屋类型" prop="standardType" />
+          <el-table-column show-overflow-tooltip label="授权地址" prop="shouQuanDZ" width="120" />
+          <el-table-column v-if="props.listType == 'zyfp'" show-overflow-tooltip label="采集人" prop="workPerson" />
           <!-- <el-table-column fixed="right" label="操作" width="100">
             <template #default>
               <el-button link type="primary" size="small" @click="handleClick"> 驳回 </el-button>
@@ -50,11 +59,33 @@
           </template>
         </el-table> -->
       </div>
+      <!-- 分配采集人-->
+      <el-dialog v-if="props.listType == 'zyfp'" v-model="dialogVisible" title="分配采集人" width="80%">
+        <template #header="{ close, titleId, titleClass }">
+          <div class="my-header">
+            <h4 :id="titleId" :class="titleClass">当前已选择{{ multipleSelection.length }}幢建筑</h4>
+          </div>
+        </template>
+        <el-form :model="form" size="large">
+          <el-form-item label="人员" label-width="40px">
+            <el-select v-model="form.region" placeholder="请分配采集人">
+              <el-option label="张三" value="张三" />
+              <el-option label="李四" value="李四" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="save">确定</el-button>
+          </span>
+        </template>
+      </el-dialog>
       <!--分页-->
       <div class="pagination">
         <el-pagination
           v-model:currentPage="pagination.currentPage"
-          :page-size="10"
+          :page-size="20"
           small
           background
           layout="total, prev, pager"
@@ -72,15 +103,8 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import type { FormInstance } from 'element-plus'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
-  const ruleFormRef = ref<FormInstance>()
-  //const parentBorder = ref(false)
-  //const childBorder = ref(false)
+  import { reactive } from 'vue'
 
-  //const defaultExpandedKeys = tableData.map((item) => item.id) selectedRow
-  const selectedRow = ref([])
-  const multipleSelection = ref([])
-
-  const emit = defineEmits(['reset', 'onSubmit', 'selection-change'])
   let props = defineProps({
     columns: {
       type: Array,
@@ -98,11 +122,54 @@
       type: Boolean,
       default: false,
     },
+    listType: {
+      type: String,
+      default: '',
+    },
+    id: {
+      type: String,
+      default: '',
+    },
   })
+
+  //const etitle = props.entryType == 'xcrw'? '请选择建筑范围':'分配采集人'
+  const ruleFormRef = ref<FormInstance>()
+
+  //const listType = 'xzlb'
+  const dialogVisible = ref(false)
+  const selected = ref(null)
+  const options = ref([
+    { label: '选项1', value: 'option1' },
+    { label: '选项2', value: 'option2' },
+    { label: '选项3', value: 'option3' },
+  ])
+  const form = reactive({
+    name: '',
+    region: '',
+    date1: '',
+    date2: '',
+    delivery: false,
+    type: [],
+    resource: '',
+    desc: '',
+  })
+  //const parentBorder = ref(false)
+  //const childBorder = ref(false)
+
+  //const defaultExpandedKeys = tableData.map((item) => item.id) selectedRow
+  const selectedRow = ref([])
+  const multipleSelection = ref([])
+
+  const emit = defineEmits(['reset', 'onSubmit', 'selection-change', 'selectsearch'])
 
   const handleSelectionChange = (val) => {
     console.log(val)
-    multipleSelection.value = val
+    console.log(val.length)
+    let selectlist = []
+    val.forEach((item) => {
+      selectlist.push(item.id)
+    })
+    multipleSelection.value = selectlist
   }
 
   // 过滤调需要进行搜索选择的
@@ -112,12 +179,16 @@
 
   const pagination = reactive({
     currentPage: 1,
-    pageSize: 10,
+    pageSize: 20,
   })
 
   const getRowKeys = (row) => {
     return row.id
   }
+
+  const selectAllchange = () => {}
+
+  const selectchange = () => {}
   const currentPage = ref(1)
   // 收缩展开
   //const isExpand = ref(false)
@@ -130,11 +201,38 @@
     pagination.currentPage = val
   }
 
+  const tableRef = ref(null)
+  const filterMethod = (e1, e2) => {
+    console.log(e1, e2)
+    if (e1 == 1) {
+      console.log('修改列表')
+      selectsearch(e2)
+    } else if (e1 == 3) {
+      dialogVisible.value = !dialogVisible.value
+    } else if (e1 == 4) {
+      if (e2) {
+        tableRef.value.clearSelection()
+        tableRef.value.toggleAllSelection()
+      }
+      //selectsearch(e2)
+      //multipleSelection.value =
+    }
+  }
+
+  const selectsearch = (val) => {
+    emit('selectsearch', val)
+  }
+
+  const save = () => {
+    console.log('确定建筑或者联系人')
+    console.log(form.region)
+    //dialogVisible.value = false
+  }
   //当前页面的list  勾选记录时需要需要存下来
   const list = computed(() => {
     let arr = JSON.parse(JSON.stringify(props.data))
     let gxarr = multipleSelection
-    return arr.splice((pagination.currentPage - 1) * 10, 10)
+    return arr.splice((pagination.currentPage - 1) * 20, 20)
   })
 
   const listLoading = ref(false)
@@ -144,8 +242,6 @@
   const cancelEdit = (row) => {
     row.edit = false
   }
-
-  import { reactive } from 'vue'
 
   let obj = {}
   let search = []

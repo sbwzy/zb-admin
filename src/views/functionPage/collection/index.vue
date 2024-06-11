@@ -133,6 +133,7 @@
   // 在这里引入接口
   import { collectionInfo, getLocationInfo } from '@/api/user'
   import { useUserStore } from '@/store/modules/user'
+  import { youliCJXQGet } from '@/api/user'
   import {
     validatorMethod,
     verifyPhone,
@@ -248,6 +249,11 @@
 
   onMounted(() => {
     // collectionInfo(gfIDList).then((res) => {
+    //   console.log(res)
+    // })
+
+    // youliCJXQGet("1").then(res => {
+    //   console.log("11111")
     //   console.log(res)
     // })
     lists.value = [

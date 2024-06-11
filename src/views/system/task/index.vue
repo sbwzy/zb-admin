@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 筛选列表 -->
+
     <filterView :filterss="dynamicFilters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
     <div class="mui-content-padded">
       <!-- 信息列表组件 seniorList:高管数组信息 -->

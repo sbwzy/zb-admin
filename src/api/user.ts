@@ -19,9 +19,25 @@ export function getLocationInfo(data) {
 }
 
 //登录接口
+
+//登录 /wuyegl/webapi/login
+export const loginInfo = (p1, p2) => {
+  return request.post('webapi/login', {
+    phone: p1,
+    yzm: p2,
+  })
+}
 //注册接口
 
 // 获取详情
+
+//详情查看
+export const youliCJXQGet = (id) => {
+  return request.post('webapi/youligf.youliCJXQ', {
+    gfid: id,
+  })
+}
+
 export function collectionInfo(data) {
   return request({
     url: '/webapi/youligf.youliCJXQ1',

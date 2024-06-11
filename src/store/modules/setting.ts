@@ -40,6 +40,18 @@ export const useSettingStore = defineStore({
       // 色弱模式
       weak: false,
     },
+    //新建巡查任务 字段信息
+    xcrw: {
+      name: '',
+      //region: '',
+      date1: '',
+      date2: '',
+      delivery: false,
+      type: [],
+      resource: '',
+      desc: '',
+      clubType: '',
+    },
   }),
   getters: {},
   // 可以同步 也可以异步
@@ -67,6 +79,10 @@ export const useSettingStore = defineStore({
       setTimeout(() => {
         this.isReload = true
       }, 50)
+    },
+    //新建巡查任务时候 在未保存时候 缓存到本地
+    setXcrw(value) {
+      this.xcrw = value
     },
   },
   // 这部分数据不需要存储

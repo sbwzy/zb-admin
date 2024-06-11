@@ -6,7 +6,7 @@
           <el-input v-model="ruleForm.name" />
         </el-form-item>
         <el-form-item label="任务区域" prop="delivery">
-          <!-- <el-link :icon="MapLocation" type="primary" @click="inMap">进入地图</el-link> -->
+          <el-link :icon="OfficeBuilding" type="primary" @click="inBuilds">选择建筑</el-link>
         </el-form-item>
         <el-form-item label="任务团队分配" prop="clubType">
           <el-select v-model="ruleForm.clubType" placeholder="请选择一个团队">
@@ -42,9 +42,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue'
-  import { MapLocation, View as IconView } from '@element-plus/icons-vue'
+  import { reactive, ref, onMounted } from 'vue'
+  import { MapLocation, Memo, OfficeBuilding, View as IconView } from '@element-plus/icons-vue'
   import type { FormInstance } from 'element-plus'
+  import { useSettingStore } from '@/store/modules/setting'
   import Upload from './components/Upload.vue'
   import { useRouter } from 'vue-router'
   const router = useRouter()
@@ -53,52 +54,9 @@
   const ruleFormRef = ref<FormInstance>()
   const props = { multiple: true }
   const cascaderRef = ref(null)
+  const UseSettingStore = useSettingStore()
 
-  const pointslist1 = ref([
-    [31.26119881827799, 121.4253616333008],
-    [31.32745508030936, 121.3517974853515],
-    [31.36530592827279, 121.3593505859375],
-    [31.3814392726145, 121.3473342895508],
-    [31.21119881827799, 121.4253616333008],
-    [31.39745508030936, 121.3517974853515],
-    [31.31530592827279, 121.3593505859375],
-    [31.3114392726145, 121.3473342895508],
-  ])
-  const options = [
-    {
-      value: 1,
-      label: '全市',
-      children: [
-        {
-          value: 2,
-          label: '静安区',
-          children: [
-            { value: 3, label: '南京西路街道' },
-            { value: 4, label: '曹家渡街道' },
-            { value: 5, label: '江宁路街道' },
-          ],
-        },
-        {
-          value: 6,
-          label: '徐汇区',
-          children: [
-            { value: 7, label: '天平路街道' },
-            { value: 8, label: '湖南路街道' },
-            { value: 9, label: '徐家汇街道' },
-          ],
-        },
-        {
-          value: 10,
-          label: '普陀区',
-          children: [
-            { value: 11, label: '曹杨新村街道' },
-            { value: 12, label: '长寿路街道' },
-          ],
-        },
-      ],
-    },
-  ]
-  const ruleForm = reactive({
+  let ruleForm = reactive({
     name: '',
     //region: '',
     date1: '',
@@ -108,7 +66,6 @@
     resource: '',
     desc: '',
     clubType: '',
-    img: [],
   })
 
   const rules = reactive({
@@ -116,14 +73,6 @@
       { required: true, message: '请输入任务名称', trigger: 'blur' },
       { min: 3, message: '长度大于3个字符', trigger: 'blur' },
     ],
-    img: [{ required: false, message: '请上传图片', trigger: 'blur' }],
-    // region: [
-    //   {
-    //     required: true,
-    //     message: '请选择任务区域',
-    //     trigger: 'change',
-    //   },
-    // ],
     date1: [
       {
         type: 'date',
@@ -142,7 +91,7 @@
     ],
     clubType: [
       {
-        type: 'array',
+        type: String,
         required: true,
         message: '请分配一个团队',
         trigger: 'change',
@@ -158,7 +107,7 @@
     delivery: [
       {
         required: true,
-        message: '请进入地图选择区域方位\n',
+        message: '请选择区域范围\n',
         trigger: 'change',
       },
       {
@@ -166,7 +115,7 @@
           if (value) {
             callback() // 如果选择true，则验证通过
           } else {
-            callback(new Error('请进入地图选择区域方位')) // 如果选择false，则返回错误信息
+            callback(new Error('请进入选择区域范围')) // 如果选择false，则返回错误信息
           }
         },
         trigger: 'change',
@@ -191,12 +140,20 @@
     formEl.resetFields()
   }
 
-  const inMap = () => {
+  const inBuilds = () => {
+    //缓存当前页面的信息
+    UseSettingStore.setXcrw(ruleForm)
     router.push(
-      { name: 'BingMap', params: { id: '0', type: 'xcmap' } },
+      { name: 'comprehensive', params: { type: 'newxcrw', id: '1' } },
       //,params:{list:JSON.stringify(pointslist1.value)}
     )
   }
+
+  onMounted(() => {
+    //初始化是赋值信息
+    console.log('赋值新建的巡查任务字段')
+    ruleForm = UseSettingStore.xcrw
+  })
 </script>
 <style lang="scss">
   .el-cascader-menu {

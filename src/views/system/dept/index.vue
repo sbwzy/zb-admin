@@ -91,32 +91,6 @@
       type: 'text',
       placeholder: '请输入创建人',
     },
-    {
-      label: '区域选择',
-      key: 'region',
-      type: 'cascader',
-      placeholder: '请选择区域',
-      options: [
-        {
-          value: '黄浦',
-          label: '黄浦区',
-          children: [
-            { value: '南京东路街道', label: '南京东路街道' },
-            { value: '外滩街道', label: '外滩街道' },
-            // 街道选项...
-          ],
-        },
-        {
-          value: '徐汇',
-          label: '徐汇区',
-          children: [
-            { value: '徐家汇街道', label: '徐家汇街道' },
-            { value: '田林街道', label: '田林街道' },
-            // 街道选项...
-          ],
-        },
-      ],
-    },
   ])
 
   let dataList = ref([

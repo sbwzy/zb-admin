@@ -62,7 +62,7 @@
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
   import { getYZM } from '@/api/user'
-  import { collectionInfo } from '@/api/user'
+  import { loginInfo } from '@/api/user'
   const router = useRouter()
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
@@ -93,27 +93,32 @@
       if (valid) {
         loading.value = true
 
-        collectionInfo(gfIDList).then((res) => {
+        loginInfo(ruleForm.phone, ruleForm.yzm).then((res) => {
           console.log(res)
+          if (res.data.result == 1) {
+            setTimeout(async () => {
+              await UserStore.login1(ruleForm)
+              await router.push({
+                path: '/',
+              })
+              ElNotification({
+                title: getTimeStateStr(),
+                message: '欢迎登录 监测管理平台',
+                type: 'success',
+                duration: 3000,
+              })
+              loading.value = true
+            }, 1000)
+          } else {
+            console.log('error submit!')
+            return false
+          }
         })
         // getYZM(ruleForm).then((res) => {
         //   console.log('打印', res)
         //   //把后面代码写在这里面
         // })
         // 登录
-        setTimeout(async () => {
-          await UserStore.login1(ruleForm)
-          await router.push({
-            path: '/',
-          })
-          ElNotification({
-            title: getTimeStateStr(),
-            message: '欢迎登录 监测管理平台',
-            type: 'success',
-            duration: 3000,
-          })
-          loading.value = true
-        }, 1000)
       } else {
         console.log('error submit!')
         return false

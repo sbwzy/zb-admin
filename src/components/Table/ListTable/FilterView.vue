@@ -1,6 +1,6 @@
 <template>
   <!-- 展开/收起按钮 -->
-  <button v-if="listtype != ':type' || !isExpanded" id="btndown" @click="isExpanded = true">
+  <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -41,7 +41,7 @@
                 :options="filter.options"
                 :placeholder="filter.placeholder"
               />
-              <el-checkbox-group v-else-if="filter.type === 'checkbox' && listtype == 'xcrw'" v-model="filters[filter.key]">
+              <el-checkbox-group v-else-if="filter.type === 'checkbox'" v-model="filters[filter.key]">
                 <el-checkbox v-for="option in filter.options" :key="option.value" :label="option.value">{{ option.label }}</el-checkbox>
               </el-checkbox-group>
               <el-time-picker v-else-if="filter.type === 'time'" v-model="filters[filter.key]" :placeholder="filter.placeholder" />
@@ -83,21 +83,21 @@
       </template>
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="reset()">重置</el-button>
           <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
+          <el-button @click="reset">重置</el-button>
         </div>
       </template>
     </el-drawer>
 
     <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
-      <el-form-item v-if="listtype == 'build' || listtype == 'xcmap'" label="建筑名称" prop="jzName">
+      <el-form-item v-if="listtype != 'xcrw'" label="建筑信息" prop="jzName">
         <div class="flex gap-1 mt-4">
-          <el-input v-model="filters.jzName" placeholder="请输入建筑名称" />
+          <el-input v-model="filters.jzName" placeholder="请输入建筑相关信息" />
         </div>
       </el-form-item>
-      <el-form-item v-else-if="listtype == 'xcrw'" label="任务名称" prop="wName">
+      <el-form-item v-else-if="listtype == 'xcrw'" label="任务信息" prop="wName">
         <div class="flex gap-1 mt-4">
-          <el-input v-model="filters.rwName" placeholder="请输入任务名称" />
+          <el-input v-model="filters.rwName" placeholder="请输入任务相关信息" />
         </div>
       </el-form-item>
       <el-form-item v-if="listtype != ':type' && listtype != 'buildmap'" prop="sift" style="float: right; margin-right: 0px">
@@ -108,13 +108,18 @@
 
       <el-form-item>
         <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
-        <el-button v-if="listtype != ':type' && listtype != 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(filters)"
+        <el-button v-if="listtype != ':type' && listtype != 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(1, filters)"
           >查询</el-button
         >
-        <el-button v-if="listtype == ':type' || listtype == 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(filters)"
+        <el-button v-if="listtype == ':type' || listtype == 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(2, filters)"
           >签到打卡</el-button
         >
-        <el-button v-if="listtype == 'xcmap'" @click="reset">重置</el-button>
+        <el-button @click="reset">重置</el-button>
+        <el-button v-if="listtype == 'xcmap' || listtype == 'xzlb'" type="primary" :icon="Select" @click="parentTypeMethod(3, 'select')"
+          >分配已勾选</el-button
+        >
+        <el-button v-if="listtype == 'newxcrw'" type="primary" :icon="Select" @click="parentTypeMethod(4, filters)">选择所有</el-button>
+        <!-- <el-button  v-if="listtype == 'xcmap' || listtype == 'xzlb' " type="primary" :icon="SemiSelect" @click="parentTypeMethod(filters)">未勾选</el-button> -->
         <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button>
       </el-form-item>
       <!-- 展开/收起按钮 -->
@@ -141,10 +146,9 @@
 <script lang="ts" setup>
   import { ElMessageBox, ElMessage, FormInstance, ComponentSize, DrawerProps } from 'element-plus'
   import { onMounted, reactive, computed, ref, defineEmits } from 'vue'
-  import { Search } from '@element-plus/icons-vue'
+  import { Search, Select, SemiSelect } from '@element-plus/icons-vue'
 
   import { useSettingStore } from '@/store/modules/setting'
-
   // 定义事件
   const emit = defineEmits(['parent-method1'])
 
@@ -191,6 +195,8 @@
     district: null, //区域
     checked1: false,
     checked2: false,
+    streetType: '未分配',
+    standardType: '',
   })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
@@ -219,23 +225,23 @@
       loading.value = false
     }, 500)
   }
+
   //重置方法没做好
   const reset = () => {
     loading.value = true
     // 将响应式对象置空
     Object.keys(filters).forEach((key) => {
-      filters[key] = ''
+      ;(filters[key] = ''), (filters['collectionStatus'] = '采集中'), (filters['streetType'] = '未分配')
     })
     //暂时
-    ;(filters['collectionStatus'] = '采集中'),
-      setTimeout(() => {
-        loading.value = false
-      }, 500)
+    setTimeout(() => {
+      loading.value = false
+    }, 500)
   }
 
   onMounted(() => {
     console.log(props.filterss)
-    console.log(props.listtype)
+    console.log('打印1111', props.listtype)
     setTimeout(() => {
       loading.value = false
     }, 500)
