@@ -22,6 +22,12 @@ export function getLocationInfo(data) {
 //注册接口
 
 // 获取详情
+export const youliCJXQGet = (id) => {
+  return request.post('webapi/youligf.youliCJXQ', {
+    gfid: id,
+  })
+}
+
 export function collectionInfo(data) {
   return request({
     url: '/webapi/youligf.youliCJXQ1',
