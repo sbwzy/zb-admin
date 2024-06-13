@@ -125,7 +125,6 @@
   // 在这里引入接口
   import { youliCJXQGet, getLocationInfo } from '@/api/user'
   import { useUserStore } from '@/store/modules/user'
-  import { youliCJXQGet } from '@/api/user'
   import {
     validatorMethod,
     verifyPhone,

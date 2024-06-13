@@ -98,7 +98,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, onMounted, ref } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
   import SearchForm from '@/components/SearchForm/index.vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import type { FormInstance } from 'element-plus'
@@ -160,6 +160,9 @@
   const selectedRow = ref([])
   const multipleSelection = ref([])
 
+  const tableRef = ref(null)
+  const selectAll = ref(false) // 全选状态
+
   const emit = defineEmits(['reset', 'onSubmit', 'selection-change', 'selectsearch'])
 
   const handleSelectionChange = (val) => {
@@ -201,7 +204,6 @@
     pagination.currentPage = val
   }
 
-  const tableRef = ref(null)
   const filterMethod = (e1, e2) => {
     console.log(e1, e2)
     if (e1 == 1) {
@@ -211,8 +213,12 @@
       dialogVisible.value = !dialogVisible.value
     } else if (e1 == 4) {
       if (e2) {
-        tableRef.value.clearSelection()
-        tableRef.value.toggleAllSelection()
+        ElMessage.success('成功添加' + props.data.length + '幢建筑')
+        // if(tableRef.value){
+        //   selectAll.value ? tableRef.value.clearSelection() : tableRef.value.toggleAllSelection();
+        // }
+        //tableRef.value.clearSelection()
+        //tableRef.value.toggleAllSelection()
       }
       //selectsearch(e2)
       //multipleSelection.value =
@@ -232,6 +238,9 @@
   const list = computed(() => {
     let arr = JSON.parse(JSON.stringify(props.data))
     let gxarr = multipleSelection
+
+    //tableRef.value.clearSelection()
+    //tableRef.value.toggleAllSelection()
     return arr.splice((pagination.currentPage - 1) * 20, 20)
   })
 

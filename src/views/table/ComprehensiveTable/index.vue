@@ -17,7 +17,7 @@
 <script lang="ts" setup name="comprehensive">
   import { ref, reactive, onMounted, nextTick } from 'vue'
   import * as dayjs from 'dayjs'
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
   import type { FormInstance } from 'element-plus'
   import PropTable from '@/components/Table/PropTable/index.vue'
   import { useRoute } from 'vue-router'
@@ -39,6 +39,7 @@
       fangWuYTOld: '非居住办公用房11',
       notemsg: '00004',
       workPerson: '张' + i,
+      isSelect: '未勾选',
     })
   }
   const dynamicFilters1 = ref([
