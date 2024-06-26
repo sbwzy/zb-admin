@@ -8,6 +8,9 @@
       :list-type="entryType"
       @selection-change="selectionChange"
       @reset="reset"
+      @delete='deleteAction'
+      @select="selectAction"
+      @selectAll='selectAllAction'
       @on-submit="onSubmit"
       @selectsearch="selectSearch"
     >
@@ -21,11 +24,13 @@
   import type { FormInstance } from 'element-plus'
   import PropTable from '@/components/Table/PropTable/index.vue'
   import { useRoute } from 'vue-router'
+  import { useSettingStore } from '@/store/modules/setting'
   const loading = ref(true)
   const appContainer = ref(null)
   const data = []
+  let selList = [] //选择的id列表
   const route = useRoute()
-
+  const UseSettingStore = useSettingStore()
   const sId = route.params.id as string
   const entryType = route.params.type as string
   for (let i = 0; i < 30; i++) {
@@ -447,7 +452,7 @@
     sex: null,
     price: null,
   })
-
+  let ruleForm1 = {}
   const rules = reactive({
     name: [
       { required: true, message: '请输入活动名称活动区域', trigger: 'blur' },
@@ -468,45 +473,6 @@
   const rowObj = ref({})
   const selectObj = ref([])
 
-  const handleClose = async () => {
-    await ruleFormRef.value.validate((valid, fields) => {
-      if (valid) {
-        let obj = {
-          id: Date.now(),
-          ...ruleForm,
-          age: 0,
-          city: '普陀区',
-          address: '上海市普上海',
-          zip: 200333,
-          province: '上海',
-          admin: 'admin',
-          date: dayjs().format('YYYY-MM-DD'),
-        }
-        if (title.value === '新增') {
-          list.value = [obj, ...list.value]
-          ElMessage.success('添加成功')
-        } else {
-          list.value.forEach((item) => {
-            if (item.id === rowObj.value.id) {
-              item.name = obj.name
-              item.sex = obj.sex
-              item.price = obj.price
-            }
-          })
-        }
-        dialogVisible.value = false
-        console.log('submit!', obj)
-      } else {
-        console.log('error submit!', fields)
-      }
-    })
-  }
-
-  const add = () => {
-    title.value = '新增'
-    dialogVisible.value = true
-  }
-
   const batchDelete = () => {
     if (!selectObj.value.length) {
       return ElMessage.error('未选中任何行')
@@ -525,6 +491,10 @@
   }
   const selectionChange = (val) => {
     selectObj.value = val
+  }
+  const selectAllAction = () => {
+    ruleForm1 = UseSettingStore.xcrw
+    console.log('ruleForm1',ruleForm1)
   }
 
   const edit = (row) => {
@@ -562,6 +532,20 @@
     }, 500)
     ElMessage.success('触发重置方法')
   }
+  //删除该记录 
+  const deleteAction = (va1,va2) =>{
+    //调用接口修改数据
+
+    //在接口修改数据成功后，删除该条数据
+    list.value = list.value.filter((item) => item.id !== va2.id)
+  }
+
+  const selectAction = (va1,va2) =>{
+    //调用接口修改数据
+
+    //在接口修改数据成功后，删除该条数据
+    list.value = list.value.filter((item) => item.id !== va2.id)
+  }
 
   const onSubmit = (val) => {
     console.log('val===', val)
@@ -577,12 +561,21 @@
   }
 
   onMounted(() => {
-    nextTick(() => {
-      // let data = appContainer.value.
-    })
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
+    //加载数据
+    selList = UseSettingStore.selJZList
+    if(selList.length != 0){
+      console.log("进来了")
+      console.log(selList)
+      console.log(list.value)
+      list.value.forEach((item) => {
+        if(selList.indexOf(item.id) != -1){
+          //store里面存在已保存的id，则xiu
+          item.isSelect = '已勾选'
+        }else{
+          item.isSelect = '未勾选'
+        }
+      })
+    }
   })
 </script>
 

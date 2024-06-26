@@ -1,11 +1,10 @@
 <template>
   <div class="app-container">
     <!-- 筛选列表 -->
-
-    <filterView :filterss="dynamicFilters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
+    <filterView :filterss="dynamicFilters" :filters="filters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
     <div class="mui-content-padded">
       <!-- 信息列表组件 seniorList:高管数组信息 -->
-      <spListView :bz-list="datacurrList" :listtype="listType"></spListView>
+      <spListView :bz-list="datacurrList" :listtype="listType" :parent-type-method="filterMethod"></spListView>
     </div>
     <!--分页列表-->
     <div class="pagination">
@@ -31,10 +30,15 @@
   import menuView from '@/components/Table/ListTable/menu.vue'
   import { buildListinfo } from '@/api/user'
   import { onMounted, reactive, computed, ref, onBeforeMount } from 'vue'
-
+  import { useRouter } from 'vue-router'
   //
   import { useSettingStore } from '../../../store/modules/setting'
+  import { da } from 'element-plus/es/locale'
 
+  import { buildOperation } from '@/api/user'
+  import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+
+  const router = useRouter()
   const SettingStore = useSettingStore()
   // 配置全局组件大小
   const size = computed((): string => SettingStore.themeConfig.globalComSize)
@@ -237,132 +241,126 @@
       placeholder: '请输入建筑名称',
     },
   ])
-  let dataList = ref([
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄7号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00001',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄5号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00002',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄6号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00003',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄4号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00004',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄5号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00002',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄6号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00003',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄4号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00004',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄5号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00002',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄6号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00003',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄4号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00004',
-    },
-    {
-      xiaoQu: '福世花园',
-      jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄4号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      id: '00004',
-    },
-  ])
-  let datacurrList = ref([])
-  const pagination = reactive({
-    currentPage: 1,
-    pageSize: 10,
+  let dataList1 = ref([])
+  // let datacurrList = ref([])
+  // const pagination = reactive({
+  //   currentPage: 1,
+  //   pageSize: 10,
+  // })
+
+  let filters = ref({
+    listtype: listType, //类型
+    collectionStatus: '采集中',
+    regionmap: '',
+    type: '',
+    jzName: '', //建筑名称
+    rwName: '', //任务名称
+    district: null, //区域
+    checked1: false,
+    checked2: false,
+    streetType: '',
+    standardType: '',
+    isSelect: ['未勾选'],
   })
 
-  onMounted(() => {})
-
-  onBeforeMount(() => {
-    splitData(dataList.value, pagination.pageSize, pagination.currentPage)
+  const dataList = computed(() => {
+    return SettingStore.jzList
   })
 
-  const handleSizeChange = (val: number) => {
-    console.log(`${val} items per page`)
-    pagination.pageSize = val
-    splitData(dataList.value, pagination.pageSize, pagination.currentPage)
-  }
-  const handleCurrentChange = (val: number) => {
-    console.log(`current page: ${val}`)
-    pagination.currentPage = val
-    splitData(dataList.value, pagination.pageSize, pagination.currentPage)
-  }
-  //临时使用分页取数据  后面从数据库分页取
-  const splitData = (data, pageSize, pageNum) => {
-    //let result = [];
-    const startIndex = (pageNum - 1) * pageSize
-    const endIndex = Math.min(pageNum * pageSize, data.length)
+  const pagination = computed(() => {
+    return SettingStore.pagination
+  })
+
+  const datacurrList = computed(() => {
+    const startIndex = (pagination.value.currentPage - 1) * pagination.value.pageSize
+    const endIndex = Math.min(pagination.value.currentPage * pagination.value.pageSize, dataList.value.length)
     console.log(startIndex, endIndex)
     //result = data;
     //slice 是 新建数组   splice 是修改原数组
-    datacurrList.value = data.slice(startIndex, endIndex)
-    console.log('222', data)
-    console.log('333', datacurrList)
+    return dataList.value.slice(startIndex, endIndex)
+  })
+  onMounted(() => {})
+
+  // onBeforeMount(() => {
+  //   //splitData(dataList.value, pagination.value.pageSize, pagination.value.currentPage)
+  // })
+
+  const handleSizeChange = (val: number) => {
+    pagination.value.pageSize = val
   }
-  const filterMethod = (el) => {
-    console.log('回传的列表', el)
+  const handleCurrentChange = (val: number) => {
+    pagination.value.currentPage = val
+  }
+
+  const filterMethod = (e1, e2) => {
+    console.log('操作方法', e1, e2)
+    if (e2 == '提交' ) {
+      let ids = [e1.id]
+      let stringids = ids.join(',')
+      Operation(stringids, '提交待审批', null)
+    }else if(e2 == '全部提交'){
+      //触发接口 提交 全部提交
+      let ids = []
+      dataList.value.forEach((item) => {
+        ids.push(item.id)
+      })
+      //数组如果存在数据 才会提交待审批 (批量时的操作)
+      if (ids.length !== 0) {
+        let stringids = ids.join(',')
+        Operation(stringids, '提交待审批', null)
+      } else {
+        ElMessage({
+          message: '当前没有数据可以提交审批',
+          type: 'warning',
+        })
+      }
+    } else if (e2 == '撤回') {
+      let ids = [e1.id]
+      let stringids = ids.join(',')
+      Operation(stringids, '撤回', null)
+      //触发接口 撤回
+    } else if (e2 == '模糊查询') {
+      //触发接口 模糊查询
+    } else if (e2 == '精细查询') {
+      //触发接口 多条件查询
+    } else if (e2 == '详情') {
+      //进入详情页面
+      router.push({ name: 'collection', params: { id: e1.id } })
+    } else if (e2 == '重置' || e2 == '模糊重置') {
+      // 将响应式对象置空
+      Object.keys(filters.value).forEach((key) => {
+        ;(filters.value[key] = ''), (filters.value['collectionStatus'] = '采集中'), (filters.value['streetType'] = '未分配')
+      })
+      SettingStore.setSearch(filters.value)
+    } else if (e2 == '查询') {
+      //触发接口  查询
+      SettingStore.setSearch(filters.value)
+    } else if (e2 == '模糊查询') {
+      //触发接口  查询
+      SettingStore.setSearch(filters.value)
+    }
+    //修改list
+  }
+
+  //触发接口 e1 id集合 e2 操作类型 e3 审批拒绝操作内容
+  const Operation = (e1, e2, e3) => {
+    buildOperation(e1, e2, e3).then((res) => {
+      console.log(res)
+      if (res.data.result == 1) {
+        if (e2 == '提交待审批') {
+          ElMessage.success(res.data.msg)
+        } else if (e2 == '撤回') {
+          ElMessage.success(res.data.msg)
+        }
+        //修改列表的数据
+        //SettingStore.setJzList(dataList1.value)
+        let list = res.data.succids.splice(',')
+        let filteredArray = dataList.value.filter((item) => !list.includes(item.id))
+        SettingStore.setJzList(filteredArray)
+
+        //...
+      }
+    })
   }
 </script>
 

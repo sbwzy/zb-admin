@@ -83,8 +83,9 @@
       </template>
       <template #footer>
         <div style="flex: auto">
-          <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters)">查询</el-button>
-          <el-button @click="reset">重置</el-button>
+          <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters, '查询')">查询</el-button>
+          <el-button @click="parentTypeMethod(filters, '重置')">重置</el-button>
+          <!-- <el-button v-if="filters.collectionStatus == '采集中'" @click="parentTypeMethod('转派',2)">批量转派</el-button> -->
         </div>
       </template>
     </el-drawer>
@@ -107,18 +108,39 @@
       </el-form-item>
 
       <el-form-item>
-        <!-- <el-button type="primary" :icon="Search" @click="onSubmit">查询</el-button> -->
-        <el-button v-if="listtype != ':type' && listtype != 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(1, filters)"
+        <el-button
+          v-if="listtype != ':type' && listtype != 'buildmap'"
+          type="primary"
+          :icon="Search"
+          @click="parentTypeMethod(filters, '模糊查询')"
           >查询</el-button
         >
-        <el-button v-if="listtype == ':type' || listtype == 'buildmap'" type="primary" :icon="Search" @click="parentTypeMethod(2, filters)"
+        <el-button
+          v-if="listtype == ':type' || listtype == 'buildmap'"
+          type="primary"
+          :icon="Search"
+          @click="parentTypeMethod(filters, '签到打卡')"
           >签到打卡</el-button
         >
-        <el-button @click="reset">重置</el-button>
-        <el-button v-if="listtype == 'xcmap' || listtype == 'xzlb'" type="primary" :icon="Select" @click="parentTypeMethod(3, 'select')"
+        <el-button @click="parentTypeMethod(filters, '模糊重置')">重置</el-button>
+
+        <el-button
+          v-if="listtype == 'xcmap' || listtype == 'xzlb'"
+          type="primary"
+          :icon="Select"
+          @click="parentTypeMethod('select', '分配已勾选')"
           >分配已勾选</el-button
         >
-        <el-button v-if="listtype == 'newxcrw'" type="primary" :icon="Select" @click="parentTypeMethod(4, filters)">选择所有</el-button>
+        <el-button
+          v-if="listtype == 'build' && SettingStore.search.collectionStatus == '采集中'"
+          type="primary"
+          @click="parentTypeMethod(5, '全部提交')"
+          >全部提交</el-button
+        >
+
+        <el-button v-if="listtype == 'newxcrw'" type="primary" :icon="Select" @click="parentTypeMethod(filters, '选择所有')"
+          >选择所有</el-button
+        >
         <!-- <el-button  v-if="listtype == 'xcmap' || listtype == 'xzlb' " type="primary" :icon="SemiSelect" @click="parentTypeMethod(filters)">未勾选</el-button> -->
         <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button>
       </el-form-item>
@@ -149,6 +171,7 @@
   import { Search, Select, SemiSelect } from '@element-plus/icons-vue'
 
   import { useSettingStore } from '@/store/modules/setting'
+  import { fi } from 'element-plus/es/locale'
   // 定义事件
   const emit = defineEmits(['parent-method1'])
 
@@ -169,6 +192,12 @@
         return []
       },
     },
+    filters: {
+      type: Object,
+      default() {
+        return {}
+      },
+    },
     listtype: {
       type: String,
       default() {
@@ -183,21 +212,9 @@
   let checked1 = ref(false)
   let checked2 = ref(false)
 
-  console.log('111', props.listtype)
-  // 筛选条件状态
-  const filters = reactive({
-    listtype: props.listtype, //类型
-    collectionStatus: '采集中',
-    regionmap: '',
-    type: '',
-    jzName: '', //建筑名称
-    rwName: '', //任务名称
-    district: null, //区域
-    checked1: false,
-    checked2: false,
-    streetType: '未分配',
-    standardType: '',
-  })
+  // const filters = computed(() => {
+  //   return SettingStore.search
+  // })
   const drawer = ref(false)
   const direction = ref<DrawerProps['direction']>('ttb')
   const SettingStore = useSettingStore()
@@ -210,41 +227,13 @@
   // jzName: '', //建筑名称
   // rwName: '', //任务名称
   // })
+  // const onSubmit = () => {
+  //   SettingStore.setSearch(filters.value)
+  // }
 
-  const funcchecked1 = (status: boolean) => {
-    filters.checked1 = status
-  }
-  const funcchecked2 = (status: boolean) => {
-    filters.checked2 = status
-  }
-  const onSubmit = () => {
-    console.log('submit!', filters)
-    console.log(filters)
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
-  }
-
-  //重置方法没做好
-  const reset = () => {
-    loading.value = true
-    // 将响应式对象置空
-    Object.keys(filters).forEach((key) => {
-      ;(filters[key] = ''), (filters['collectionStatus'] = '采集中'), (filters['streetType'] = '未分配')
-    })
-    //暂时
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
-  }
 
   onMounted(() => {
-    console.log(props.filterss)
-    console.log('打印1111', props.listtype)
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
+    //filters.value.listtype = props.listtype
   })
 </script>
 

@@ -42,12 +42,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, onMounted } from 'vue'
+  import { reactive, ref, onMounted,computed } from 'vue'
   import { MapLocation, Memo, OfficeBuilding, View as IconView } from '@element-plus/icons-vue'
   import type { FormInstance } from 'element-plus'
   import { useSettingStore } from '@/store/modules/setting'
   import Upload from './components/Upload.vue'
   import { useRouter } from 'vue-router'
+import { ru } from 'element-plus/es/locale'
+import { files } from 'jszip'
   const router = useRouter()
 
   const formSize = ref('small')
@@ -57,17 +59,20 @@
   const UseSettingStore = useSettingStore()
 
   let ruleForm = reactive({
-    name: '',
-    //region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
-    clubType: '',
+    // name: '',
+    // //region: '',
+    // date1: '',
+    // date2: '',
+    // delivery: false,
+    // resource: '',
+    // desc: '',
+    // clubType: '',
   })
 
+  ruleForm = computed(()=>{
+    return UseSettingStore.xcrw
+  })
+  
   const rules = reactive({
     name: [
       { required: true, message: '请输入任务名称', trigger: 'blur' },
@@ -104,33 +109,46 @@
         trigger: 'change',
       },
     ],
-    delivery: [
-      {
-        required: true,
-        message: '请选择区域范围\n',
-        trigger: 'change',
-      },
-      {
-        validator: (rule, value, callback) => {
-          if (value) {
-            callback() // 如果选择true，则验证通过
-          } else {
-            callback(new Error('请进入选择区域范围')) // 如果选择false，则返回错误信息
-          }
-        },
-        trigger: 'change',
-      },
-    ],
+    // delivery: [
+    //   {
+    //     required: true,
+    //     message: '请选择区域范围\n',
+    //     trigger: 'change',
+    //   },
+    //   {
+    //     validator: (rule, value, callback) => {
+    //       if (value) {
+    //         callback() // 如果选择true，则验证通过
+    //       } else {
+    //         callback(new Error('请进入选择区域范围')) // 如果选择false，则返回错误信息
+    //       }
+    //     },
+    //     trigger: 'change',
+    //   },
+    // ],
     desc: [{ required: false, message: '请填写活动形式', trigger: 'blur' }],
   })
-
+  //保存后 把store中的数据清空
   const submitForm = async (formEl: FormInstance | undefined) => {
+    let delivery = UseSettingStore.selJZList.length > 0 ? true : false
+    console.log("1111",delivery)
+    ruleForm.delivery = delivery;
     if (!formEl) return
     await formEl.validate((valid, fields) => {
+      console.log("222",valid,fields)
       if (valid) {
-        console.log('submit!')
+        console.log('保存巡查任务!')
+        ruleForm.name = '';
+        ruleForm.clubType = '';
+        ruleForm.date1 = '';
+        ruleForm.date2 = '';
+        ruleForm.delivery = false;
+        ruleForm.resource= '',
+        ruleForm.desc='',
+        UseSettingStore.setXcrw(ruleForm)
+        console.log("3333",UseSettingStore.xcrw)
       } else {
-        console.log('error submit!', fields)
+        console.log('不保存巡查任务!', fields)
       }
     })
   }
@@ -141,6 +159,7 @@
   }
 
   const inBuilds = () => {
+    console.log('2222222',ruleForm)
     //缓存当前页面的信息
     UseSettingStore.setXcrw(ruleForm)
     router.push(
@@ -148,7 +167,9 @@
       //,params:{list:JSON.stringify(pointslist1.value)}
     )
   }
-
+  // mounted(()=> {
+  //   //console.log('赋值新建的巡查任务字段111')
+  // })
   onMounted(() => {
     //初始化是赋值信息
     console.log('赋值新建的巡查任务字段')
