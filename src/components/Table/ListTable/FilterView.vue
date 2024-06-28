@@ -132,7 +132,7 @@
           >分配已勾选</el-button
         >
         <el-button
-          v-if="listtype == 'build' && SettingStore.search.collectionStatus == '采集中'"
+          v-if="listtype == 'build' && allSelect == true"
           type="primary"
           @click="parentTypeMethod(5, '全部提交')"
           >全部提交</el-button
@@ -190,6 +190,12 @@
       type: Array,
       default() {
         return []
+      },
+    },
+    allSelect: {
+      type: Boolean,
+      default() {
+        return false
       },
     },
     filters: {

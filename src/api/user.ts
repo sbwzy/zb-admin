@@ -66,7 +66,7 @@ export function buildListinfo(data) {
 
 /**
  * 构建操作请求
- * 
+ *
  * 本函数用于向特定接口发送POST请求，以提交某种操作。操作的具体细节由传入的参数决定。
  * 提交待审批\撤回审批 (领取作业\丢弃作业) 审批同意  审批拒绝
  * @param gfids 关联的GFD IDs，用于指定操作的对象。
@@ -74,11 +74,39 @@ export function buildListinfo(data) {
  * @param descShenHe 描述审核，对操作的额外说明或备注。
  * @returns 返回一个Promise，解析后的结果是请求的响应数据。
  */
-export function buildOperation(gfids,option,descShenHe){
+export function buildOperation(gfids, option, descShenHe) {
   // 发送POST请求到指定接口，携带必要的参数
   return request.post('webapi/youligf.tijiaoSp', {
     gfids: gfids,
     opeType: option,
-    descShenHe: descShenHe
+    descShenHe: descShenHe,
   })
+}
+/**
+ * 模糊搜索 和详细搜索
+ *
+ * 本函数用于向特定接口发送POST请求，以提交某种操作。操作的具体细节由传入的参数决定。
+ * 根据查询条件进行搜索
+ * @param type 哪种条件搜索  建筑列表 还是巡查任务列表等
+ * @param search 搜索条件对象
+ * @returns 返回一个Promise，解析后的结果是请求的响应数据。
+ */
+
+// 定义一个接口来描述参数对象的结构
+interface YouliSearchParams {
+  listtype: string,
+  collectionStatus: string,
+  regionmap: string,
+  type: string,
+  jzName: string,
+  rwName: string,
+  district: string,
+  checked1: boolean,
+  checked2: boolean,
+  streetType: string,
+  standardType: string,
+  isSelect: Array<string>
+}
+export function getYouliList(params: YouliSearchParams) {
+  return request.post('webapi/youligf.youliQuery',params)
 }

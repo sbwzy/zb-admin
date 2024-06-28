@@ -57,7 +57,8 @@ export const useSettingStore = defineStore({
     //搜索条件
     search: ref({
       listtype: '', //类型
-      collectionStatus: '',
+      searchType:'', //搜索类型
+      collectionStatus: '采集中',
       regionmap: '',
       type: '',
       jzName: '', //建筑名称

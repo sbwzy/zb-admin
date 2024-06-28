@@ -1,7 +1,13 @@
 <template>
   <div class="app-container">
     <!-- 筛选列表 -->
-    <filterView :filterss="dynamicFilters" :filters="filters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
+    <filterView
+      :filterss="dynamicFilters"
+      :filters="filters"
+      :allSelect="dataList[0]?.cjZt == '采集中' ? true : false"
+      :listtype="listType"
+      :parent-type-method="filterMethod"
+    ></filterView>
     <div class="mui-content-padded">
       <!-- 信息列表组件 seniorList:高管数组信息 -->
       <spListView :bz-list="datacurrList" :listtype="listType" :parent-type-method="filterMethod"></spListView>
@@ -36,6 +42,7 @@
   import { da } from 'element-plus/es/locale'
 
   import { buildOperation } from '@/api/user'
+  import { getYouliList } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 
   const router = useRouter()
@@ -241,26 +248,9 @@
       placeholder: '请输入建筑名称',
     },
   ])
-  let dataList1 = ref([])
-  // let datacurrList = ref([])
-  // const pagination = reactive({
-  //   currentPage: 1,
-  //   pageSize: 10,
-  // })
 
-  let filters = ref({
-    listtype: listType, //类型
-    collectionStatus: '采集中',
-    regionmap: '',
-    type: '',
-    jzName: '', //建筑名称
-    rwName: '', //任务名称
-    district: null, //区域
-    checked1: false,
-    checked2: false,
-    streetType: '',
-    standardType: '',
-    isSelect: ['未勾选'],
+  const filters = computed(() => {
+    return SettingStore.search
   })
 
   const dataList = computed(() => {
@@ -292,37 +282,38 @@
     pagination.value.currentPage = val
   }
 
+  //子组件方法 根据条件触发事件
   const filterMethod = (e1, e2) => {
+
     console.log('操作方法', e1, e2)
-    if (e2 == '提交' ) {
-      let ids = [e1.id]
-      let stringids = ids.join(',')
-      Operation(stringids, '提交待审批', null)
-    }else if(e2 == '全部提交'){
-      //触发接口 提交 全部提交
-      let ids = []
-      dataList.value.forEach((item) => {
-        ids.push(item.id)
+
+    if (e2 == '模糊查询' || e2 == '查询') {
+      //将搜索类型赋值到条件里面 searchType
+      e1.searchType = e2
+      //查询 后搜索列表的接口
+      getYouliList(e1).then((res) => {
+        console.log(res)
+        //接口目前没有做好
+        if (res.data.result != 1) {
+          // 默认修改数据
+          dataList.value.push({
+            xiaoQu: '福世花园',
+            jieZhen: '江苏路街道',
+            cjZt: '采集中',
+            shouQuanDZ: '安化路201弄4号',
+            standardType: '花园住宅',
+            fangWuYTOld: '非居住办公用房',
+            id: '00012',
+          })
+          SettingStore.setJzList(dataList.value)
+        }else{
+          ElMessage({
+            message: '搜索条件有误',
+            type: 'error',
+          })
+          return
+        }
       })
-      //数组如果存在数据 才会提交待审批 (批量时的操作)
-      if (ids.length !== 0) {
-        let stringids = ids.join(',')
-        Operation(stringids, '提交待审批', null)
-      } else {
-        ElMessage({
-          message: '当前没有数据可以提交审批',
-          type: 'warning',
-        })
-      }
-    } else if (e2 == '撤回') {
-      let ids = [e1.id]
-      let stringids = ids.join(',')
-      Operation(stringids, '撤回', null)
-      //触发接口 撤回
-    } else if (e2 == '模糊查询') {
-      //触发接口 模糊查询
-    } else if (e2 == '精细查询') {
-      //触发接口 多条件查询
     } else if (e2 == '详情') {
       //进入详情页面
       router.push({ name: 'collection', params: { id: e1.id } })
@@ -332,35 +323,53 @@
         ;(filters.value[key] = ''), (filters.value['collectionStatus'] = '采集中'), (filters.value['streetType'] = '未分配')
       })
       SettingStore.setSearch(filters.value)
-    } else if (e2 == '查询') {
-      //触发接口  查询
-      SettingStore.setSearch(filters.value)
-    } else if (e2 == '模糊查询') {
-      //触发接口  查询
-      SettingStore.setSearch(filters.value)
-    }
-    //修改list
-  }
 
-  //触发接口 e1 id集合 e2 操作类型 e3 审批拒绝操作内容
-  const Operation = (e1, e2, e3) => {
-    buildOperation(e1, e2, e3).then((res) => {
-      console.log(res)
-      if (res.data.result == 1) {
-        if (e2 == '提交待审批') {
-          ElMessage.success(res.data.msg)
-        } else if (e2 == '撤回') {
-          ElMessage.success(res.data.msg)
+    } else {
+      //e2 == '提交' || e2 == '全部提交' || e2 =='撤回'
+      //触发接口 e0 id集合 e2 操作类型 e3 审批拒绝操作内容   e0 是接口数据不存在 测试使用
+      let ids = []
+      let stringids = ''
+
+      if (e2 != '全部提交') {
+        ids = [e1.id]
+      } else {
+        if (dataList.value.length != 0) {
+          dataList.value.forEach((item) => {
+            ids.push(item.id)
+          })
+        } else {
+          ElMessage({
+            message: '当前没有数据可以提交审批',
+            type: 'warning',
+          })
+          return
         }
-        //修改列表的数据
-        //SettingStore.setJzList(dataList1.value)
-        let list = res.data.succids.splice(',')
-        let filteredArray = dataList.value.filter((item) => !list.includes(item.id))
-        SettingStore.setJzList(filteredArray)
-
-        //...
       }
-    })
+      stringids = ids.join(',')
+      buildOperation(stringids, e2, '审批驳回的意见').then((res) => {
+        console.log(res)
+        //接口目前没有做好
+        if (res.data.result != 1) {
+          ElMessage.success(res.data.msg)
+          // if (e2 == '提交待审批') {
+          //   ElMessage.success(res.data.msg)
+          // } else if (e2 == '撤回') {
+          //   ElMessage.success(res.data.msg)
+          // }
+          //目前接口没有做好 先做修改
+          let list = ids
+          //let list = res.data.succids.splice(',')
+          let filteredArray = dataList.value.filter((item) => !list.includes(item.id))
+          SettingStore.setJzList(filteredArray)
+          //...
+        } else {
+          ElMessage({
+            message: '数据出错,xxxxx',
+            type: 'error',
+          })
+        }
+      })
+    }
   }
 </script>
 
