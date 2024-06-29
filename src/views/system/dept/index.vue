@@ -1,7 +1,14 @@
 <template>
   <div class="app-container">
     <div style="margin-bottom: 5px">
-      <filterView :filterss="dynamicFilters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
+      <filterView
+        :filterss="dynamicFilters"
+        :filters="filters"
+        :allSelect="dataList[0]?.cjZt == '采集中' ? true : false"
+        :listtype="listType"
+        :parent-type-method="filterMethod"
+      >
+      </filterView>
     </div>
     <div>
       <el-button style="float: right" type="primary" @click="addHandler">
@@ -12,7 +19,7 @@
       </el-button>
     </div>
     <div>
-      <spListView :bz-list="dataList" :listtype="listType"></spListView>
+      <spListView :bz-list="dataList" :listtype="listType" :parent-type-method="filterMethod"></spListView>
     </div>
   </div>
 </template>
@@ -20,24 +27,29 @@
 <script lang="ts" setup>
   import { ElMessageBox, FormInstance } from 'element-plus'
   //import { Search } from '@element-plus/icons-vue'
-  import { onMounted, reactive, ref } from 'vue'
+  import { onMounted, reactive, ref,computed } from 'vue'
   //import { deptData } from '@/mock/system'
   //import DeptDialog from './components/deptDialog.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import spListView from '@/components/Table/ListTable/ListView.vue'
   import { useRouter } from 'vue-router'
-
+  
   import { useSettingStore } from '@/store/modules/setting'
   //const tableData = ref(deptData)
   //const loading = ref(true)
   const deptDialog = ref()
   //const ruleFormRef = ref<FormInstance>()
   const formInline = reactive({})
-
+  const SettingStore = useSettingStore()
   onMounted(() => {})
   const router = useRouter()
   const listType = 'xcrw'
   // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项） //数据库配置
+
+  const filters = computed(() => {
+    return SettingStore.search
+  })
+
   const dynamicFilters = ref([
     {
       label: '任务名称',
@@ -92,54 +104,10 @@
       placeholder: '请输入创建人',
     },
   ])
-
-  let dataList = ref([
-    {
-      id: 1,
-      renwuName: '24年度第一季度巡查任务',
-      xcsjS: '2024-2月',
-      xcsjE: '2024-5月',
-      type: '年度中心巡查',
-      cjdw: '物业管理中心',
-      cjr: 'xxxx',
-      progress: '进行中',
-      //jieZhen: 'jieZhen',
-      shouQuanDZ: '安化路200弄7号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      notemsg: '00001',
-    },
-    {
-      id: 2,
-      renwuName: '24年度第二季度巡查任务',
-      xcsjS: '2024-6月',
-      xcsjE: '2024-9月',
-      type: '季度中心巡查',
-      cjdw: '物业管理中心',
-      cjr: 'xxxx',
-      progress: '进行中', //任务进展情况
-      //jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄5号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      notemsg: '00002',
-    },
-    {
-      id: 3,
-      renwuName: '24年度第二季度重点巡查任务',
-      xcsjS: '2024-6月',
-      xcsjE: '2024-6月',
-      type: '特殊情况巡查',
-      cjdw: '物业管理中心',
-      cjr: 'xxxx',
-      progress: '未开始',
-      //jieZhen: '江苏路街道',
-      shouQuanDZ: '安化路200弄5号',
-      standardType: '花园住宅',
-      fangWuYTOld: '非居住办公用房',
-      notemsg: '00003',
-    },
-  ])
+  
+  const dataList = computed(() => {
+    return SettingStore.xcList
+  })
 
   const addHandler = () => {
     router.push('/form/validateForm')
@@ -148,37 +116,6 @@
   //筛选条件 回传方法
   const filterMethod = (el) => {
     console.log('回传的列表', el)
-    // dataList.value = [{
-    // 	id: 1,
-    // 	renwuName: '24年度第一季度巡查任务',
-    // 	xcsjS: '2024-2月',
-    // 	xcsjE: '2024-5月',
-    // 	type: '年度中心巡查',
-    // 	cjdw: '物业管理中心',
-    // 	cjr: 'xxxx',
-    // 	progress: '进行中',
-    // 	//jieZhen: 'jieZhen',
-    // 	shouQuanDZ: '安化路200弄7号',
-    // 	standardType: '花园住宅',
-    // 	fangWuYTOld: '非居住办公用房',
-    // 	notemsg: '00001',
-    // },
-    // {
-    // 	id: 2,
-    // 	renwuName: '24年度第二季度巡查任务',
-    // 	xcsjS: '2024-6月',
-    // 	xcsjE: '2024-9月',
-    // 	type: '季度中心巡查',
-    // 	cjdw: '物业管理中心',
-    // 	cjr: 'xxxx',
-    // 	progress: '进行中', //任务进展情况
-    // 	//jieZhen: '江苏路街道',
-    // 	shouQuanDZ: '安化路200弄5号',
-    // 	standardType: '花园住宅',
-    // 	fangWuYTOld: '非居住办公用房',
-    // 	notemsg: '00002',
-    // }
-    // ]
   }
 </script>
 

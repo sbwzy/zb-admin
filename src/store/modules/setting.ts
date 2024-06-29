@@ -172,7 +172,248 @@ export const useSettingStore = defineStore({
         id: '00011',
       },
     ]),
-
+    //巡查任务每次保存的建筑列表
+    xcList: ref([
+      {
+        id: 1,
+        renwuName: '24年度第一季度巡查任务',
+        xcsjS: '2024-2月',
+        xcsjE: '2024-5月',
+        type: '年度中心巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '进行中',
+        //jieZhen: 'jieZhen',
+        shouQuanDZ: '安化路200弄7号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        notemsg: '00001',
+      },
+      {
+        id: 2,
+        renwuName: '24年度第二季度巡查任务',
+        xcsjS: '2024-6月',
+        xcsjE: '2024-9月',
+        type: '季度中心巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '进行中', //任务进展情况
+        //jieZhen: '江苏路街道',
+        shouQuanDZ: '安化路200弄5号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        notemsg: '00002',
+      },
+      {
+        id: 3,
+        renwuName: '24年度第二季度重点巡查任务',
+        xcsjS: '2024-6月',
+        xcsjE: '2024-6月',
+        type: '特殊情况巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '未开始',
+        //jieZhen: '江苏路街道',
+        shouQuanDZ: '安化路200弄5号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        notemsg: '00003',
+      }
+    ]),
+    //建筑列表搜索条件
+    dynamicFilters: ref([
+      {
+        label: '采集状态',
+        key: 'collectionStatus',
+        type: 'select',
+        placeholder: '请选择采集状态',
+        options: [
+          { label: '采集中', value: '采集中' },
+          { label: '待审核', value: '待审核' },
+          { label: '已审核', value: '已审核' },
+        ],
+      },
+      {
+        label: '区域/小区',
+        key: 'district',
+        type: 'duoxuan',
+        placeholder: '请选择',
+        options: [
+          {
+            value: '徐汇',
+            label: '徐汇',
+            children: [
+              {
+                value: '天平路',
+                label: '天平路',
+                children: [
+                  {
+                    value: '上海新村直管公房',
+                    label: '上海新村直管公房',
+                  },
+                  {
+                    value: '京剧院小区',
+                    label: '京剧院小区',
+                  },
+                  {
+                    value: '伊丽莎白公寓',
+                    label: '伊丽莎白公寓',
+                  },
+                  {
+                    value: '余庆直管公房',
+                    label: '余庆直管公房',
+                  },
+                  {
+                    value: '吴兴直管公房',
+                    label: '吴兴直管公房',
+                  },
+                ],
+              },
+              {
+                value: '徐家汇',
+                label: '徐家汇',
+                children: [
+                  {
+                    value: '徐家汇街道淮海西路345弄小区',
+                    label: '徐家汇街道淮海西路345弄小区',
+                  },
+                  {
+                    value: '漕北高层',
+                    label: '漕北高层',
+                  },
+                ],
+              },
+              {
+                value: '枫林路',
+                label: '枫林路',
+                children: [
+                  {
+                    value: '天钥新村',
+                    label: '天钥新村',
+                  },
+                  {
+                    value: '谨斜小区',
+                    label: '谨斜小区',
+                  },
+                ],
+              },
+              {
+                value: '湖南路',
+                label: '湖南路',
+                children: [
+                  {
+                    value: '东湖直管公房',
+                    label: '东湖直管公房',
+                  },
+                  {
+                    value: '中兴小区',
+                    label: '中兴小区',
+                  },
+                  {
+                    value: '中南小区',
+                    label: '中南小区',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            value: '普陀',
+            label: '普陀',
+            children: [
+              {
+                value: '曹杨新村',
+                label: '曹杨新村',
+                children: [
+                  {
+                    value: '曹杨一村（源园）',
+                    label: '曹杨一村（源园）',
+                  },
+                ],
+              },
+              {
+                value: '长寿路',
+                label: '长寿路',
+                children: [
+                  {
+                    value: '长寿路街道康宁小区',
+                    label: '长寿路街道康宁小区',
+                  },
+                  {
+                    value: '长寿路街道澳门路660弄小区',
+                    label: '长寿路街道澳门路660弄小区',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            value: '杨浦',
+            label: '杨浦',
+            children: [
+              {
+                value: '五角场',
+                label: '五角场',
+                children: [
+                  {
+                    value: '长海路街道国京41号小区',
+                    label: '长海路街道国京41号小区',
+                  },
+                  {
+                    value: '长海路街道市光路三十六宅 (东块）小区',
+                    label: '长海路街道市光路三十六宅 (东块）小区',
+                  },
+                ],
+              },
+              {
+                value: '大桥',
+                label: '大桥',
+                children: [
+                  {
+                    value: '平青小区',
+                    label: '平青小区',
+                  },
+                ],
+              },
+              {
+                value: '定海路',
+                label: '定海路',
+                children: [
+                  {
+                    value: '130街坊 贵阳路、海州路、凉州路',
+                    label: '130街坊 贵阳路、海州路、凉州路',
+                  },
+                  {
+                    value: '定海街道137街坊048小区',
+                    label: '定海街道137街坊048小区',
+                  },
+                ],
+              },
+              {
+                value: '平凉路',
+                label: '平凉路',
+                children: [
+                  {
+                    value: '隆昌路331号、355弄',
+                    label: '隆昌路331号、355弄',
+                  },
+                  {
+                    value: '41街坊龙江路',
+                    label: '41街坊龙江路',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        label: '建筑名称',
+        key: 'buildingName',
+        type: 'text',
+        placeholder: '请输入建筑名称',
+      },
+    ]),
     //建筑列表分页
     pagination:ref({
       currentPage: 1,
@@ -222,6 +463,10 @@ export const useSettingStore = defineStore({
     setSearch(value) {
       this.search = value
     },
+    //查询条件
+    setFilters(value) {
+      this.dynamicFilters = value
+    }
   },
   // 这部分数据不需要存储
   // persist: {

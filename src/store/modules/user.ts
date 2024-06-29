@@ -10,6 +10,8 @@ export const useUserStore = defineStore({
     // 登录用户信息
     userInfo: {},
     // 角色
+    sfRole: '',
+    // 角色(弃用)
     roles: localStorage.roles ? JSON.parse(localStorage.roles) : [],
   }),
   getters: {},
@@ -26,11 +28,16 @@ export const useUserStore = defineStore({
       })
     },
     //手机登录
-    login1(userInfo) {
+    login1(userInfo,role) {
       const { phone, yzm } = userInfo
+      //这段代码定义了一个返回Promise对象的异步函数。
+      //函数内部首先将phone赋值给this.token，将userInfo赋值给this.userInfo，
+      //然后调用this.getRoles()方法。最后使用resolve(phone)来解决这个Promise，
+      //表示异步操作成功完成，返回值为phone。
       return new Promise(async (resolve, reject) => {
         this.token = phone
         this.userInfo = userInfo
+        this.sfRole = role
         await this.getRoles()
         resolve(phone)
       })

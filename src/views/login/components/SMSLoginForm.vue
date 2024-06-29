@@ -63,11 +63,13 @@
   import { getTimeStateStr } from '@/utils/index'
   import { getYZM } from '@/api/user'
   import { loginInfo } from '@/api/user'
+  import { useSettingStore } from '@/store/modules/setting'
   const router = useRouter()
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
   //const passwordType = ref('password')
   const loading = ref(false)
+  const SettingStore = useSettingStore()
 
   const rules = reactive({
     phone: [
@@ -97,7 +99,19 @@
           console.log(res)
           if (res.data.result == 1) {
             setTimeout(async () => {
-              await UserStore.login1(ruleForm)
+              //管理员下修改搜索条件
+              let Filters = SettingStore.dynamicFilters
+              Filters.forEach((item) => {
+                if (item.label == '采集状态' && res.data.userRole == '管理员') {
+                  item.options = [
+                    { label: '待审核', value: '待审核' },
+                    { label: '已审核', value: '已审核' },
+                  ]
+                }
+              })
+              SettingStore.setFilters(Filters)
+
+              await UserStore.login1(ruleForm, '采集员')
               await router.push({
                 path: '/',
               })
