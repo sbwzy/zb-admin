@@ -72,54 +72,6 @@
     [31.27439272614506, 121.4473342895508],
     [31.27219881827323, 121.4253616333008],
   ]
-  const dynamicFilters = ref([
-    {
-      label: '巡查类型',
-      key: 'collectionStatus',
-      type: 'select',
-      placeholder: '请选择巡查类型',
-      options: [
-        { label: '年度中心巡查', value: '年度中心巡查' },
-        { label: '季度中心巡查', value: '季度中心巡查' },
-        { label: '季度集团巡查', value: '季度集团巡查' },
-        { label: '特殊情况巡查', value: '特殊情况任务' },
-      ],
-    },
-    {
-      label: '区域选择',
-      key: 'regionmap',
-      type: 'duoxuan',
-      placeholder: '请选择区域',
-      options: [
-        {
-          value: 1,
-          label: '静安区',
-          children: [
-            { value: 2, label: '南京西路街道' },
-            { value: 3, label: '曹家渡街道' },
-            { value: 4, label: '江宁路街道' },
-          ],
-        },
-        {
-          value: 5,
-          label: '徐汇区',
-          children: [
-            { value: 6, label: '天平路街道' },
-            { value: 7, label: '湖南路街道' },
-            { value: 8, label: '徐家汇街道' },
-          ],
-        },
-        {
-          value: 9,
-          label: '普陀区',
-          children: [
-            { value: 10, label: '曹杨新村街道' },
-            { value: 11, label: '长寿路街道' },
-          ],
-        },
-      ],
-    },
-  ])
   //const xcrwList = params.value.list
   //console.log("地图",xcrwList)
   const onSubmit = () => {
