@@ -32,24 +32,24 @@ const formRouter = [
         name: 'displayForm',
         meta: { title: '巡查任务详情', icon: 'MenuIcon' },
       },
-      {
-        path: '/form/appendForm',
-        component: () => import('@/views/form/appendForm/index.vue'),
-        name: 'appendForm',
-        meta: { title: '勾选记录', keepAlive: true, icon: 'MenuIcon' },
-      },
-      {
-        path: '/form/moreForm',
-        component: () => import('@/views/form/moreForm/index.vue'),
-        name: 'moreForm',
-        meta: { title: '多表单验证', keepAlive: true, icon: 'MenuIcon' },
-      },
-      {
-        path: '/form/searchForm',
-        component: () => import('@/views/form/searchForm/index.vue'),
-        name: 'searchForm',
-        meta: { title: '查询 Form', keepAlive: true, icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/form/appendForm',
+      //   component: () => import('@/views/form/appendForm/index.vue'),
+      //   name: 'appendForm',
+      //   meta: { title: '勾选记录', keepAlive: true, icon: 'MenuIcon' },
+      // },
+      // {
+      //   path: '/form/moreForm',
+      //   component: () => import('@/views/form/moreForm/index.vue'),
+      //   name: 'moreForm',
+      //   meta: { title: '多表单验证', keepAlive: true, icon: 'MenuIcon' },
+      // },
+      // {
+      //   path: '/form/searchForm',
+      //   component: () => import('@/views/form/searchForm/index.vue'),
+      //   name: 'searchForm',
+      //   meta: { title: '查询 Form', keepAlive: true, icon: 'MenuIcon' },
+      // },
     ],
   },
 ]

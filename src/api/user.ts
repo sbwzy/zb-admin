@@ -113,10 +113,10 @@ export function getYouliList(params: YouliSearchParams) {
 
 /**
  * 提交信息给后台接口。
- * 
+ *
  * 该函数通过发送POST请求到指定的API endpoint，来提交包含各种参数的信息。
  * 主要用于房地产相关的信息记录，参数涵盖了建筑的基本信息、使用情况等。
- * 
+ *
  * @param params - 一个对象，包含了提交给后台的所有参数。
  * @param params.gfID - 建筑ID，用于唯一标识一个建筑。
  * @param params.chanYeZT - 产业类型，描述建筑的用途性质。
@@ -129,19 +129,19 @@ export function getYouliList(params: YouliSearchParams) {
  * @returns 返回一个Promise，解析后的结果是请求的响应数据。
  */
 interface xinXiGXParams {
-  gfID: string  // 建筑ID
-  chanYeZT: string  // 产业类型
-  fangWuYT: string  // 房屋用途
-  shiYongR: string  // 使用人
-  desc: string  // 外业巡查情况备注
+  gfID: string // 建筑ID
+  chanYeZT: string // 产业类型
+  fangWuYT: string // 房屋用途
+  shiYongR: string // 使用人
+  desc: string // 外业巡查情况备注
   desc2: string // 建筑现状
-  dkdesc: string  // 现场带看情况
-  sfmpqs: string  // 铭牌是否缺失
+  dkdesc: string // 现场带看情况
+  sfmpqs: string // 铭牌是否缺失
 }
 
 /**
  * 调用xinXiGX接口
- * 
+ *
  * 本函数用于发送一个POST请求到'webapi/youligf.xinXiGX'接口，以获取信息。
  * @param params 请求参数，具体结构由xinXiGXParams定义
  * @returns 返回请求的结果，通常是一个包含响应数据的对象

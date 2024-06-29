@@ -19,12 +19,12 @@ const functionPageRouter = [
         name: 'collection',
         meta: { title: '信息采集', keepAlive: true, icon: 'MenuIcon' },
       },
-      {
-        path: '/function-page/tools',
-        component: () => import('@/views/functionPage/tools/index.vue'),
-        name: 'tools',
-        meta: { title: '工具链集合', keepAlive: true, icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/function-page/tools',
+      //   component: () => import('@/views/functionPage/tools/index.vue'),
+      //   name: 'tools',
+      //   meta: { title: '工具链集合', keepAlive: true, icon: 'MenuIcon' },
+      // },
       {
         path: '/function-page/404',
         component: () => import('@/views/errorPages/404.vue'),
@@ -69,18 +69,18 @@ const functionPageRouter = [
         name: 'function-403',
         meta: { title: '403 页面', keepAlive: true, icon: 'MenuIcon' },
       },
-      {
-        path: '/function-page/fullscreen',
-        component: () => import('@/views/functionPage/fullscreen/index.vue'),
-        name: 'fullscreen',
-        meta: { title: '元素 全屏', keepAlive: true, icon: 'MenuIcon' },
-      },
-      {
-        path: '/function-page/information-list',
-        component: () => import('@/views/functionPage/informationList/index.vue'),
-        name: 'informationList',
-        meta: { title: '信息列表', keepAlive: true, icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/function-page/fullscreen',
+      //   component: () => import('@/views/functionPage/fullscreen/index.vue'),
+      //   name: 'fullscreen',
+      //   meta: { title: '元素 全屏', keepAlive: true, icon: 'MenuIcon' },
+      // },
+      // {
+      //   path: '/function-page/information-list',
+      //   component: () => import('@/views/functionPage/informationList/index.vue'),
+      //   name: 'informationList',
+      //   meta: { title: '信息列表', keepAlive: true, icon: 'MenuIcon' },
+      // },
     ],
   },
 ]

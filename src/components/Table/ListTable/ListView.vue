@@ -22,8 +22,8 @@
           }"
           class="rigFlagV"
         >
-          <el-button type="primary" size="small" @click="parentTypeMethod(item,'提交')">
-            提交<el-icon class="el-icon--right" ><Upload /></el-icon>
+          <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
+            提交<el-icon class="el-icon--right"><Upload /></el-icon>
           </el-button>
           <!-- <el-button type="primary" size="small" @click="OptionItem(item,2)">
             转派<el-icon class="el-icon--right"><Connection /></el-icon>
@@ -37,7 +37,7 @@
           }"
           class="rigFlagV"
         >
-          <el-button type="primary" size="small" @click="parentTypeMethod(item,'撤回')">
+          <el-button type="primary" size="small" @click="parentTypeMethod(item, '撤回')">
             撤回<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
           </el-button>
         </div>
@@ -45,37 +45,37 @@
       <div
         v-if="listtype == 'build'"
         style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)"
-        @click="parentTypeMethod(item,'详情')"
+        @click="parentTypeMethod(item, '详情')"
       >
         <!-- 自定义了一个data-id的属性,可以通过js获取到它的值!  hover-class 指定按下去的样式类-->
         <div v-for="(tagItem, index) in bindTag(item)" :key="index" class="celldiv">
           {{ tagItem }}
         </div>
       </div>
-      <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">授权地址:</div>
         <div class="detailV">{{ item.shouQuanDZ }}</div>
       </div>
-      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">巡查时间:</div>
         <div class="detailV">{{ item.xcsjS }} - {{ item.xcsjE }}</div>
       </div>
-      <div style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">类型:</div>
         <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
           {{ listtype == 'build' ? item.standardType : item.type }}
           <span style="color: #333333; margin-left: 2px"></span>
         </div>
       </div>
-      <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">房屋用途:</div>
         <div class="detailV">{{ item.fangWuYTOld }}</div>
       </div>
-      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">创建单位:</div>
         <div class="detailV">{{ item.cjdw }}</div>
       </div>
-      <div v-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item,'详情')">
+      <div v-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">创建人:</div>
         <div class="detailV">{{ item.cjr }}</div>
       </div>
@@ -86,7 +86,7 @@
 <script lang="ts" setup>
   import { onMounted, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { Connection, Upload,RefreshLeft } from '@element-plus/icons-vue'
+  import { Connection, Upload, RefreshLeft } from '@element-plus/icons-vue'
 
   let props = defineProps({
     bzList: {
@@ -107,15 +107,12 @@
     },
   })
 
-  
   //'/function-page/collection'
   const bindTag = (item) => {
     return [item.standardType, item.fangWuYTOld]
   }
 
-  onMounted(() => {
-   
-  })
+  onMounted(() => {})
 </script>
 
 <style scoped>

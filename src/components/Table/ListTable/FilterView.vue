@@ -131,10 +131,7 @@
           @click="parentTypeMethod('select', '分配已勾选')"
           >分配已勾选</el-button
         >
-        <el-button
-          v-if="listtype == 'build' && allSelect == true"
-          type="primary"
-          @click="parentTypeMethod(5, '全部提交')"
+        <el-button v-if="listtype == 'build' && allSelect == true" type="primary" @click="parentTypeMethod(5, '全部提交')"
           >全部提交</el-button
         >
 
@@ -236,7 +233,6 @@
   // const onSubmit = () => {
   //   SettingStore.setSearch(filters.value)
   // }
-
 
   onMounted(() => {
     //filters.value.listtype = props.listtype

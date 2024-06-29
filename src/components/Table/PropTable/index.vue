@@ -36,27 +36,16 @@
           <el-table-column show-overflow-tooltip label="授权地址" prop="shouQuanDZ" width="120" />
           <el-table-column v-if="props.listType == 'zyfp'" show-overflow-tooltip label="采集人" prop="workPerson" />
           <el-table-column label="操作">
-      <template #default="scope">
-        <el-button
-        v-if="scope.row.isSelect=='已勾选'"
-        size="small"
-          type="danger"
-          @click="deleteAction(scope.$index, scope.row)"
-        >
-          删除
-        </el-button>
-        <el-button
-        v-else="scope.row.isSelect=='未勾选'"
-        size="small"
-          type="danger"
-          @click="selectAction(scope.$index, scope.row)"
-        >
-          选择
-        </el-button>
-      </template>
-    </el-table-column>
+            <template #default="scope">
+              <el-button v-if="scope.row.isSelect == '已勾选'" size="small" type="danger" @click="deleteAction(scope.$index, scope.row)">
+                删除
+              </el-button>
+              <el-button v-else="scope.row.isSelect == '未勾选'" size="small" type="danger" @click="selectAction(scope.$index, scope.row)">
+                选择
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
-
       </div>
       <!-- 分配采集人-->
       <el-dialog v-if="props.listType == 'zyfp'" v-model="dialogVisible" title="分配采集人" width="80%">
@@ -131,7 +120,6 @@
     },
   })
 
-  
   //const etitle = props.entryType == 'xcrw'? '请选择建筑范围':'分配采集人'
   const ruleFormRef = ref<FormInstance>()
 
@@ -164,7 +152,7 @@
   const tableRef = ref(null)
   const selectAll = ref(false) // 全选状态
 
-  const emit = defineEmits(['reset','delete','select','selectAll', 'onSubmit', 'selection-change', 'selectsearch'])
+  const emit = defineEmits(['reset', 'delete', 'select', 'selectAll', 'onSubmit', 'selection-change', 'selectsearch'])
 
   const handleSelectionChange = (val) => {
     console.log(val)
@@ -209,7 +197,6 @@
     console.log(index, row)
   }
 
-
   const filterMethod = (e1, e2) => {
     console.log(e1, e2)
     if (e1 == 1) {
@@ -218,13 +205,11 @@
     } else if (e1 == 3) {
       dialogVisible.value = !dialogVisible.value
     } else if (e1 == 4) {
-      
       if (e2) {
         //调用方法
         emit('selectAll')
-        ElMessage.success('成功添加' + props.data.length + '幢建筑')      
+        ElMessage.success('成功添加' + props.data.length + '幢建筑')
       }
-
     }
   }
 
@@ -278,7 +263,7 @@
     })
     emit('reset')
   }
-  const deleteAction = (index,row) => {
+  const deleteAction = (index, row) => {
     ElMessageBox.confirm('你确定要删除当前项吗?', '温馨提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -287,14 +272,14 @@
     })
       .then(() => {
         // list.value = list.value.filter((item) => item.id !== row.id)
-        emit('delete',index,row)
+        emit('delete', index, row)
         ElMessage.success('删除成功')
       })
       .catch(() => {})
   }
 
-  const selectAction = (index,row) => {
-    emit('select',index,row)
+  const selectAction = (index, row) => {
+    emit('select', index, row)
   }
 </script>
 <style scoped lang="scss">

@@ -37,24 +37,24 @@ const systemRouter = [
         name: 'role',
         meta: { title: '角色管理', icon: 'MenuIcon' },
       },
-      {
-        path: '/system/menu',
-        component: () => import('@/views/system/menu/index.vue'),
-        name: 'menu',
-        meta: { title: '菜单管理', icon: 'MenuIcon' },
-      },
-      {
-        path: '/system/dictionary',
-        component: () => import('@/views/system/dictionary/index.vue'),
-        name: 'dictionary',
-        meta: { title: '字典管理', icon: 'MenuIcon' },
-      },
-      {
-        path: '/system/task',
-        component: () => import('@/views/system/task/index.vue'),
-        name: 'task',
-        meta: { title: '建筑信息管理', icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/system/menu',
+      //   component: () => import('@/views/system/menu/index.vue'),
+      //   name: 'menu',
+      //   meta: { title: '菜单管理', icon: 'MenuIcon' },
+      // },
+      // {
+      //   path: '/system/dictionary',
+      //   component: () => import('@/views/system/dictionary/index.vue'),
+      //   name: 'dictionary',
+      //   meta: { title: '字典管理', icon: 'MenuIcon' },
+      // },
+      // {
+      //   path: '/system/task',
+      //   component: () => import('@/views/system/task/index.vue'),
+      //   name: 'task',
+      //   meta: { title: '建筑信息管理', icon: 'MenuIcon' },
+      // },
     ],
   },
 ]

@@ -42,14 +42,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref, onMounted,computed } from 'vue'
+  import { reactive, ref, onMounted, computed } from 'vue'
   import { MapLocation, Memo, OfficeBuilding, View as IconView } from '@element-plus/icons-vue'
   import type { FormInstance } from 'element-plus'
   import { useSettingStore } from '@/store/modules/setting'
   import Upload from './components/Upload.vue'
   import { useRouter } from 'vue-router'
-import { ru } from 'element-plus/es/locale'
-import { files } from 'jszip'
+  import { ru } from 'element-plus/es/locale'
+  import { files } from 'jszip'
   const router = useRouter()
 
   const formSize = ref('small')
@@ -69,10 +69,10 @@ import { files } from 'jszip'
     // clubType: '',
   })
 
-  ruleForm = computed(()=>{
+  ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
-  
+
   const rules = reactive({
     name: [
       { required: true, message: '请输入任务名称', trigger: 'blur' },
@@ -131,22 +131,20 @@ import { files } from 'jszip'
   //保存后 把store中的数据清空
   const submitForm = async (formEl: FormInstance | undefined) => {
     let delivery = UseSettingStore.selJZList.length > 0 ? true : false
-    console.log("1111",delivery)
-    ruleForm.delivery = delivery;
+    console.log('1111', delivery)
+    ruleForm.delivery = delivery
     if (!formEl) return
     await formEl.validate((valid, fields) => {
-      console.log("222",valid,fields)
+      console.log('222', valid, fields)
       if (valid) {
         console.log('保存巡查任务!')
-        ruleForm.name = '';
-        ruleForm.clubType = '';
-        ruleForm.date1 = '';
-        ruleForm.date2 = '';
-        ruleForm.delivery = false;
-        ruleForm.resource= '',
-        ruleForm.desc='',
-        UseSettingStore.setXcrw(ruleForm)
-        console.log("3333",UseSettingStore.xcrw)
+        ruleForm.name = ''
+        ruleForm.clubType = ''
+        ruleForm.date1 = ''
+        ruleForm.date2 = ''
+        ruleForm.delivery = false
+        ;(ruleForm.resource = ''), (ruleForm.desc = ''), UseSettingStore.setXcrw(ruleForm)
+        console.log('3333', UseSettingStore.xcrw)
       } else {
         console.log('不保存巡查任务!', fields)
       }
@@ -159,7 +157,7 @@ import { files } from 'jszip'
   }
 
   const inBuilds = () => {
-    console.log('2222222',ruleForm)
+    console.log('2222222', ruleForm)
     //缓存当前页面的信息
     UseSettingStore.setXcrw(ruleForm)
     router.push(
