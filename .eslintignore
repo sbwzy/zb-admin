@@ -18,3 +18,5 @@ dist
 .local
 /bin
 Dockerfile
+**/*.vue
+**/*.js

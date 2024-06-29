@@ -8,9 +8,9 @@
       :list-type="entryType"
       @selection-change="selectionChange"
       @reset="reset"
-      @delete='deleteAction'
+      @delete="deleteAction"
       @select="selectAction"
-      @selectAll='selectAllAction'
+      @selectAll="selectAllAction"
       @on-submit="onSubmit"
       @selectsearch="selectSearch"
     >
@@ -494,7 +494,7 @@
   }
   const selectAllAction = () => {
     ruleForm1 = UseSettingStore.xcrw
-    console.log('ruleForm1',ruleForm1)
+    console.log('ruleForm1', ruleForm1)
   }
 
   const edit = (row) => {
@@ -532,15 +532,15 @@
     }, 500)
     ElMessage.success('触发重置方法')
   }
-  //删除该记录 
-  const deleteAction = (va1,va2) =>{
+  //删除该记录
+  const deleteAction = (va1, va2) => {
     //调用接口修改数据
 
     //在接口修改数据成功后，删除该条数据
     list.value = list.value.filter((item) => item.id !== va2.id)
   }
 
-  const selectAction = (va1,va2) =>{
+  const selectAction = (va1, va2) => {
     //调用接口修改数据
 
     //在接口修改数据成功后，删除该条数据
@@ -563,15 +563,15 @@
   onMounted(() => {
     //加载数据
     selList = UseSettingStore.selJZList
-    if(selList.length != 0){
-      console.log("进来了")
+    if (selList.length != 0) {
+      console.log('进来了')
       console.log(selList)
       console.log(list.value)
       list.value.forEach((item) => {
-        if(selList.indexOf(item.id) != -1){
+        if (selList.indexOf(item.id) != -1) {
           //store里面存在已保存的id，则xiu
           item.isSelect = '已勾选'
-        }else{
+        } else {
           item.isSelect = '未勾选'
         }
       })

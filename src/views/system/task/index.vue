@@ -91,7 +91,6 @@
 
   //子组件方法 根据条件触发事件
   const filterMethod = (e1, e2) => {
-
     console.log('操作方法', e1, e2)
 
     if (e2 == '模糊查询' || e2 == '查询') {
@@ -113,7 +112,7 @@
             id: '00012',
           })
           SettingStore.setJzList(dataList.value)
-        }else{
+        } else {
           ElMessage({
             message: '搜索条件有误',
             type: 'error',
@@ -130,7 +129,6 @@
         ;(filters.value[key] = ''), (filters.value['collectionStatus'] = '采集中'), (filters.value['streetType'] = '未分配')
       })
       SettingStore.setSearch(filters.value)
-
     } else {
       //e2 == '提交' || e2 == '全部提交' || e2 =='撤回'
       //触发接口 e0 id集合 e2 操作类型 e3 审批拒绝操作内容   e0 是接口数据不存在 测试使用

@@ -57,7 +57,7 @@ export const useSettingStore = defineStore({
     //搜索条件
     search: ref({
       listtype: '', //类型
-      searchType:'', //搜索类型
+      searchType: '', //搜索类型
       collectionStatus: '采集中',
       regionmap: '',
       type: '',
@@ -415,10 +415,10 @@ export const useSettingStore = defineStore({
       },
     ]),
     //建筑列表分页
-    pagination:ref({
+    pagination: ref({
       currentPage: 1,
       pageSize: 10,
-    })
+    }),
   }),
   getters: {},
   // 可以同步 也可以异步

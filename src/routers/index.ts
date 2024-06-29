@@ -27,15 +27,15 @@ import functionPageRouter from './modules/functionPage'
 // 异步组件
 export const asyncRoutes = [
   ...dataScreenRouter,
-  ...echartsRouter,
+  // ...echartsRouter,
   ...tableRouter,
   ...formRouter,
-  ...othersRouter,
+  // ...othersRouter,
   ...functionPageRouter,
-  ...chatRouter,
-  ...nestedRouter,
-  ...excelRouter,
-  ...externalLink,
+  // ...chatRouter,
+  // ...nestedRouter,
+  // ...excelRouter,
+  // ...externalLink,
   ...systemRouter,
 ]
 
