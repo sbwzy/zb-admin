@@ -1,8 +1,35 @@
 <template>
+  <!-- <div class="cover-view">
+     <el-icon><ArrowLeftBold/></el-icon>    -->
+  <!-- <div class="inner-container first-row"> -->
+  <!-- <el-button type="primary" @click="save()">打卡定位</el-button>
+      <el-text v-if="buildInfo.isMorm">{{ buildInfo.qiaoDaoReason }}</el-text>
+      <el-icon><ArrowLeftBold/></el-icon>
+      <el-icon><ArrowLeftBold/></el-icon>
+      <el-icon><ArrowLeftBold/></el-icon>
+      <el-icon><ArrowLeftBold/></el-icon> -->
+  <!-- </div> -->
+  <!-- </div> -->
   <div class="cover-view1">
-    <!-- <el-icon><ArrowLeftBold/></el-icon>    -->
-    <el-button type="primary" @click="save()">打卡定位</el-button>
-    <el-text v-if="buildInfo.isMorm">{{ buildInfo.qiaoDaoReason }}</el-text>
+    <div class="inner-container first-row">
+      <el-button size="large" type="primary" @click="save()">打卡定位</el-button>
+      <el-text style="font-size: 15px; color: red" v-if="buildInfo.isMorm">{{ buildInfo.qiaoDaoReason }}</el-text>
+    </div>
+    <div class="inner-container second-row">
+      <div class="item"
+        ><div style="width: 30px; height: 30px; background-color: #3af960; border-radius: 100%"></div>
+        <el-text style="font-size: 15px">建筑规划点位</el-text>
+      </div>
+      <div class="item"
+        ><div style="width: 30px; height: 30px; background-color: #ffd633; border-radius: 100%"></div>
+        <el-text style="font-size: 15px">上次巡查点位</el-text></div
+      >
+      <div class="item"
+        ><div style="width: 30px; height: 30px; background-color: #ff3333; border-radius: 100%"></div>
+        <el-text style="font-size: 15px">上次签到位置</el-text></div
+      >
+      <!-- <div class="item"></div> -->
+    </div>
   </div>
 
   <div ref="mapContainer" style="height: 100%; z-index: 20"></div>
@@ -351,11 +378,47 @@
     height: 10px important !;
   }
 
-  .cover-view1 {
+  .cover-view {
     position: relative;
+    flex-wrap: wrap; /* 允许Flex项目换行 */
+    display: flex;
+    gap: 10px; /*设置元素间的垂直和水平间距 */
     background-color: #fff;
     width: 100%;
-    height: 100px;
+    /* height: 100px; */
     top: 0px;
   }
+  .cover-view1 {
+    display: flex;
+    flex-direction: column;
+  }
+  .inner-container {
+    display: flex;
+    gap: 30px; /* 控制元素间间距 */
+  }
+
+  .first-row {
+    flex: 0 0 calc(50% - 15px);
+    gap: 10px;
+  }
+
+  .second-row {
+    /* 自动调整，根据需要可以设定具体宽度以适应四个元素 */
+    flex: 0 0 calc(30% - 15px);
+    gap: 10px;
+  }
+
+  .item {
+    display: flex;
+    /* height: 50px; */
+  }
+
+  /* 根据需要可以为按钮和文本设定宽度，以控制每行显示的数量
+  .el-button,
+  .el-text {
+    flex: 0 0 calc(50% - 15px); /* 每个元素占据50%宽度减去间隙的一半，保持间距 */
+  /*}
+  .el-icon{
+    flex: 0 0 calc(25% - 15px); /* 每个元素占据50%宽度减去间隙的一半，保持间距 */
+  /*} */
 </style>

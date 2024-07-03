@@ -1,10 +1,16 @@
 <template>
   <div class="app-container">
-    <!-- 筛选列表 -->
+    <el-segmented v-model="initvalue" :options="cjZt" block @change="changeValue">
+      <!-- <template #default="{ item }">
+        <div class="flex flex-col items-center gap-2 p-2">
+          {{item}}·{{datacurrList.length}}
+        </div>
+      </template> -->
+    </el-segmented>
     <filterView
       :filterss="dynamicFilters"
       :filters="filters"
-      :allSelect="dataList[0]?.cjZt == '采集中' ? true : false"
+      :allSelect="initvalue == '采集中' ? true : false"
       :listtype="listType"
       :parent-type-method="filterMethod"
     ></filterView>
@@ -30,15 +36,13 @@
 
 <script lang="ts" setup>
   import filterView from '@/components/Table/ListTable/FilterView.vue'
-  //import spListView from './components/ListView.vue'
-  //import menuView from './components/Menu.vue'
   import spListView from '@/components/Table/ListTable/ListView.vue'
-  import menuView from '@/components/Table/ListTable/menu.vue'
   import { buildListinfo } from '@/api/user'
   import { onMounted, reactive, computed, ref, onBeforeMount } from 'vue'
   import { useRouter } from 'vue-router'
   //
   import { useSettingStore } from '@/store/modules/setting'
+  import { useUserStore } from '@/store/modules/user'
   import { da } from 'element-plus/es/locale'
 
   import { buildOperation } from '@/api/user'
@@ -46,7 +50,11 @@
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 
   const router = useRouter()
+  import { useRoute } from 'vue-router'
+  const route = useRoute()
+  const xcId = route.params.xcId as string
   const SettingStore = useSettingStore()
+  const UserStore = useUserStore()
   // 配置全局组件大小
   const size = computed((): string => SettingStore.themeConfig.globalComSize)
 
@@ -55,6 +63,12 @@
   const listType = 'build'
   // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项）
   const dynamicFilters = SettingStore.dynamicFilters
+
+  //根据当前用户身份设置初始分段  初始这样设计
+  const initvalue = ref(UserStore.sfRole.includes('审核员') ? '待审核' : '未采集')
+  const cjZt = computed(() => {
+    return SettingStore.cjZt
+  })
 
   const filters = computed(() => {
     return SettingStore.search
@@ -88,7 +102,11 @@
   const handleCurrentChange = (val: number) => {
     pagination.value.currentPage = val
   }
-
+  const changeValue = (val) => {
+    console.log('打印', val)
+    initvalue.value = val
+    //修改属性
+  }
   //子组件方法 根据条件触发事件
   const filterMethod = (e1, e2) => {
     console.log('操作方法', e1, e2)
@@ -112,6 +130,7 @@
             id: '00012',
           })
           SettingStore.setJzList(dataList.value)
+          //目前有问题是因为接口没弄完
         } else {
           ElMessage({
             message: '搜索条件有误',

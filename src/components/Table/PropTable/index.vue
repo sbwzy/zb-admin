@@ -1,7 +1,13 @@
 <template>
   <div class="zb-pro-table">
     <div class="header">
-      <filterView :filterss="filters" :listtype="listType" :parent-type-method="filterMethod"></filterView>
+      <filterView
+        :filterss="filterss"
+        :all-select="false"
+        :filters="filters"
+        :listtype="listType"
+        :parent-type-method="filterMethod"
+      ></filterView>
     </div>
     <!--底部-->
     <div class="footer">
@@ -98,9 +104,15 @@
       type: Array,
       default: () => [],
     },
-    filters: {
+    filterss: {
       type: Array,
       default: () => [],
+    },
+    filters: {
+      type: Object,
+      default() {
+        return {}
+      },
     },
     data: {
       type: Array,
@@ -111,10 +123,6 @@
       default: false,
     },
     listType: {
-      type: String,
-      default: '',
-    },
-    id: {
       type: String,
       default: '',
     },

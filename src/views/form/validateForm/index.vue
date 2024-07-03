@@ -58,18 +58,7 @@
   const cascaderRef = ref(null)
   const UseSettingStore = useSettingStore()
 
-  let ruleForm = reactive({
-    // name: '',
-    // //region: '',
-    // date1: '',
-    // date2: '',
-    // delivery: false,
-    // resource: '',
-    // desc: '',
-    // clubType: '',
-  })
-
-  ruleForm = computed(() => {
+  let ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
 
@@ -109,41 +98,24 @@
         trigger: 'change',
       },
     ],
-    // delivery: [
-    //   {
-    //     required: true,
-    //     message: '请选择区域范围\n',
-    //     trigger: 'change',
-    //   },
-    //   {
-    //     validator: (rule, value, callback) => {
-    //       if (value) {
-    //         callback() // 如果选择true，则验证通过
-    //       } else {
-    //         callback(new Error('请进入选择区域范围')) // 如果选择false，则返回错误信息
-    //       }
-    //     },
-    //     trigger: 'change',
-    //   },
-    // ],
     desc: [{ required: false, message: '请填写活动形式', trigger: 'blur' }],
   })
   //保存后 把store中的数据清空
   const submitForm = async (formEl: FormInstance | undefined) => {
     let delivery = UseSettingStore.selJZList.length > 0 ? true : false
     console.log('1111', delivery)
-    ruleForm.delivery = delivery
+    ruleForm.value.delivery = delivery
     if (!formEl) return
     await formEl.validate((valid, fields) => {
       console.log('222', valid, fields)
       if (valid) {
         console.log('保存巡查任务!')
-        ruleForm.name = ''
-        ruleForm.clubType = ''
-        ruleForm.date1 = ''
-        ruleForm.date2 = ''
-        ruleForm.delivery = false
-        ;(ruleForm.resource = ''), (ruleForm.desc = ''), UseSettingStore.setXcrw(ruleForm)
+        ruleForm.value.name = ''
+        ruleForm.value.clubType = ''
+        ruleForm.value.date1 = ''
+        ruleForm.value.date2 = ''
+        ruleForm.value.delivery = false
+        ;(ruleForm.value.resource = ''), (ruleForm.value.desc = ''), UseSettingStore.setXcrw(ruleForm)
         console.log('3333', UseSettingStore.xcrw)
       } else {
         console.log('不保存巡查任务!', fields)
@@ -161,7 +133,7 @@
     //缓存当前页面的信息
     UseSettingStore.setXcrw(ruleForm)
     router.push(
-      { name: 'comprehensive', params: { type: 'newxcrw', id: '1' } },
+      { name: 'comprehensive', params: { type: 'newxcrw' } },
       //,params:{list:JSON.stringify(pointslist1.value)}
     )
   }
@@ -171,7 +143,7 @@
   onMounted(() => {
     //初始化是赋值信息
     console.log('赋值新建的巡查任务字段')
-    ruleForm = UseSettingStore.xcrw
+    // ruleForm.value = UseSettingStore.xcrw
   })
 </script>
 <style lang="scss">

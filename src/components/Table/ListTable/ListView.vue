@@ -5,7 +5,7 @@
       <div style="display: flex">
         <div class="topTitleV">{{ listtype == 'build' ? item.xiaoQu : item.renwuName }}</div>
         <div
-          v-if="listtype != 'build'"
+          v-if="listtype == 'xcrw'"
           :style="{
             marginLeft: item.progress.length * 1 + 'px',
             width: item.progress.length * 10 + 'px !important',
@@ -42,6 +42,18 @@
           </el-button>
         </div>
       </div>
+
+      <div
+        v-if="listtype == 'build' && item.cjZt == '审核驳回'"
+        :style="{
+          display: 'flex',
+        }"
+        class="rigFlagV"
+      >
+        <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
+          重新提交<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
+        </el-button>
+      </div>
       <div
         v-if="listtype == 'build'"
         style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)"
@@ -56,7 +68,7 @@
         <div class="titleV">授权地址:</div>
         <div class="detailV">{{ item.shouQuanDZ }}</div>
       </div>
-      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
+      <div v-else-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">巡查时间:</div>
         <div class="detailV">{{ item.xcsjS }} - {{ item.xcsjE }}</div>
       </div>
@@ -71,11 +83,11 @@
         <div class="titleV">房屋用途:</div>
         <div class="detailV">{{ item.fangWuYTOld }}</div>
       </div>
-      <div v-else-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
+      <div v-else-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">创建单位:</div>
         <div class="detailV">{{ item.cjdw }}</div>
       </div>
-      <div v-if="listtype != 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
+      <div v-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">创建人:</div>
         <div class="detailV">{{ item.cjr }}</div>
       </div>

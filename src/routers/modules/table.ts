@@ -14,10 +14,10 @@ const tableRouter = [
     },
     children: [
       {
-        path: '/table/comprehensive/:type/:id',
+        path: '/table/comprehensive/:type',
         component: () => import('@/views/table/ComprehensiveTable/index.vue'),
         name: 'comprehensive',
-        meta: { title: '建筑列表', keepAlive: true, icon: 'MenuIcon' },
+        meta: { title: '巡查任务建筑列表', keepAlive: true, icon: 'MenuIcon' },
       },
       // {
       //   path: '/table/inlineTable',
