@@ -43,6 +43,8 @@ export const useSettingStore = defineStore({
     },
     // 采集状态
     cjZt: ref(['未采集', '采集中', '待审核', '审核驳回', '审核通过']),
+    //当前巡查任务id 初始化时默认是最新创建的巡查记录
+    xcrwId: 1,
     //新建巡查任务 字段信息
     xcrw: ref({
       name: '',
@@ -78,7 +80,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄7号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -87,7 +89,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄5号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -96,7 +98,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄6号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -105,7 +107,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄4号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -114,7 +116,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄5号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -123,7 +125,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄6号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -132,7 +134,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄4号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -141,7 +143,7 @@ export const useSettingStore = defineStore({
       {
         xiaoQu: '福世花园',
         jieZhen: '江苏路街道',
-        cjZt: '采集中',
+        cjZt: '未采集',
         shouQuanDZ: '安化路200弄5号',
         standardType: '花园住宅',
         fangWuYTOld: '非居住办公用房',
@@ -174,8 +176,81 @@ export const useSettingStore = defineStore({
         fangWuYTOld: '非居住办公用房',
         id: '00011',
       },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '待审核',
+        shouQuanDZ: '安化路200弄6号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00012',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '待审核',
+        shouQuanDZ: '安化路200弄4号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00013',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '待审核',
+        shouQuanDZ: '安化路200弄4号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00014',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '审核驳回',
+        shouQuanDZ: '安化路200弄6号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00015',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '审核驳回',
+        shouQuanDZ: '安化路200弄4号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00016',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '审核通过',
+        shouQuanDZ: '安化路200弄6号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00017',
+      },
+      {
+        xiaoQu: '福世花园',
+        jieZhen: '江苏路街道',
+        cjZt: '审核通过',
+        shouQuanDZ: '安化路200弄4号',
+        standardType: '花园住宅',
+        fangWuYTOld: '非居住办公用房',
+        id: '00018',
+      },
     ]),
-    //巡查任务每次保存的任务列表
+    //当前巡查任务下未采集的建筑列表
+    wcjJzList: ref([]),
+    //当前巡查任务下采集中的建筑列表
+    cjzJzList: ref([]),
+    //当前巡查任务下待审核的建筑列表
+    dshJzList: ref([]),
+    //当前巡查任务下审核驳回的建筑列表
+    shbhJzList: ref([]),
+    //当前巡查任务下审核通过的建筑列表
+    shtgJzList: ref([]),
+    //巡查任务每次保存的任务列表 (待删除)
     xcList: ref([
       {
         id: 1,
@@ -223,6 +298,8 @@ export const useSettingStore = defineStore({
         notemsg: '00003',
       },
     ]),
+    //巡查任务列表搜索的列表
+    xcbcList: ref([]),
     //新建巡查任务 未生成任务的原始建筑列表
     xcjzList: ref([
       {
@@ -1132,7 +1209,7 @@ export const useSettingStore = defineStore({
         ],
       },
     ]),
-    //建筑列表分页
+    //建筑列表当前分页
     pagination: ref({
       currentPage: 1,
       pageSize: 10,
@@ -1190,6 +1267,25 @@ export const useSettingStore = defineStore({
     },
     setBcjzList(value) {
       this.bcjzList = value
+    },
+    setXcrwId(value) {
+      this.xcrwId = value
+    },
+    //
+    setWcjJzList(value) {
+      this.wcjJzList = value
+    },
+    setCjzJzList(value) {
+      this.cjzJzList = value
+    },
+    setDshJzList(value) {
+      this.dshJzList = value
+    },
+    setShbhJzList(value) {
+      this.shbhJzList = value
+    },
+    setShtgJzList(value) {
+      this.shtgJzList = value
     },
   },
   // 这部分数据不需要存储

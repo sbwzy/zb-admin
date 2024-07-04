@@ -204,7 +204,7 @@
     listtype: {
       type: String,
       default() {
-        return 'buildmap' //build xcmap
+        return '' //build xcmap
       },
     },
     parentTypeMethod: {

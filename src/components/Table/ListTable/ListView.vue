@@ -4,16 +4,10 @@
       <!--item?.jieZhen == '即将实施' ? '#1890FF' : '#39b54a',-->
       <div style="display: flex">
         <div class="topTitleV">{{ listtype == 'build' ? item.xiaoQu : item.renwuName }}</div>
-        <div
-          v-if="listtype == 'xcrw'"
-          :style="{
-            marginLeft: item.progress.length * 1 + 'px',
-            width: item.progress.length * 10 + 'px !important',
-            color: item.progress == '进行中' ? '#1890FF' : '#aa0000',
-          }"
-          class="rigFlagV"
-        >
-          {{ item.progress }}
+        <div v-if="listtype == 'xcrw' && UserStore.sfRole.includes('超级管理员')" class="rigFlagV">
+          <el-button type="primary" size="small" @click="parentTypeMethod(item, '编辑')">
+            详情<el-icon class="el-icon--right"><Pointer /></el-icon>
+          </el-button>
         </div>
         <div
           v-if="listtype == 'build' && item.cjZt == '采集中'"
@@ -41,19 +35,19 @@
             撤回<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
           </el-button>
         </div>
+        <div
+          v-if="listtype == 'build' && item.cjZt == '审核驳回'"
+          :style="{
+            display: 'flex',
+          }"
+          class="rigFlagV"
+        >
+          <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
+            重新提交<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
+          </el-button>
+        </div>
       </div>
 
-      <div
-        v-if="listtype == 'build' && item.cjZt == '审核驳回'"
-        :style="{
-          display: 'flex',
-        }"
-        class="rigFlagV"
-      >
-        <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
-          重新提交<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
-        </el-button>
-      </div>
       <div
         v-if="listtype == 'build'"
         style="display: flex; flex: 1; flex-wrap: wrap; margin-top: 0px; margin-left: -8px; height: 38px; width: calc(100vw-62px)"
@@ -98,7 +92,10 @@
 <script lang="ts" setup>
   import { onMounted, reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { Connection, Upload, RefreshLeft } from '@element-plus/icons-vue'
+  import { Connection, Upload, RefreshLeft, Pointer } from '@element-plus/icons-vue'
+  import { useUserStore } from '@/store/modules/user'
+
+  const UserStore = useUserStore()
 
   let props = defineProps({
     bzList: {

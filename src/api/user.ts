@@ -140,7 +140,7 @@ interface xinXiGXParams {
 }
 
 /**
- * 调用xinXiGX接口
+ * 调用xinXiGX接口 提交信息(提交待审批)
  *
  * 本函数用于发送一个POST请求到'webapi/youligf.xinXiGX'接口，以获取信息。
  * @param params 请求参数，具体结构由xinXiGXParams定义
