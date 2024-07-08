@@ -79,7 +79,7 @@
       <div class="pagination">
         <el-pagination
           v-model:currentPage="pagination.currentPage"
-          :page-size="20"
+          :page-size="10"
           small
           background
           layout="total, prev, pager"
@@ -179,7 +179,7 @@
 
   const pagination = reactive({
     currentPage: 1,
-    pageSize: 20,
+    pageSize: 10,
   })
 
   const getRowKeys = (row) => {
@@ -212,12 +212,14 @@
       selectsearch(e2)
     } else if (e1 == 3) {
       dialogVisible.value = !dialogVisible.value
-    } else if (e1 == 4) {
-      if (e2) {
-        //调用方法
-        emit('selectAll')
-        ElMessage.success('成功添加' + props.data.length + '幢建筑')
-      }
+    } else if (e2 == '选择所有') {
+      //if (e2) {
+      //调用方法
+      console.log(e1)
+      emit('selectAll')
+      ElMessage.success('成功添加' + props.data.length + '幢建筑')
+      //}
+    } else if (e2 == '模糊查询' || e2 == '查询') {
     }
   }
 
@@ -237,7 +239,7 @@
 
     //tableRef.value.clearSelection()
     //tableRef.value.toggleAllSelection()
-    return arr.splice((pagination.currentPage - 1) * 20, 20)
+    return arr.splice((pagination.currentPage - 1) * 10, 10)
   })
 
   const listLoading = ref(false)
