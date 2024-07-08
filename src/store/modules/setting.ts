@@ -45,17 +45,97 @@ export const useSettingStore = defineStore({
     cjZt: ref(['未采集', '采集中', '待审核', '审核驳回', '审核通过']),
     //当前巡查任务id 初始化时默认是最新创建的巡查记录
     xcrwId: 1,
+    //新增用户
     //新建巡查任务 字段信息
     xcrw: ref({
+      id: '',
       name: '',
-      //region: '',
       date1: '',
       date2: '',
-      delivery: false,
+      status: false,
       resource: '',
       desc: '',
       clubType: '',
+      rwList: [
+        // {
+        //   cjrname: '用户1',
+        //   shrName: '用户1',
+        //   status: true,
+        //   jzsl: 110,
+        //   photo: '15333333333',
+        //   describe: '该采集员已负责xx1、xx2等街区',
+        //   createTime: '2022-09-02 15:30:20',
+        // },
+        // {
+        //   cjrname: '用户2',
+        //   shrName: '用户2',
+        //   status: true,
+        //   jzsl: 100,
+        //   photo: '15311111111',
+        //   describe: '该采集员已负责xx3、xx4等街区',
+        //   createTime: '2022-09-02 15:30:20',
+        // },
+        // {
+        //   cjrname: '用户3',
+        //   shrName: '用户3',
+        //   jzsl: 10,
+        //   status: true,
+        //   photo: '13823456789',
+        //   describe: '该采集员已负责xx5、xx6等街区',
+        //   createTime: '2022-09-02 15:30:20',
+        // },
+        // {
+        //   cjrname: '用户4',
+        //   shrName: '用户4',
+        //   jzsl: 0,
+        //   status: false,
+        //   photo: '13923456789',
+        //   describe: '该采集员目前非启用状态',
+        //   createTime: '2022-09-02 15:30:20',
+        // },
+      ], //任务分配列表
     }),
+    //(非超级管理员)所有巡查员的列表 管理员也可以采集(所以这个表是管理员和采集员都有)
+    xcoptions: ref([
+      {
+        value: '用户1',
+        label: '用户1(仅采集)',
+        disabled: false,
+      },
+      {
+        value: '用户2',
+        label: '用户2(仅采集)',
+        disabled: false,
+      },
+      {
+        value: '用户3',
+        label: '用户3(可审核)',
+        disabled: false,
+      },
+      {
+        value: '用户4',
+        label: '用户4(可审核)',
+        disabled: false,
+      },
+      {
+        value: '用户5',
+        label: '用户5(仅采集)',
+        disabled: false,
+      },
+    ]),
+    //审核员的列表
+    shoptions: ref([
+      {
+        value: '用户3',
+        label: '用户3',
+        disabled: false,
+      },
+      {
+        value: '用户4',
+        label: '用户4',
+        disabled: false,
+      },
+    ]),
     //已选择的建筑列表
     selJZList: [1, 2, 3],
     //搜索条件
@@ -67,6 +147,7 @@ export const useSettingStore = defineStore({
       type: '',
       jzName: '', //建筑名称
       rwName: '', //任务名称
+      xcrwName: '',
       district: null, //区域
       checked1: false,
       checked2: false,
@@ -299,7 +380,38 @@ export const useSettingStore = defineStore({
       },
     ]),
     //巡查任务列表搜索的列表
-    xcbcList: ref([]),
+    xcssList: ref([
+      {
+        id: 1,
+        renwuName: '24年度第一季度巡查任务',
+        xcsjS: '2024-2月',
+        xcsjE: '2024-5月',
+        type: '年度中心巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '进行中',
+      },
+      {
+        id: 2,
+        renwuName: '24年度第二季度巡查任务',
+        xcsjS: '2024-6月',
+        xcsjE: '2024-9月',
+        type: '季度中心巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '进行中', //任务进展情况
+      },
+      {
+        id: 3,
+        renwuName: '24年度第二季度重点巡查任务',
+        xcsjS: '2024-6月',
+        xcsjE: '2024-6月',
+        type: '特殊情况巡查',
+        cjdw: '物业管理中心',
+        cjr: 'xxxx',
+        progress: '未开始',
+      },
+    ]),
     //新建巡查任务 未生成任务的原始建筑列表
     xcjzList: ref([
       {
@@ -965,7 +1077,7 @@ export const useSettingStore = defineStore({
       },
       {
         label: '巡查类型',
-        key: 'collectionStatus',
+        key: 'collectionStatus1',
         type: 'select',
         placeholder: '请选择巡查类型',
         options: [
@@ -1214,6 +1326,11 @@ export const useSettingStore = defineStore({
       currentPage: 1,
       pageSize: 10,
     }),
+    //巡查列表当前分页
+    xcpagination: ref({
+      currentPage: 1,
+      pageSize: 10,
+    }),
   }),
   getters: {},
   // 可以同步 也可以异步
@@ -1286,6 +1403,9 @@ export const useSettingStore = defineStore({
     },
     setShtgJzList(value) {
       this.shtgJzList = value
+    },
+    setXcssList(value) {
+      this.xcssList = value
     },
   },
   // 这部分数据不需要存储

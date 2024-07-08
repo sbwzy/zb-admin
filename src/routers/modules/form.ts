@@ -18,7 +18,7 @@ const formRouter = [
         path: '/form/validateForm',
         component: () => import('@/views/form/validateForm/index.vue'),
         name: 'validateForm',
-        meta: { title: '新建巡查任务', keepAlive: true, icon: 'MenuIcon' },
+        meta: { title: '巡查任务详情', keepAlive: true, icon: 'MenuIcon' },
       },
       {
         path: '/form/advancedForm',

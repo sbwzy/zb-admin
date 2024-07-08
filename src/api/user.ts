@@ -149,3 +149,34 @@ interface xinXiGXParams {
 export function xinXiGX(params: xinXiGXParams) {
   return request.post('webapi/youligf.xinXiGX', params)
 }
+
+//查看巡查任务详情   替换接口
+export const xcrwXQ = (id) => {
+  return request.post('webapi/youligf.youliCJXQ', {
+    xcrwId: id,
+  })
+}
+
+//巡查任务详情
+interface xcrwParams {
+  id: string
+  name: string
+  date1: string
+  date2: string
+  status: boolean
+  resource: string
+  desc: string
+  clubType: string
+  rwList: Array<{
+    cjrname: string
+    shrName: string
+    status: boolean
+    jzsl: number
+    photo: string
+    describe: string
+    createTime: string
+  }>
+}
+export function saveXcrw(params: xcrwParams) {
+  return request.post('webapi/youligf.youliQuery', params)
+}

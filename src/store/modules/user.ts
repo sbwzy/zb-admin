@@ -10,7 +10,7 @@ export const useUserStore = defineStore({
     // 登录用户信息
     userInfo: {},
     // 角色
-    sfRole: ['采集员'],
+    sfRole: ['超级管理员'],
     // 角色(弃用)
     roles: localStorage.roles ? JSON.parse(localStorage.roles) : [],
   }),

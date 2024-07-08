@@ -17,7 +17,7 @@
     </svg>
   </button>
   <div class="header" :style="{ paddingTop: (isExpanded ? 8 : 0) + 'px !important' }">
-    <el-drawer v-model="drawer" :direction="direction" size="50%" style="height: auto !important" :show-close="false" :with-header="false">
+    <el-drawer v-model="drawer" :direction="direction" size="40%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
           <el-form label-position="left" label-width="80px">

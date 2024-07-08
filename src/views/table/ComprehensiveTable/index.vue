@@ -32,8 +32,8 @@
   const route = useRoute()
   const UseSettingStore = useSettingStore()
   // const sId = route.params.id as string
-  const entryType = route.params.type as string
-
+  const entryType = 'newxcrw'
+  const emit = defineEmits(['selectAlls'])
   const filters = computed(() => {
     return SettingStore.search
   })
@@ -45,28 +45,33 @@
   const dynamicFilters = computed(() => {
     return entryType == 'newxcrw' ? SettingStore.dynamicFilters1 : SettingStore.dynamicFilters1
   })
-
+  let props = defineProps({
+    parentTypeMethod: {
+      type: Function,
+      default: () => {},
+    },
+  })
   const formSize = ref('default')
   const ruleFormRef = ref<FormInstance>()
   const ruleForm = reactive({
     name: '',
-    sex: null,
-    price: null,
+    //sex: null,
+    //: null,
   })
   let ruleForm1 = {}
   const rules = reactive({
     name: [
       { required: true, message: '请输入活动名称活动区域', trigger: 'blur' },
-      { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' },
+      { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' },
     ],
-    price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
-    sex: [
-      {
-        required: true,
-        message: '请选择性别',
-        trigger: 'change',
-      },
-    ],
+    //price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
+    // sex: [
+    //   {
+    //     required: true,
+    //     message: '请选择性别',
+    //     trigger: 'change',
+    //   },
+    // ],
   })
 
   const dialogVisible = ref(false)
@@ -94,8 +99,14 @@
     selectObj.value = val
   }
   const selectAllAction = () => {
-    ruleForm1 = UseSettingStore.xcrw
-    console.log('ruleForm1', ruleForm1)
+    //ruleForm1 = UseSettingStore.xcrw
+    list.value.forEach((item) => {
+      if (item.isSelect == '未勾选') {
+        //store里面存在已保存的id，则xiu
+        item.isSelect = '已勾选'
+      }
+    })
+    emit('selectAlls')
   }
 
   const edit = (row) => {
@@ -103,8 +114,8 @@
     rowObj.value = row
     dialogVisible.value = true
     ruleForm.name = row.name
-    ruleForm.sex = row.sex
-    ruleForm.price = row.price
+    //ruleForm.sex = row.sex
+    //ruleForm.price = row.price
   }
 
   const del = (row) => {
