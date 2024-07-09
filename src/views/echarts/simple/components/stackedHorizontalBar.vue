@@ -120,9 +120,9 @@
   let chart: EChartsType
   const initChart = () => {
     let chart = echarts.init(document.getElementById(props.id))
-    let options = {
-      series: settingStore.echartsData,
-    }
+    // let options = {
+    //   series: settingStore.echartsData,
+    // }
     chart.setOption(options)
     return chart
   }
