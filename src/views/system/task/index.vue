@@ -26,7 +26,7 @@
         small
         background
         layout="total,sizes,prev, pager,next"
-        :total="dataList.length"
+        :total="datacurrList.length"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -39,7 +39,7 @@
   import spListView from '@/components/Table/ListTable/ListView.vue'
   import { buildListinfo } from '@/api/user'
   import { onMounted, reactive, computed, ref, onBeforeMount } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   //
   import { useSettingStore } from '@/store/modules/setting'
   import { useUserStore } from '@/store/modules/user'
@@ -48,11 +48,14 @@
   import { buildOperation } from '@/api/user'
   import { getYouliList } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+  //import { useTagsViewStore } from '@/store/modules/tagsView'
+
+  //const TagsViewStore = useTagsViewStore()
+  // const visitedViews = computed(() => TagsViewStore.visitedViews)
 
   const router = useRouter()
-  import { useRoute } from 'vue-router'
-  const route = useRoute()
-  const xcId = route.params.xcId as string
+  // const route = useRoute()
+  // const xcId = route.query.xcId as string
   const SettingStore = useSettingStore()
   const UserStore = useUserStore()
   // 配置全局组件大小
@@ -61,6 +64,9 @@
   const loading = ref(true)
 
   const listType = 'build'
+  const xcId = computed(() => {
+    return SettingStore.xcrwId
+  })
   // 动态筛选选项配置，type：（select下拉框，radio单选，cascader级联选项）
   const dynamicFilters = SettingStore.dynamicFilters
 
@@ -75,7 +81,17 @@
   })
 
   const dataList = computed(() => {
-    return SettingStore.jzList
+    if (initvalue.value == '未采集') {
+      return SettingStore.wcjJzList
+    } else if (initvalue.value == '采集中') {
+      return SettingStore.cjzJzList
+    } else if (initvalue.value == '待审核') {
+      return SettingStore.dshJzList
+    } else if (initvalue.value == '审核驳回') {
+      return SettingStore.shbhJzList
+    } else {
+      return SettingStore.shtgJzList
+    }
   })
 
   const pagination = computed(() => {
@@ -91,7 +107,6 @@
     return dataList.value.slice(startIndex, endIndex)
   })
   onMounted(() => {})
-
   // onBeforeMount(() => {
   //   //splitData(dataList.value, pagination.value.pageSize, pagination.value.currentPage)
   // })
@@ -105,6 +120,8 @@
   const changeValue = (val) => {
     console.log('打印', val)
     initvalue.value = val
+    pagination.value.pageSize = 10
+    pagination.value.currentPage = 1
     //修改属性
   }
   //子组件方法 根据条件触发事件
@@ -112,6 +129,7 @@
     console.log('操作方法', e1, e2)
 
     if (e2 == '模糊查询' || e2 == '查询') {
+      e1.listType = listType
       //将搜索类型赋值到条件里面 searchType
       e1.searchType = e2
       //查询 后搜索列表的接口

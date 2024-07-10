@@ -1,6 +1,6 @@
 <template>
   <div class="app-container m-user">
-    <UserSide />
+    <!-- <UserSide /> -->
     <UserTable />
   </div>
 </template>

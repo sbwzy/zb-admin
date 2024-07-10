@@ -140,7 +140,7 @@ interface xinXiGXParams {
 }
 
 /**
- * 调用xinXiGX接口
+ * 调用xinXiGX接口 提交信息(提交待审批)
  *
  * 本函数用于发送一个POST请求到'webapi/youligf.xinXiGX'接口，以获取信息。
  * @param params 请求参数，具体结构由xinXiGXParams定义
@@ -148,4 +148,35 @@ interface xinXiGXParams {
  */
 export function xinXiGX(params: xinXiGXParams) {
   return request.post('webapi/youligf.xinXiGX', params)
+}
+
+//查看巡查任务详情   替换接口
+export const xcrwXQ = (id) => {
+  return request.post('webapi/youligf.youliCJXQ', {
+    xcrwId: id,
+  })
+}
+
+//巡查任务详情
+interface xcrwParams {
+  id: string
+  name: string
+  date1: string
+  date2: string
+  status: boolean
+  resource: string
+  desc: string
+  clubType: string
+  rwList: Array<{
+    cjrname: string
+    shrName: string
+    status: boolean
+    jzsl: number
+    photo: string
+    describe: string
+    createTime: string
+  }>
+}
+export function saveXcrw(params: xcrwParams) {
+  return request.post('webapi/youligf.youliQuery', params)
 }

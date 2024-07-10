@@ -1,18 +1,9 @@
 <template>
   <PageWrapLayout>
-    <div style="max-width: 900px">
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm" :size="formSize">
+    <div style="">
+      <el-form ref="ruleFormRef" size="large" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm" :size="formSize">
         <el-form-item label="任务名称" prop="name">
           <el-input v-model="ruleForm.name" />
-        </el-form-item>
-        <el-form-item label="任务区域" prop="delivery">
-          <el-link :icon="OfficeBuilding" type="primary" @click="inBuilds">选择建筑</el-link>
-        </el-form-item>
-        <el-form-item label="任务团队分配" prop="clubType">
-          <el-select v-model="ruleForm.clubType" placeholder="请选择一个团队">
-            <el-option label="xx保险公司" value="xx保险公司" />
-            <el-option label="xx行外业团队" value="xx行外业团队" />
-          </el-select>
         </el-form-item>
         <el-form-item label="巡查时间" required>
           <el-col :span="11">
@@ -32,11 +23,17 @@
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" />
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)">创建</el-button>
-          <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-        </el-form-item>
       </el-form>
+    </div>
+    <div class="app-container m-user">
+      <UserTable :table-data="ruleForm.rwList" />
+    </div>
+    <div class="centered-buttons">
+      <el-form-item>
+        <el-button type="primary" size="large" @click="submitForm(ruleFormRef, 1)">创建</el-button>
+        <el-button type="info" size="large" @click="submitForm(ruleFormRef, 2)">暂存</el-button>
+        <el-button size="large" @click="resetForm(ruleFormRef)">重置</el-button>
+      </el-form-item>
     </div>
   </PageWrapLayout>
 </template>
@@ -44,20 +41,26 @@
 <script lang="ts" setup>
   import { reactive, ref, onMounted, computed } from 'vue'
   import { MapLocation, Memo, OfficeBuilding, View as IconView } from '@element-plus/icons-vue'
-  import type { FormInstance } from 'element-plus'
+  import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+  import type { FormInstance, Action } from 'element-plus'
   import { useSettingStore } from '@/store/modules/setting'
   import Upload from './components/Upload.vue'
+  import UserTable from '@/components/Table/ListTable/userTable.vue'
   import { useRouter } from 'vue-router'
   import { ru } from 'element-plus/es/locale'
   import { files } from 'jszip'
+  import { saveXcrw } from '@/api/user'
+  //import { userData } from '@/mock/system'
   const router = useRouter()
-
+  //const tableData = ref(userData)
   const formSize = ref('small')
   const ruleFormRef = ref<FormInstance>()
   const props = { multiple: true }
   const cascaderRef = ref(null)
   const UseSettingStore = useSettingStore()
-
+  const xcId = computed(() => {
+    return UseSettingStore.xcrwId
+  })
   let ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
@@ -99,44 +102,113 @@
       },
     ],
     desc: [{ required: false, message: '请填写活动形式', trigger: 'blur' }],
+    // rwList: [
+    //   (value) => {
+    //     // 验证数组是否为空
+    //     return value.length > 0 || '您尚未分配任务人员'
+    //   },
+    // ],
   })
   //保存后 把store中的数据清空
-  const submitForm = async (formEl: FormInstance | undefined) => {
-    let delivery = UseSettingStore.selJZList.length > 0 ? true : false
-    console.log('1111', delivery)
-    ruleForm.value.delivery = delivery
+  const submitForm = async (formEl: FormInstance | undefined, num) => {
+    // let delivery = UseSettingStore.selJZList.length > 0 ? true : false
+    // console.log('1111', delivery)
+    // ruleForm.value.delivery = delivery
     if (!formEl) return
     await formEl.validate((valid, fields) => {
       console.log('222', valid, fields)
       if (valid) {
-        console.log('保存巡查任务!')
-        ruleForm.value.name = ''
-        ruleForm.value.clubType = ''
-        ruleForm.value.date1 = ''
-        ruleForm.value.date2 = ''
-        ruleForm.value.delivery = false
-        ;(ruleForm.value.resource = ''), (ruleForm.value.desc = ''), UseSettingStore.setXcrw(ruleForm)
-        console.log('3333', UseSettingStore.xcrw)
+        if (ruleForm.value.rwList.length == 0) {
+          ElMessageBox.alert('当前巡查任务没有进行人员分配,请分配任务后再操作', '提示', {
+            // if you want to disable its autofocus
+            // autofocus: false,
+            confirmButtonText: '确定',
+            callback: (action: Action) => {
+              ElMessage({
+                type: 'warning',
+                message: `请添加人员任务!`,
+              })
+            },
+          })
+        } else {
+          saveXcrw(ruleForm.value).then((res) => {
+            if (res.data.result == -11) {
+              //let xcssList = res.data.data.xcssList;
+              let newXcssList = UseSettingStore.xcssList
+              newXcssList.push({
+                id: 4,
+                renwuName: ruleForm.value.name,
+                xcsjS: ruleForm.value.date1,
+                xcsjE: ruleForm.value.date2,
+                type: '季度物业巡查',
+                cjdw: '静安物业中心',
+                cjr: '张三',
+                progress: '未提交',
+              })
+              //UseSettingStore.setXcssList(xcssList)
+
+              ElMessage({
+                type: 'success',
+                message: `保存成功!`,
+              })
+              setTimeout(async () => {
+                router.push({
+                  path: '/system/dept',
+                })
+              }, 500)
+            }
+          })
+          // ruleForm.value.name = ''
+          // ruleForm.value.clubType = ''
+          // ruleForm.value.date1 = ''
+          // ruleForm.value.date2 = ''
+          // //ruleForm.value.delivery = false
+          // ;(ruleForm.value.resource = ''), (ruleForm.value.desc = ''), UseSettingStore.setXcrw(ruleForm)
+        }
       } else {
-        console.log('不保存巡查任务!', fields)
+        console.log('error submit!!')
+        return false
       }
     })
   }
 
-  const resetForm = (formEl: FormInstance | undefined) => {
+  const resetForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.resetFields()
+    if (ruleForm.value.rwList.length !== 0) {
+      ElMessageBox.alert('当前巡查任务存在人员分配,确定清空吗？', '提示', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: (action: Action) => {
+          // ElMessage({
+          //   type: 'warning',
+          //   message: `请添加人员任务!`,
+          // })
+          ruleForm.value.name = ''
+          ruleForm.value.clubType = ''
+          ruleForm.value.date1 = ''
+          ruleForm.value.date2 = ''
+          ruleForm.value.rwList = []
+        },
+      })
+    } else {
+      ruleForm.value.name = ''
+      ruleForm.value.clubType = ''
+      ruleForm.value.date1 = ''
+      ruleForm.value.date2 = ''
+      ruleForm.value.rwList = []
+    }
   }
 
-  const inBuilds = () => {
-    console.log('2222222', ruleForm)
-    //缓存当前页面的信息
-    UseSettingStore.setXcrw(ruleForm)
-    router.push(
-      { name: 'comprehensive', params: { type: 'newxcrw' } },
-      //,params:{list:JSON.stringify(pointslist1.value)}
-    )
-  }
+  // const inBuilds = () => {
+  //   console.log('2222222', ruleForm)
+  //   //缓存当前页面的信息
+  //   UseSettingStore.setXcrw(ruleForm)
+  //   router.push(
+  //     { name: 'comprehensive', params: { type: 'newxcrw' } },
+  //     //,params:{list:JSON.stringify(pointslist1.value)}
+  //   )
+  // }
   // mounted(()=> {
   //   //console.log('赋值新建的巡查任务字段111')
   // })
@@ -149,5 +221,16 @@
 <style lang="scss">
   .el-cascader-menu {
     min-width: 40px;
+  }
+  .m-user {
+    display: flex;
+    flex-direction: row;
+  }
+  .app-container {
+    height: 60%;
+  }
+  .centered-buttons {
+    display: flex;
+    justify-content: center;
   }
 </style>
