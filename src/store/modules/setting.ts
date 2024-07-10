@@ -14,6 +14,25 @@ export const useSettingStore = defineStore({
     device: 'desktop',
     // 刷新当前页
     isReload: true,
+    // 当前App域名
+    BASE: 'https://dev.ccgis.cn',
+
+    //页面跳转传参
+    optionSetting: {
+      // 显示设置
+      showSetting: false,
+      qianDaosj: null,
+      gfid: null,
+      currentTabIndex: null,
+      pagefrom: null,
+      qu: null,
+      jieZhen: null,
+      xiaoQu: null,
+      lastpagezoom: null,
+      lastpagecenterX: null,
+      lastpagecenterY: null,
+    },
+
     // 主题设置
     themeConfig: {
       // 显示设置
@@ -1137,13 +1156,35 @@ export const useSettingStore = defineStore({
       currentPage: 1,
       pageSize: 10,
     }),
+    gfid: null as string | null, // 初始化为null，类型为string或null
+    gfIdList: [] as string[], // 初始化为空数组，元素类型为string
   }),
   getters: {},
   // 可以同步 也可以异步
   actions: {
+    // 设置gfid的action，模拟setter
+    setGfid(newValue: string | null) {
+      this.gfid = newValue
+    },
+    // 获取gfid的action，虽然直接访问state.gfid更常见，但这里为了演示模拟getter
+    getGfid() {
+      return this.gfid
+    },
+    // 设置gfIdList的action，模拟setter
+    setGfIdList(newList: string[]) {
+      this.gfIdList = newList
+    },
+    // 获取gfIdList的action，模拟getter
+    getGfIdList() {
+      return this.gfIdList
+    },
     // 设置主题
     setThemeConfig({ key, val }) {
       this.themeConfig[key] = val
+    },
+    // 设置主题
+    setOptionSetting({ key, val }) {
+      this.optionSetting[key] = val
     },
     // 切换 Collapse
     setCollapse(value) {
