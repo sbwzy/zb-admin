@@ -73,6 +73,13 @@
           <span style="color: #333333; margin-left: 2px"></span>
         </div>
       </div>
+      <div v-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
+        <div class="titleV">任务状态:</div>
+        <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
+          {{ item.progress }}
+          <span style="color: #333333; margin-left: 2px"></span>
+        </div>
+      </div>
       <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
         <div class="titleV">房屋用途:</div>
         <div class="detailV">{{ item.fangWuYTOld }}</div>

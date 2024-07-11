@@ -45,7 +45,19 @@ export const useSettingStore = defineStore({
     cjZt: ref(['未采集', '采集中', '待审核', '审核驳回', '审核通过']),
     //当前巡查任务id 初始化时默认是最新创建的巡查记录
     xcrwId: 1,
-    //新增用户
+    //新增用户的列表
+    xcrwUserList: ref([]),
+    //新建巡查任务的用户信息
+    xcrwUser: ref({
+      cjrname: '',
+      shrName: '',
+      status: true,
+      jzsl: 0,
+      photo: '',
+      describe: '',
+      createTime: '',
+      jzList: [],
+    }),
     //新建巡查任务 字段信息
     xcrw: ref({
       id: '',
@@ -65,6 +77,7 @@ export const useSettingStore = defineStore({
         //   photo: '15333333333',
         //   describe: '该采集员已负责xx1、xx2等街区',
         //   createTime: '2022-09-02 15:30:20',
+        //   jzList: [1,2,3]
         // },
         // {
         //   cjrname: '用户2',
@@ -74,6 +87,7 @@ export const useSettingStore = defineStore({
         //   photo: '15311111111',
         //   describe: '该采集员已负责xx3、xx4等街区',
         //   createTime: '2022-09-02 15:30:20',
+        //   jzList: [11,21,31]
         // },
         // {
         //   cjrname: '用户3',
@@ -83,6 +97,7 @@ export const useSettingStore = defineStore({
         //   photo: '13823456789',
         //   describe: '该采集员已负责xx5、xx6等街区',
         //   createTime: '2022-09-02 15:30:20',
+        //   jzList: [12,22,32]
         // },
         // {
         //   cjrname: '用户4',
@@ -92,6 +107,7 @@ export const useSettingStore = defineStore({
         //   photo: '13923456789',
         //   describe: '该采集员目前非启用状态',
         //   createTime: '2022-09-02 15:30:20',
+        //   jzList: [13,23,33]
         // },
       ], //任务分配列表
     }),

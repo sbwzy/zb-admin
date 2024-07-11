@@ -58,13 +58,15 @@
   const props = { multiple: true }
   const cascaderRef = ref(null)
   const UseSettingStore = useSettingStore()
+  //目前没有作用
   const xcId = computed(() => {
     return UseSettingStore.xcrwId
   })
+  //如果是新建 置空xcrw  如果是编辑  赋值
   let ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
-
+  //验证规则
   const rules = reactive({
     name: [
       { required: true, message: '请输入任务名称', trigger: 'blur' },
@@ -200,23 +202,7 @@
     }
   }
 
-  // const inBuilds = () => {
-  //   console.log('2222222', ruleForm)
-  //   //缓存当前页面的信息
-  //   UseSettingStore.setXcrw(ruleForm)
-  //   router.push(
-  //     { name: 'comprehensive', params: { type: 'newxcrw' } },
-  //     //,params:{list:JSON.stringify(pointslist1.value)}
-  //   )
-  // }
-  // mounted(()=> {
-  //   //console.log('赋值新建的巡查任务字段111')
-  // })
-  onMounted(() => {
-    //初始化是赋值信息
-    console.log('赋值新建的巡查任务字段')
-    // ruleForm.value = UseSettingStore.xcrw
-  })
+  onMounted(() => {})
 </script>
 <style lang="scss">
   .el-cascader-menu {
