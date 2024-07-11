@@ -172,6 +172,8 @@ export const useSettingStore = defineStore({
       buildType: ['优秀历史建筑', '花园住宅'], //房屋类型
       isSelect: ['未勾选'], //巡查任务条件
     }),
+    // 仪表盘 任务总览
+    echartsData: ref([]),
     //建筑列表每次保存的建筑列表
     jzList: ref([
       {
