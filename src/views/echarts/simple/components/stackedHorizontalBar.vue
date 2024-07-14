@@ -5,7 +5,7 @@
   import * as echarts from 'echarts'
   import { EChartsType } from 'echarts/core'
   import { onMounted } from 'vue'
-  import { useSettingStore } from '@/store/modules/setting'
+  // import { useSettingStore } from 'src/store/modules/setting'
 
   let props = defineProps({
     className: {
@@ -114,8 +114,8 @@
       },
     ],
   }
-  const settingStore = useSettingStore()
-  const echartsData = settingStore.echartsData
+  // const settingStore = useSettingStore()
+  // const echartsData = settingStore.echartsData
 
   let chart: EChartsType
   const initChart = () => {
