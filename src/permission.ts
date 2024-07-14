@@ -15,7 +15,7 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start()
   // 设置标题
   if (typeof to.meta.title === 'string') {
-    document.title = to.meta.title || 'vue-admin-perfect'
+    document.title = to.meta.title || '优历公房采集系统'
   }
 
   const UserStore = useUserStore()
@@ -29,12 +29,14 @@ router.beforeEach(async (to, from, next) => {
     } else {
       try {
         const PermissionStore = usePermissionStore()
+        console.log()
         // 路由添加进去了没有及时更新 需要重新进去一次拦截
         if (!PermissionStore.routes.length) {
           // 获取权限列表进行接口访问 因为这里页面要切换权限
           const accessRoutes = await PermissionStore.generateRoutes(UserStore.roles)
           hasRoles = false
           accessRoutes.forEach((item) => router.addRoute(item)) // 动态添加访问路由表
+          console.log('路由', accessRoutes)
           next({ ...to, replace: true }) // // 这里相当于push到一个页面 不在进入路由拦截
         } else {
           next() // // 如果不传参数就会重新执行路由拦截，重新进到这里
