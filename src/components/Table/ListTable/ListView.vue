@@ -10,7 +10,7 @@
           </el-button>
         </div>
         <div
-          v-if="listtype == 'build' && item.cjZt == '采集中'"
+          v-if="listtype == 'build' && item.cjZt == '采集中' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -25,7 +25,7 @@
         </div>
 
         <div
-          v-if="listtype == 'build' && item.cjZt == '待审核'"
+          v-if="listtype == 'build' && item.cjZt == '待审核' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -36,7 +36,7 @@
           </el-button>
         </div>
         <div
-          v-if="listtype == 'build' && item.cjZt == '审核驳回'"
+          v-if="listtype == 'build' && item.cjZt == '审核驳回' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"

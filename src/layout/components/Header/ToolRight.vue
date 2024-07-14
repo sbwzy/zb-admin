@@ -1,10 +1,10 @@
 <template>
   <div class="m-tool-right">
-    <GlobalComSize class="item-children" />
-    <HeaderSearch class="item-children" />
+    <!-- <GlobalComSize class="item-children" /> -->
+    <!-- <HeaderSearch class="item-children" /> -->
     <Remind class="item-children" />
     <ScreenFull class="item-children" />
-    <Setting class="item-children" />
+    <!-- <Setting class="item-children" /> -->
     <Avatar />
   </div>
 </template>

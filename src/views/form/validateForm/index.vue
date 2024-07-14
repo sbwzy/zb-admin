@@ -136,12 +136,20 @@
           saveXcrw(ruleForm.value).then((res) => {
             if (res.data.result == -11) {
               //let xcssList = res.data.data.xcssList;
+              let date1 = new Date(ruleForm.value.date1)
+              let year1 = date1.getFullYear()
+              let month1 = date1.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+              let xcsjs = `${year1}-${month1.toString().padStart(2, '0')}`
+              let date2 = new Date(ruleForm.value.date2)
+              let year2 = date2.getFullYear()
+              let month2 = date2.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+              let xcsje = `${year2}-${month2.toString().padStart(2, '0')}`
               let newXcssList = UseSettingStore.xcssList
               newXcssList.push({
                 id: 4,
                 renwuName: ruleForm.value.name,
-                xcsjS: ruleForm.value.date1,
-                xcsjE: ruleForm.value.date2,
+                xcsjS: xcsjs,
+                xcsjE: xcsje,
                 type: '季度物业巡查',
                 cjdw: '静安物业中心',
                 cjr: '张三',
@@ -160,12 +168,6 @@
               }, 500)
             }
           })
-          // ruleForm.value.name = ''
-          // ruleForm.value.clubType = ''
-          // ruleForm.value.date1 = ''
-          // ruleForm.value.date2 = ''
-          // //ruleForm.value.delivery = false
-          // ;(ruleForm.value.resource = ''), (ruleForm.value.desc = ''), UseSettingStore.setXcrw(ruleForm)
         }
       } else {
         console.log('error submit!!')
