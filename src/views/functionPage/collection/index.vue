@@ -1,185 +1,352 @@
 <template>
   <div class="app-container">
     <div class="app-container-local right-align-inputs">
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" status-icon label-position="left">
+      <!-- 表单 -->
+      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto" status-icon label-position="left">
+        <el-form-item label="打卡定位">
+          <el-col :span="20" class="text-center">
+            <el-text
+              class="mx-1"
+              :style="
+                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == '' || (ruleForm.descZuoBiao != null && ruleForm.descZuoBiao != '')
+                  ? 'text-align: right;color:red'
+                  : 'text-align: right;'
+              "
+            >
+              &nbsp;
+              {{
+                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == ''
+                  ? '请先定位打卡'
+                  : ruleForm.descZuoBiao == null || ruleForm.descZuoBiao == ''
+                  ? '已定位打卡'
+                  : ruleForm.descZuoBiao
+              }}
+            </el-text>
+          </el-col>
+          <el-col :span="4" class="text-center">
+            <el-icon>
+              <Location @click="dingWeiDaKa()" color="#999999" />
+            </el-icon>
+          </el-col>
+        </el-form-item>
+
         <el-form-item label="建筑名称">
-          <el-input v-model="ruleForm.standartName" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.standartName }}
+            </el-text>
+          </el-col>
         </el-form-item>
 
         <el-form-item label="授权地址">
-          <el-input v-model="ruleForm.shouQuanDZ" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.shouQuanDZ }}
+            </el-text>
+          </el-col>
         </el-form-item>
 
         <el-form-item label="物业联系人员">
-          <el-input v-model="ruleForm.wyName" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.wyName }}
+            </el-text>
+          </el-col>
         </el-form-item>
 
         <el-form-item label="物业联系方式">
-          <el-input v-model="ruleForm.wyPhone" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.wyPhone }}
+            </el-text>
+          </el-col>
         </el-form-item>
         <el-form-item label="房屋类型">
-          <el-input v-model="ruleForm.standardType" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.standardType }}
+            </el-text>
+          </el-col>
         </el-form-item>
         <el-form-item label="原产业状态">
-          <el-input v-model="ruleForm.IndustrStatusOld" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.IndustrStatusOld }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="当前产业状态">
-          <el-input v-model="ruleForm.IndustrStatus" readonly />
+
+        <el-form-item
+          label="当前产业状态"
+          v-if="
+            isEdit ||
+            (ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld)
+          "
+          class="demo-uni-row"
+          :style="
+            ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.IndustrStatus" placeholder="Select" style="width: 240px">
+              <el-option v-for="item in IndustrStatusList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.IndustrStatus }}
+            </el-text>
+          </el-col>
         </el-form-item>
+
         <el-form-item label="原房屋用途">
-          <el-input v-model="ruleForm.fangWuYTOld" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.fangWuYTOld }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="当前房屋用途">
-          <el-input v-model="ruleForm.fangWuYT" readonly />
+
+        <el-form-item
+          label="当前房屋用途"
+          v-if="isEdit || (ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.fangWuYT" placeholder="Select" style="width: 240px">
+              <el-option v-for="item in fangWuYTList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.fangWuYT }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="建筑现状">
-          <el-input v-model="ruleForm.desc2" readonly />
+
+        <el-form-item
+          label="建筑现状"
+          class="demo-uni-row"
+          :style="ruleForm.desc2 != '' && ruleForm.desc2 != null ? 'border-left: 2px solid red;' : ''"
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.desc2" placeholder="Select" style="width: 240px">
+              <el-option v-for="item in desc2List" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.desc2 }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="现场是否有铭牌">
-          <el-input v-model="ruleForm.sfmpqs" readonly />
+
+        <el-form-item
+          label="现场是否有铭牌"
+          class="demo-uni-row"
+          :style="ruleForm.sfmpqs != '' && ruleForm.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.sfmpqs" placeholder="Select" style="width: 240px">
+              <el-option v-for="item in sfmpqsList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.sfmpqs }}
+            </el-text>
+          </el-col>
         </el-form-item>
+
         <el-form-item label="保护铭牌内容">
-          <el-input v-model="ruleForm.bhmpCont" readonly />
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.bhmpCont }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="使用人-">
-          <el-input v-model="ruleForm.shiYongROld" readonly />
+        <el-form-item label="使用人">
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.shiYongROld }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="现场带看情况">
-          <el-input v-model="ruleForm.dkdesc" readonly />
+
+        <el-form-item
+          label="现场带看情况"
+          class="demo-uni-row"
+          :style="ruleForm.dkdesc != '' && ruleForm.dkdesc != null ? 'border-left: 2px solid red;' : ''"
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input v-model="ruleForm.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+          </el-col>
+          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.dkdesc }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="外业巡查情况备注">
-          <el-input v-model="ruleForm.desc" readonly />
+
+        <el-form-item
+          label="外业巡查情况备注"
+          class="demo-uni-row"
+          :style="ruleForm.desc != '' && ruleForm.desc != null ? 'border-left: 2px solid red;' : ''"
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input v-model="ruleForm.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+          </el-col>
+          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.desc }}
+            </el-text>
+          </el-col>
         </el-form-item>
-        <el-form-item label="审核意见">
-          <el-input v-model="ruleForm.descShenHe" readonly />
+
+        <el-form-item label="审核意见" v-if="ruleForm.descShenHe != null && ruleForm.descShenHe != ''">
+          <el-col :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.descShenHe }}
+            </el-text>
+          </el-col>
         </el-form-item>
+        <br /><br /><br />
       </el-form>
 
+      <!-- 图片模块 -->
       <div>
-        <!-- <el-tabs type="border-card" class="demo-tabs">
-          <el-tab-pane v-for="(tab, index) in tabs" :key="index">
-            <template #label>
-              <span class="custom-tabs-label">
-                <el-icon><component :is="tab.icon" /></el-icon>
-                <span>{{ tab.title }}</span>
-              </span>
-            </template>
-            <el-row class="cardContainer" :gutter="20">
-              <el-col v-for="item in tab.imglists" :key="item" :xs="12" :sm="8" :md="6" :lg="{ span: '7' }">
-                <el-card
-                  class="card"
-                  shadow="hover"
-                  :body-style="{
-                    padding: '10px',
-                    boxSizing: 'border-box',
-                    width: '100%',
-                  }"
-                >
-                  <div class="content">
-                    <el-image :src="item.imgUrl" :preview-src-list="[item.imgUrl]" class="image" alt="图片"></el-image>
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
-          </el-tab-pane>
-        </el-tabs> -->
-
         <el-tabs type="border-card" class="demo-tabs">
-          <el-tab-pane v-for="(tab, index) in tabs" :key="index">
+          <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
             <template #label>
               <span class="custom-tabs-label">
-                <el-icon><component :is="tab.icon" /></el-icon>
-                <span>{{ tab.title }}</span>
-              </span>
+                <el-icon>
+                  <component :is="tab.icon" />
+                </el-icon>
+                <span>{{ tab.title }}</span> </span
+              >&nbsp;
+              <!-- 动态判断是否展示tooltip -->
+              <el-tooltip
+                v-if="tab.isShowToolTip"
+                class="box-item"
+                effect="dark"
+                :content="tab.tooltip"
+                :disabled="!tab.isShowToolTip"
+                placement="bottom"
+                show-arrow="false"
+                raw-content="true"
+              >
+                <el-icon>
+                  <InfoFilled />
+                </el-icon>
+              </el-tooltip>
             </template>
             <el-row class="cardContainer" :gutter="20">
+              <el-progress :text-inside="true" :stroke-width="20" :percentage="uploadpercentage" status="exception">
+                <span>Content</span>
+              </el-progress>
+
               <el-upload
+                ref="uploadRef"
                 action="#"
                 list-type="picture-card"
-                :auto-upload="false"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :on-download="handleDownload"
+                :on-success="handleSuccess"
                 :file-list="fileList"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-exceed="handleExceed"
+                :on-change="handleChange"
+                :auto-upload="false"
               >
-                <el-icon><Plus /></el-icon>
-
-                <template #file="{ file }">
-                  <div>
-                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                    <span class="el-upload-list__item-actions">
-                      <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                        <el-icon><zoom-in /></el-icon>
-                      </span>
-                      <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleDownload(file)">
-                        <el-icon><Download /></el-icon>
-                      </span>
-                      <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-                        <el-icon><Delete /></el-icon>
-                      </span>
-                    </span>
-
-                    <el-input
-                      v-model="dialogImageRemark"
-                      class="remark-input"
-                      placeholder="添加备注"
-                      @change="updateRemark(file)"
-                    ></el-input>
-                  </div>
-                </template>
+                <el-icon>
+                  <Plus />
+                </el-icon>
               </el-upload>
 
-              <el-dialog v-model="dialogVisible">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" />
+              <el-dialog v-model="dialogVisible" top="25vh" width="98%">
+                <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%" />
               </el-dialog>
             </el-row>
           </el-tab-pane>
         </el-tabs>
+      </div>
 
-        <!-- 图片模块 -->
-        <div class="itemCloum" title="">
-          <div title="">
-            <!--照片类型-->
-            <div class="bg-white nav">
-              <div class="cu-item">
-                <span class="margin-right-xs"></span>
-              </div>
-            </div>
-
-            <!-- 自定义弹出框组件 -->
-            <div class="tooltip-popup"> </div>
-
-            <!--照片库-->
-            <div>
-              <div class="example-body">
-                <div></div>
-                <div>
-                  <div></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="button-sp-area foot-button">
-              <el-button class="mini-btn">取消</el-button>
-              <el-button class="mini-btn">暂存</el-button>
-              <el-button class="mini-btn">保存并提交</el-button>
-            </div>
-          </div>
+      <!-- 审核模块 -->
+      <div v-if="userInfo.groupName == '外业管理员' && bannerData.standardState == '待审核'" style="">
+        <div style="height: auto; overflow: auto; border-bottom: none; border-top: 6px solid #e3e4e5" class="itemCloum" title="">
+          <uni-card style="height: auto; margin: 0" title="">
+            <uni-easyinput v-model="approvalComment" type="textarea" placeholder="请录入审核意见:" />
+            <view class="" style="text-align: center; padding-top: 5rpx">
+              <uni-row class="demo-uni-row" style="">
+                <uni-col :span="12" class="text-grey">
+                  <button @click="approveRefuse()" class="mini-btn" style="background-color: red; color: white" size="mini">驳回</button>
+                </uni-col>
+                <uni-col :span="12" class="text-balck text-df" style="text-align: center">
+                  <button @click="approveConfirm()" class="mini-btn" style="" size="mini">通过</button>
+                </uni-col>
+              </uni-row>
+            </view>
+          </uni-card>
         </div>
       </div>
     </div>
   </div>
+  <div class="button-sp-area foot-button" style="position: fixed; bottom: 0px; width: 100%; background: #fafafa">
+    <el-row v-if="isEdit">
+      <el-col :span="2" />
+      <el-col :span="6">
+        <el-button class="mini-btn" @click="cancle()">取消</el-button>
+      </el-col>
+      <el-col :span="8">
+        <el-button @click="save('')" class="mini-btn">暂存</el-button>
+      </el-col>
+      <el-col :span="6">
+        <el-button class="mini-btn" @click="save('提交')">保存并提交</el-button>
+      </el-col>
+      <el-col :span="2" />
+    </el-row>
+    <el-row v-if="!isEdit">
+      <el-col :span="8"></el-col>
+      <el-col :span="8">
+        <el-button @click="editDetail()" class="mini-btn">编辑</el-button>
+      </el-col>
+      <el-col :span="8"></el-col>
+    </el-row>
+  </div>
 </template>
-
 <script lang="ts" setup>
   import { onMounted, reactive, ref, computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import type { FormInstance, FormRules, ElUpload, ElIcon, ElDialog, UploadFile } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus'
 
   import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
   // 在这里引入接口
-  import { youliCJXQGet, getLocationInfo } from '@/api/user'
-  import { useUserStore } from '@/store/modules/user'
+  import { youliCJXQGet, getLocationInfo, buildOperation, xinXiGX } from '@/api/user'
   import {
     validatorMethod,
     verifyPhone,
@@ -194,38 +361,63 @@
     title: string
     icon: string
     imglists: any
+    tooltip: string
+    isShowToolTip: boolean
     // 其他属性...
+  }
+  const saveSub = () => {
+    // 文件上传成功时的处理逻辑
+    console.log('File success:', fileList1)
+  }
+
+  let fileList1 = []
+  const fileList = ref([]) // 存储上传的文件列表
+  const uploadRef = ref<InstanceType<typeof ElUpload>>() // 存储上传组件的引用
+
+  const handleSuccess = (response, file, fileList) => {
+    // 文件上传成功时的处理逻辑
+    console.log('File success:', response, file, fileList)
+  }
+
+  const handleRemove = (file, fileList) => {
+    // 文件移除时的处理逻辑
+    console.log('File removed:', file, fileList)
+  }
+
+  const handleExceed = (file, fileList) => {
+    // 文件预览时的处理逻辑
+    console.log('File removed:', file, fileList)
+  }
+  const handlePreview = (file) => {
+    // 文件预览时的处理逻辑
+    console.log('File preview:', file)
+  }
+
+  const handleChange = (file, fileList) => {
+    // 文件状态改变时的处理逻辑
+    console.log('File changed:', file, fileList)
+    // 在这里更新fileList响应式引用
+    fileList.value = [fileList.value, file]
+    fileList1.push(file)
+  }
+
+  // 手动调用上传组件的submit方法
+  const submitUpload = () => {
+    if (uploadRef.value) {
+      uploadRef.value.submit()
+    }
   }
 
   const dialogImageRemark = ref('')
   const dialogImageUrl = ref('')
   const dialogVisible = ref(false)
-  const fileList = ref<UploadFile[]>([])
   const disabled = ref(false)
 
-  const handleRemove = (file: UploadFile) => {
-    // 在这里处理删除逻辑，例如从服务器或文件列表中删除
-    fileList.value = fileList.value.filter((f) => f.uid !== file.uid)
-  }
-
-  const handlePictureCardPreview = (file: UploadFile) => {
-    dialogImageUrl.value = file.url!
-    dialogVisible.value = true
-  }
-
-  const handleDownload = (file: UploadFile) => {
-    // 在这里处理下载逻辑，例如下载文件
-    console.log('Download file:', file)
-  }
-  const updateRemark = (file: UploadFile) => {
-    // 处理备注更新，例如保存到服务器或本地状态
-    console.log('Update remark:', file)
-  }
-
+  const router = useRouter()
   const route = useRoute()
   const currentBuildingId = route.params.id
 
-  const tabs = ref<Tab[]>([
+  const phoneTypeList = ref<Tab[]>([
     {
       title: '建筑名称标识',
       icon: 'Picture',
@@ -240,6 +432,8 @@
         },
         // 更多图片...
       ],
+      tooltip: '指建筑物具体名称，如xx小区、xx学校等<br/>，若无标志，拍摄建筑物大门即可',
+      isShowToolTip: true,
       // 其他属性...
     },
     {
@@ -252,6 +446,8 @@
         },
         // 更多图片...
       ],
+      tooltip: '',
+      isShowToolTip: false,
       // 其他属性...
     },
     {
@@ -272,6 +468,8 @@
         },
         // 更多图片...
       ],
+      tooltip: '',
+      isShowToolTip: false,
 
       // 其他属性...
     },
@@ -282,6 +480,8 @@
         { imgUrl: 'https://example.com/image1.jpg' },
         // 更多图片...
       ],
+      tooltip: '',
+      isShowToolTip: false,
       // 其他属性...
     },
     {
@@ -291,19 +491,17 @@
         { imgUrl: 'https://example.com/image1.jpg' },
         // 更多图片...
       ],
+      tooltip: '',
+      isShowToolTip: false,
       // 其他属性...
     },
     // 更多标签页数据...
   ])
 
-  const loading = ref(true)
   const ruleFormRef = ref<FormInstance>()
-  let text = '只要自己不放弃，没有任何人可以打倒你'
-  let keyword = ref<string>(text)
-  const currentDate = new Date().toDateString()
-
-  const url = 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
   const ruleForm = reactive({
+    qianDaoSJ: '',
+    descZuoBiao: '',
     standartName: '测试名称',
     shouQuanDZ: '测试地址',
     wyName: '测试联系人',
@@ -375,13 +573,490 @@
     ],
   })
 
+  import { useSettingStore } from '@/store/modules/setting'
+
+  import { useUserStore } from '@/store/modules/user'
+
+  //选项列表值
+  const sfmpqsList = ref([
+    {
+      value: '是',
+      text: '是',
+    },
+    {
+      value: '否',
+      text: '否',
+    },
+  ])
+
+  const desc2List = ref([
+    {
+      value: '',
+      text: '无',
+    },
+    {
+      value: '缺绿牌',
+      text: '缺绿牌',
+    },
+    {
+      value: '多绿牌',
+      text: '多绿牌',
+    },
+  ])
+
+  const fangWuYTList = ref([
+    {
+      value: '非居住办公用房',
+      text: '非居住办公用房',
+    },
+    {
+      value: '非居住生产用房',
+      text: '非居住生产用房',
+    },
+    {
+      value: '非居住营业用房',
+      text: '非居住营业用房',
+    },
+
+    {
+      value: '非居住办公用房、非居住生产用房',
+      text: '非居住办公用房、非居住生产用房',
+    },
+    {
+      value: '非居住生产用房、非居住营业用房',
+      text: '非居住生产用房、非居住营业用房',
+    },
+    {
+      value: '非居住营业用房、非居住办公用房',
+      text: '非居住营业用房、非居住办公用房',
+    },
+
+    {
+      value: '居住用房',
+      text: '居住用房',
+    },
+  ])
+
+  const IndustrStatusList = ref([
+    {
+      value: '正常',
+      text: '正常',
+    },
+    {
+      value: '已列入征收',
+      text: '已列入征收',
+    },
+    {
+      value: '已灭失',
+      text: '已灭失',
+    },
+  ])
+  // Pinia存储
+  const SettingStore = useSettingStore()
+  //当前公房Id
+  const currentGfid = ref(SettingStore.gfid)
+  //公房Id列表
+  const currentGfIdList = ref(SettingStore.gfIdList)
+
+  //其他变量
+
+  // 定义响应式数据
+  const uploadState = ref('')
+  const imguping = ref(false)
+  const totalImgCount = ref(0)
+  const successImgCount = ref(0)
+  const failedImgCount = ref(0)
+  const uploadpercentage = ref(0)
+  const buttonDisabled = ref(false)
+  const lastpagezoom = ref(14)
+  const lastpagecenterX = ref(31.24534249284188)
+  const lastpagecenterY = ref(121.47915601730348)
+  const currentgfIdListindex = ref(1)
+  const gfIdListlength = ref(1)
+  const approvalComment = ref('')
+  const approvalStatus = ref('')
+  const canEdit = ref(false)
+  const userInfo = useUserStore().userInfo as any
+  const baseUrl = ref('')
+  const lodingImg = ref([])
+  const TabCur = ref(0)
+  const gfid = ref('')
+  const scrollLeft = ref(0)
+  const percentage = ref([[], [], [], [], []])
+  const imgList = ref([[], [], [], [], []])
+  const imgListPre = ref('')
+  const tooltipVisible = ref(false)
+  const currentTooltipText = ref('')
+  const tooltipPosition = ref({ left: 0, top: 0 })
+  const delIndex = ref(null)
+  const choosedIndex = ref(0)
+  const screamHeight = ref(0)
+  const msgType = ref('')
+  const messageText = ref('保存成功')
+  const value2 = ref(0)
+  const value = ref(['0', '1'])
+  const value1 = ref(['1'])
+  let isEdit = true
+  const nvueWidth = ref(0)
+  const qianDaoSJ = ref(null)
+  const currentTabIndex = ref(0)
+  const bannerData = ref({}) as any
+  const addressListsStr = ref('')
+  const bannerDataPre = ref('')
+  const scroll = ref(0)
+  const pagefrom = ref(0)
+  const qu = ref('')
+  const jieZhen = ref('')
+  const xiaoQu = ref('')
+  const isback = ref(false)
+  //页面传输参数
+  const optionSetting = ref(SettingStore.optionSetting)
+
   onMounted(() => {
-    //获取
-    youliCJXQGet(currentBuildingId).then((res) => {
-      console.log('res')
-      console.log(res)
-    })
+    const gfIdListLength = currentGfIdList.value.length
+    const currentGfIdListIndex = currentGfIdList.value.findIndex((value) => value === currentGfid.value) + 1
+
+    SettingStore.setGfid('12362')
+    console.log('currentGfid', currentGfid)
+    console.log('optionSetting', optionSetting)
+    console.log('gfid', gfid)
+
+    //获取传参
+    if (optionSetting) {
+      qianDaoSJ.value = optionSetting.value.qianDaosj ?? null
+      gfid.value = optionSetting.value.gfid ?? null
+      currentTabIndex.value = optionSetting.value.currentTabIndex ?? null
+      pagefrom.value = optionSetting.value.pagefrom ?? null
+      qu.value = optionSetting.value.qu ?? null
+      jieZhen.value = optionSetting.value.jieZhen ?? null
+      xiaoQu.value = optionSetting.value.xiaoQu ?? null
+      lastpagezoom.value = optionSetting.value.lastpagezoom ?? null
+      lastpagecenterX.value = optionSetting.value.lastpagecenterX ?? null
+      lastpagecenterY.value = optionSetting.value.lastpagecenterY ?? null
+    }
+    console.log('param', route.params)
+    gfid.value = route.params.id as string
+    console.log('ingfid', gfid)
+    screamHeight.value = window.innerHeight
+    nvueWidth.value = window.innerWidth
+    console.log('nvueWidth', nvueWidth.value)
+    console.log('screamHeight', screamHeight.value)
+    console.log('nvueWidth', nvueWidth.value)
+    initData(null)
   })
+
+  const initData = (qianDaosj) => {
+    buttonDisabled.value = false
+    baseUrl.value = SettingStore.BASE
+
+    try {
+      youliCJXQGet(gfid.value)
+        .then((res) => {
+          console.log(res.data) // 或者其他正确的属性路径
+          if (res.data.result != -11) {
+            // 在这里处理res
+            bannerData.value = res.data.caiJiXQ.data[0]
+            canEdit.value = false
+
+            if (bannerData.value.standardState === '采集中' && userInfo.groupName === '外业组员') {
+              canEdit.value = true
+            }
+
+            // Assign default values
+            bannerData.value.IndustrStatus = bannerData.value.IndustrStatus || bannerData.value.IndustrStatusOld
+            bannerData.value.fangWuYT = bannerData.value.fangWuYT || bannerData.value.fangWuYTOld
+            bannerData.value.shiYongR = bannerData.value.shiYongR || bannerData.value.shiYongROld
+            bannerData.value.sfmpqs = bannerData.value.sfmpqs || '是'
+
+            gfid.value = res.data.caiJiXQ.data[0].id
+
+            // Image list adjustment
+            const imgListData = [
+              res.data.jianZhumcbs.data,
+              res.data.gongAnLP.data,
+              res.data.waiLiM.data,
+              res.data.mingPai.data,
+              res.data.chanYeZT.data,
+            ]
+            imgList.value = imgListData
+            sortImg()
+          }
+        })
+        .catch((error) => {
+          console.error('获取数据时出错:', error)
+        })
+    } catch (err) {
+      msgType.value = 'error'
+      messageText.value = err.message
+    }
+  }
+
+  // Function to sort images (assuming it's defined elsewhere or inline)
+  //排序
+  const sortImg = () => {
+    imgList.value.forEach(function (item, index) {
+      item.sort(function (a, b) {
+        if (a.zhaopIdx < b.zhaopIdx) {
+          return -1
+        }
+        if (a.zhaopIdx > b.zhaopIdx) {
+          return 1
+        }
+        return 0
+      })
+    })
+  }
+
+  //跳转页面
+  const back = () => {
+    isback.value = true
+    if (pagefrom.value == 1) {
+      SettingStore.setOptionSetting({ key: 'qu', val: qu.value })
+
+      SettingStore.setOptionSetting({ key: 'jieZhen', val: jieZhen.value })
+      SettingStore.setOptionSetting({ key: 'xiaoQu', val: xiaoQu.value })
+      SettingStore.setOptionSetting({ key: 'lastpagezoom', val: lastpagezoom.value })
+      SettingStore.setOptionSetting({ key: 'lastpagecenterX', val: lastpagecenterX.value })
+      SettingStore.setOptionSetting({ key: 'lastpagecenterY', val: lastpagecenterY.value })
+
+      router.push({
+        path: '/form/validateForm',
+        query: {
+          id: '',
+        },
+      })
+    } else {
+      SettingStore.setOptionSetting({ key: 'currentTabIndex', val: currentTabIndex })
+
+      router.push({
+        path: '/form/validateForm',
+        query: {
+          id: '',
+        },
+      })
+    }
+  }
+
+  //跳转定位页面
+  const dingWeiDaKa = () => {
+    isback.value = true
+
+    router.push({
+      path: '/ReSenCompar3',
+      query: {
+        id: '',
+      },
+    })
+  }
+
+  //打开编辑页面
+  const editDetail = () => {
+    if (canEdit.value) {
+      //imgListPre.value = JSON.stringify(imgList.value);
+      //bannerDataPre.value = JSON.stringify(bannerData.value);
+      isEdit = true
+      buttonDisabled.value = false
+    }
+  }
+  //关闭编辑页面
+  const cancle = () => {
+    isEdit = false
+    console.log(imgListPre.value)
+    console.log(bannerDataPre.value)
+    //imgList.value = JSON.parse(imgListPre.value);
+    //bannerData.value = JSON.parse(bannerDataPre.value);
+  }
+  const dialogClose = () => {}
+
+  //提交审批确认
+  const approveConfirm = () => {
+    buildOperation(gfid.value, '审批同意', approvalComment.value)
+      .then((res) => {
+        console.log(res.data) // 或者其他正确的属性路径
+        // 在这里处理res
+        if (res.data.result != 1) {
+          msgType.value = 'error'
+          messageText.value = res.data.msg
+        }
+        initData(null)
+        //this.back();
+      })
+      .catch((error) => {
+        console.error('获取数据时出错:', error)
+        msgType.value = 'error'
+        messageText.value = error
+        ElMessage.error(messageText.value)
+      })
+  }
+  //提交审批拒绝
+  const approveRefuse = () => {
+    //console.log(this.approvalComment)
+    if (approvalComment.value == null || approvalComment.value == '') {
+      //console.log(approvalComment)
+      msgType.value = 'error'
+      messageText.value = '请填写审核意见！'
+      ElMessage.warning(messageText.value)
+    } else {
+      buildOperation(gfid.value, '审批拒绝', approvalComment.value)
+        .then((res) => {
+          console.log(res.data) // 或者其他正确的属性路径
+          // 在这里处理res
+          ////console.log("领取还是放弃还是审核还是撤回", res)
+          if (res.data.result != 1) {
+            msgType.value = 'error'
+            messageText.value = res.data.msg
+          }
+          initData(null)
+          //back();
+        })
+        .catch((error) => {
+          console.error('获取数据时出错:', error)
+          msgType.value = 'error'
+          messageText.value = error
+          ElMessage.error(messageText.value)
+        })
+      // ElMessageBox.confirm('Are you sure to close this dialog?')
+      // .then(() => {
+
+      // })
+      // .catch(() => {
+      //   // catch error
+      // })
+    }
+  }
+
+  // 方法
+  const save = async (type) => {
+    let resMsg = ''
+    let flag = false
+    let isnotice = false
+    let noticemsg = ''
+    try {
+      imgList.value.forEach((imgitem, imgindex) => {
+        if (
+          phoneTypeList.value[imgindex].title === '建筑名称标识' &&
+          (bannerData.value.xiaoquName === '' || bannerData.value.xiaoquName === null) &&
+          !(imgitem === null || imgitem.length === 0)
+        ) {
+          flag = true
+          noticemsg = '数据库中未匹配到建筑名称，请勿上传建筑名称标识图片!'
+          isnotice = true
+        }
+        if (phoneTypeList.value[imgindex].title === '公安绿牌') {
+          imgitem.forEach((item, index) => {
+            if (item.diZhi === null || item.diZhi === '') {
+              flag = true
+              noticemsg = '请填写绿牌对应的地址!'
+              isnotice = true
+            }
+          })
+        }
+      })
+
+      if (flag) {
+        throw new Error(noticemsg)
+      } else {
+        if (bannerData.value.IndustrStatus !== '正常' && (bannerData.value.desc === '' || bannerData.value.desc === null)) {
+          isnotice = true
+          throw new Error('当前产业状态异常 需要填写外业巡查情况备注!')
+        } else {
+          buttonDisabled.value = true
+          uploadState.value = '信息保存中...'
+
+          const { data } = await xinXiGX(bannerData.value)
+          if (data.result !== 1) {
+            throw new Error('保存失败' + data.msg)
+          } else {
+            resMsg = '信息保存成功'
+            uploadState.value = '信息保存成功...'
+          }
+        }
+
+        let imgDatas = []
+        let hasUploadImg = false
+
+        imgList.value.forEach((imgPartList, partIndex) => {
+          if (imgPartList != null) {
+            imgPartList.forEach((img, imgIndex) => {
+              if (img.imgID === null || img.imgID === '') {
+                totalImgCount.value += 1
+                hasUploadImg = true
+              }
+            })
+          }
+        })
+
+        if (!hasUploadImg && type === '提交') {
+          uploadState.value = '提交中...'
+          const { data } = await buildOperation(gfid.value, '提交', '')
+          if (data.result !== 1) {
+            throw new Error('提交失败，' + data.msg)
+          } else {
+            resMsg = '提交成功'
+            uploadState.value = '提交成功...'
+          }
+        }
+
+        if (!hasUploadImg) {
+          // 如果没有图片需要上传，则不需要执行图片上传逻辑
+        } else {
+          // 执行图片上传逻辑
+          uploadState.value = '图片上传中...'
+          imguping.value = true
+
+          for (const [partIndex, imgPartList] of imgList.value.entries()) {
+            if (imgPartList != null) {
+              for (const [imgIndex, img] of imgPartList.entries()) {
+                if (img.imgID === null || img.imgID === '') {
+                  const itemImg = {
+                    gfID: gfid.value,
+                    fenLei: phoneTypeList[partIndex].type,
+                    zaopIdx: img.zhaopIdx,
+                    fileName: img.fileName,
+                    diZhi: img.diZhi,
+                    desc: img.desc,
+                    base64_con: img.picURL,
+                    wlmlx: img.wlmlx,
+                    mplx: img.mplx,
+                  }
+                  //暂时写死图片上传的返回
+                  const resImg = { data: { result: 1, msg: '' } }
+                  //const resImg = await caijiTuPian(itemImg);
+                  if (resImg.data.result !== 1) throw new Error('图片上传失败，' + resImg.data.msg)
+                  successImgCount.value++
+                  uploadpercentage.value = Math.round((100 * successImgCount.value) / totalImgCount.value)
+                }
+              }
+            }
+          }
+          uploadState.value = '图片上传成功...'
+          if (successImgCount.value === totalImgCount.value && type === '提交') {
+            uploadState.value = '提交中...'
+            const resFinalSubmit = await buildOperation(bannerData.value.id, '提交', '')
+            if (resFinalSubmit.data.result !== 1) throw new Error('提交失败，' + resFinalSubmit.data.msg)
+            resMsg = '提交成功'
+            uploadState.value = '提交成功...'
+          }
+        }
+      }
+    } catch (e) {
+      ElMessage.error(e.message)
+    } finally {
+      if (resMsg !== '') {
+        ElMessage({
+          showClose: false,
+          message: resMsg,
+          type: 'success',
+          duration: 2000,
+        })
+      }
+      if (!flag) {
+        isEdit = false
+        initData(null) // 假设initData()方法已定义
+      }
+      buttonDisabled.value = false
+    }
+  }
 </script>
 
 <style lang="scss">
