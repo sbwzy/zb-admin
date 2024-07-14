@@ -8,18 +8,20 @@
             <el-text
               class="mx-1"
               :style="
-                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == '' || (ruleForm.descZuoBiao != null && ruleForm.descZuoBiao != '')
+                ruleForm.caiJiXQ.qianDaoSJ == null ||
+                ruleForm.caiJiXQ.qianDaoSJ == '' ||
+                (ruleForm.caiJiXQ.descZuoBiao != null && ruleForm.caiJiXQ.descZuoBiao != '')
                   ? 'text-align: right;color:red'
                   : 'text-align: right;'
               "
             >
               &nbsp;
               {{
-                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == ''
+                ruleForm.caiJiXQ.qianDaoSJ == null || ruleForm.caiJiXQ.qianDaoSJ == ''
                   ? '请先定位打卡'
-                  : ruleForm.descZuoBiao == null || ruleForm.descZuoBiao == ''
+                  : ruleForm.caiJiXQ.descZuoBiao == null || ruleForm.caiJiXQ.descZuoBiao == ''
                   ? '已定位打卡'
-                  : ruleForm.descZuoBiao
+                  : ruleForm.caiJiXQ.descZuoBiao
               }}
             </el-text>
           </el-col>
@@ -33,7 +35,7 @@
         <el-form-item label="建筑名称">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.standartName }}
+              {{ ruleForm.caiJiXQ.standartName }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -41,7 +43,7 @@
         <el-form-item label="授权地址">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.shouQuanDZ }}
+              {{ ruleForm.caiJiXQ.shouQuanDZ }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -49,7 +51,7 @@
         <el-form-item label="物业联系人员">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.wyName }}
+              {{ ruleForm.caiJiXQ.wyName }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -57,21 +59,21 @@
         <el-form-item label="物业联系方式">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.wyPhone }}
+              {{ ruleForm.caiJiXQ.wyPhone }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="房屋类型">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.standardType }}
+              {{ ruleForm.caiJiXQ.standardType }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="原产业状态">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.IndustrStatusOld }}
+              {{ ruleForm.caiJiXQ.IndustrStatusOld }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -80,17 +82,21 @@
           label="当前产业状态"
           v-if="
             isEdit ||
-            (ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld)
+            (ruleForm.caiJiXQ.IndustrStatus != '' &&
+              ruleForm.caiJiXQ.IndustrStatus != null &&
+              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld)
           "
           class="demo-uni-row"
           :style="
-            ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+            ruleForm.caiJiXQ.IndustrStatus != '' &&
+            ruleForm.caiJiXQ.IndustrStatus != null &&
+            ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
               ? 'border-left: 2px solid red;'
               : ''
           "
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.IndustrStatus" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.IndustrStatus" placeholder="Select" style="width: 240px">
               <el-option v-for="item in IndustrStatusList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
@@ -99,13 +105,15 @@
             :span="24"
             class="text-balck text-df"
             :style="
-              ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+              ruleForm.caiJiXQ.IndustrStatus != '' &&
+              ruleForm.caiJiXQ.IndustrStatus != null &&
+              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
                 ? 'text-align: right;color: red'
                 : 'text-align: right'
             "
           >
             <el-text class="mx-1">
-              {{ ruleForm.IndustrStatus }}
+              {{ ruleForm.caiJiXQ.IndustrStatus }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -113,23 +121,30 @@
         <el-form-item label="原房屋用途">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.fangWuYTOld }}
+              {{ ruleForm.caiJiXQ.fangWuYTOld }}
             </el-text>
           </el-col>
         </el-form-item>
 
         <el-form-item
           label="当前房屋用途"
-          v-if="isEdit || (ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld)"
+          v-if="
+            isEdit ||
+            (ruleForm.caiJiXQ.fangWuYT != '' &&
+              ruleForm.caiJiXQ.fangWuYT != null &&
+              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld)
+          "
           class="demo-uni-row"
           :style="
-            ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+            ruleForm.caiJiXQ.fangWuYT != '' &&
+            ruleForm.caiJiXQ.fangWuYT != null &&
+            ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
               ? 'border-left: 2px solid red;'
               : ''
           "
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.fangWuYT" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.fangWuYT" placeholder="Select" style="width: 240px">
               <el-option v-for="item in fangWuYTList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
@@ -138,13 +153,15 @@
             :span="24"
             class="text-balck text-df"
             :style="
-              ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+              ruleForm.caiJiXQ.fangWuYT != '' &&
+              ruleForm.caiJiXQ.fangWuYT != null &&
+              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
                 ? 'text-align: right;color: red'
                 : 'text-align: right'
             "
           >
             <el-text class="mx-1">
-              {{ ruleForm.fangWuYT }}
+              {{ ruleForm.caiJiXQ.fangWuYT }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -152,16 +169,16 @@
         <el-form-item
           label="建筑现状"
           class="demo-uni-row"
-          :style="ruleForm.desc2 != '' && ruleForm.desc2 != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.desc2 != '' && ruleForm.caiJiXQ.desc2 != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.desc2" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.desc2" placeholder="Select" style="width: 240px">
               <el-option v-for="item in desc2List" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.desc2 }}
+              {{ ruleForm.caiJiXQ.desc2 }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -169,16 +186,16 @@
         <el-form-item
           label="现场是否有铭牌"
           class="demo-uni-row"
-          :style="ruleForm.sfmpqs != '' && ruleForm.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.sfmpqs != '' && ruleForm.caiJiXQ.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.sfmpqs" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.sfmpqs" placeholder="Select" style="width: 240px">
               <el-option v-for="item in sfmpqsList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.sfmpqs }}
+              {{ ruleForm.caiJiXQ.sfmpqs }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -186,14 +203,14 @@
         <el-form-item label="保护铭牌内容">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.bhmpCont }}
+              {{ ruleForm.caiJiXQ.bhmpCont }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="使用人">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.shiYongROld }}
+              {{ ruleForm.caiJiXQ.shiYongROld }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -201,14 +218,14 @@
         <el-form-item
           label="现场带看情况"
           class="demo-uni-row"
-          :style="ruleForm.dkdesc != '' && ruleForm.dkdesc != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.dkdesc != '' && ruleForm.caiJiXQ.dkdesc != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+            <el-input v-model="ruleForm.caiJiXQ.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.dkdesc }}
+              {{ ruleForm.caiJiXQ.dkdesc }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -216,22 +233,22 @@
         <el-form-item
           label="外业巡查情况备注"
           class="demo-uni-row"
-          :style="ruleForm.desc != '' && ruleForm.desc != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.desc != '' && ruleForm.caiJiXQ.desc != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+            <el-input v-model="ruleForm.caiJiXQ.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.desc }}
+              {{ ruleForm.caiJiXQ.desc }}
             </el-text>
           </el-col>
         </el-form-item>
 
-        <el-form-item label="审核意见" v-if="ruleForm.descShenHe != null && ruleForm.descShenHe != ''">
+        <el-form-item label="审核意见" v-if="ruleForm.caiJiXQ.descShenHe != null && ruleForm.caiJiXQ.descShenHe != ''">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.descShenHe }}
+              {{ ruleForm.caiJiXQ.descShenHe }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -347,6 +364,8 @@
   import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
   // 在这里引入接口
   import { youliCJXQGet, getLocationInfo, buildOperation, xinXiGX } from '@/api/user'
+  import { useSettingStore } from '@/store/modules/setting'
+
   import {
     validatorMethod,
     verifyPhone,
@@ -365,6 +384,7 @@
     isShowToolTip: boolean
     // 其他属性...
   }
+  const SettingStore = useSettingStore()
   const saveSub = () => {
     // 文件上传成功时的处理逻辑
     console.log('File success:', fileList1)
@@ -499,34 +519,7 @@
   ])
 
   const ruleFormRef = ref<FormInstance>()
-  const ruleForm = reactive({
-    qianDaoSJ: '',
-    descZuoBiao: '',
-    standartName: '测试名称',
-    shouQuanDZ: '测试地址',
-    wyName: '测试联系人',
-    wyPhone: '测试联系方式',
-    standardType: '测试类型',
-    IndustrStatusOld: '测试状态',
-    IndustrStatus: '测试状态',
-    fangWuYTOld: '测试用途',
-    fangWuYT: '测试用途',
-    desc2: '测试现状',
-    sfmpqs: '测试是否有铭牌',
-    bhmpCont: '测试铭牌内容',
-    shiYongROld: '测试使用人',
-    dkdesc: '测试带看情况',
-    desc: '测试巡查情况',
-    descShenHe: '测试审核意见',
-    phone: '',
-    keyword: '',
-    percent: '',
-    idCard: null,
-    website: null,
-    html: null,
-    date: null,
-    email: null,
-  })
+  const ruleForm = SettingStore.optionSetting
 
   const rules = reactive<FormRules>({
     phone: [
@@ -572,8 +565,6 @@
       },
     ],
   })
-
-  import { useSettingStore } from '@/store/modules/setting'
 
   import { useUserStore } from '@/store/modules/user'
 
@@ -652,7 +643,6 @@
     },
   ])
   // Pinia存储
-  const SettingStore = useSettingStore()
   //当前公房Id
   const currentGfid = ref(SettingStore.gfid)
   //公房Id列表
@@ -721,19 +711,6 @@
     console.log('optionSetting', optionSetting)
     console.log('gfid', gfid)
 
-    //获取传参
-    if (optionSetting) {
-      qianDaoSJ.value = optionSetting.value.qianDaosj ?? null
-      gfid.value = optionSetting.value.gfid ?? null
-      currentTabIndex.value = optionSetting.value.currentTabIndex ?? null
-      pagefrom.value = optionSetting.value.pagefrom ?? null
-      qu.value = optionSetting.value.qu ?? null
-      jieZhen.value = optionSetting.value.jieZhen ?? null
-      xiaoQu.value = optionSetting.value.xiaoQu ?? null
-      lastpagezoom.value = optionSetting.value.lastpagezoom ?? null
-      lastpagecenterX.value = optionSetting.value.lastpagecenterX ?? null
-      lastpagecenterY.value = optionSetting.value.lastpagecenterY ?? null
-    }
     console.log('param', route.params)
     gfid.value = route.params.id as string
     console.log('ingfid', gfid)

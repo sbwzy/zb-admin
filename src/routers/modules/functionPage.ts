@@ -14,7 +14,7 @@ const functionPageRouter = [
     },
     children: [
       {
-        path: '/function-page/collection/:id',
+        path: '/function-page/collection',
         component: () => import('@/views/functionPage/collection/index.vue'),
         name: 'collection',
         meta: { title: '信息采集', keepAlive: true, icon: 'MenuIcon' },
