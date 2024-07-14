@@ -95,10 +95,12 @@
 
   const addHandler = () => {
     let xcrw = {
+      id: '',
       name: '',
       //region: '',
       date1: '',
       date2: '',
+      status: false,
       // delivery: false,
       resource: '',
       desc: '',
@@ -106,7 +108,7 @@
       rwList: [],
     }
     SettingStore.setXcrw(xcrw)
-    SettingStore.setXcrwId(null)
+    //SettingStore.setXcrwId(null)
     setTimeout(async () => {
       //进入建筑列表页面
       router.push({
@@ -136,30 +138,33 @@
             rwList: [
               {
                 cjrname: '用户2',
-                shrName: '用户1',
+                shrName: '用户3',
                 status: true,
-                jzsl: 110,
+                jzsl: 3,
                 photo: '15333333333',
                 describe: '该采集员已负责xx1、xx2等街区',
                 createTime: '2022-09-02 15:30:20',
+                jzList: [1, 2, 3],
               },
               {
                 cjrname: '用户1',
                 shrName: '用户3',
                 status: true,
-                jzsl: 100,
+                jzsl: 3,
                 photo: '15311111111',
                 describe: '该采集员已负责xx3、xx4等街区',
                 createTime: '2022-09-02 15:30:20',
+                jzList: [11, 21, 31],
               },
               {
                 cjrname: '用户3',
-                shrName: '用户1',
-                jzsl: 10,
+                shrName: '用户4',
+                jzsl: 3,
                 status: true,
                 photo: '13823456789',
                 describe: '该采集员已负责xx5、xx6等街区',
                 createTime: '2022-09-02 15:30:20',
+                jzList: [12, 22, 32],
               },
               // {
               //   cjrname: '用户4',

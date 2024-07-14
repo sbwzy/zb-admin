@@ -421,10 +421,10 @@
   }
 
   .demo-tabs > .el-tabs__content {
-    padding: 32px;
+    //padding: 32px;
     color: #6b778c;
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 400;
   }
   .demo-tabs .custom-tabs-label .el-icon {
     vertical-align: middle;

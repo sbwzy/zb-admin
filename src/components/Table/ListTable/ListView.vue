@@ -10,7 +10,7 @@
           </el-button>
         </div>
         <div
-          v-if="listtype == 'build' && item.cjZt == '采集中'"
+          v-if="listtype == 'build' && item.cjZt == '采集中' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -25,7 +25,7 @@
         </div>
 
         <div
-          v-if="listtype == 'build' && item.cjZt == '待审核'"
+          v-if="listtype == 'build' && item.cjZt == '待审核' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -36,7 +36,7 @@
           </el-button>
         </div>
         <div
-          v-if="listtype == 'build' && item.cjZt == '审核驳回'"
+          v-if="listtype == 'build' && item.cjZt == '审核驳回' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -70,6 +70,13 @@
         <div class="titleV">类型:</div>
         <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
           {{ listtype == 'build' ? item.standardType : item.type }}
+          <span style="color: #333333; margin-left: 2px"></span>
+        </div>
+      </div>
+      <div v-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
+        <div class="titleV">任务状态:</div>
+        <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
+          {{ item.progress }}
           <span style="color: #333333; margin-left: 2px"></span>
         </div>
       </div>

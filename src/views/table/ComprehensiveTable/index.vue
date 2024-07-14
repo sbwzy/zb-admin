@@ -34,12 +34,14 @@
   // const sId = route.params.id as string
   const entryType = 'newxcrw'
   const emit = defineEmits(['selectAlls'])
-  const filters = computed(() => {
-    return SettingStore.search
+  const filters = ref({
+    district: null,
+    buildType: ['优秀历史建筑', '花园住宅'], //房屋类型
+    isSelect: ['未勾选'], //巡查任务条件
   })
 
   const list = computed(() => {
-    return SettingStore.xcjzList
+    return SettingStore.bcjzList
   })
 
   const dynamicFilters = computed(() => {
@@ -98,14 +100,42 @@
   const selectionChange = (val) => {
     selectObj.value = val
   }
+  //按钮触发 选择全部
   const selectAllAction = () => {
     //ruleForm1 = UseSettingStore.xcrw
+    //将列表中的未勾选的id 赋值到xcrwUser.jzList中
+    const ids = SettingStore.xcrwUser.jzList
+    console.log('ids', ids)
     list.value.forEach((item) => {
       if (item.isSelect == '未勾选') {
-        //store里面存在已保存的id，则xiu
-        item.isSelect = '已勾选'
+        console.log('1111', item)
+        if (!ids.includes(item.id)) {
+          console.log('不包含')
+          UseSettingStore.xcrwUser.jzList.push(item.id)
+          //如果搜索条件包含了已勾选
+          if (
+            (UseSettingStore.search.isSelect.length != 0 && UseSettingStore.search.isSelect.includes('已勾选')) ||
+            UseSettingStore.search.isSelect.length == 0
+          ) {
+            console.log('搜索条件', UseSettingStore.search.isSelect)
+            UseSettingStore.bcjzList.forEach((item1) => {
+              if (item.id == item1.id) {
+                item1.isSelect = '已勾选'
+              }
+            })
+          } else {
+            //不包含已勾选直接剔除
+            let bcjzList = UseSettingStore.bcjzList.filter((item1) => {
+              return item.id != item1.id
+            })
+            UseSettingStore.setBcjzList(bcjzList)
+          }
+        } else {
+          console.log('包含')
+        }
       }
     })
+    console.log(UseSettingStore.xcrwUser)
     emit('selectAlls')
   }
 
@@ -138,24 +168,121 @@
   }
 
   const reset = () => {
+    //重置是 查看未勾选列表
     loading.value = true
+    let xcuserHasList = []
+    let xcOwnerHasList = []
+    const ids = SettingStore.xcrw.rwList.map((item) => item.cjrname)
+    const exists = ids.includes(SettingStore.xcrwUser.cjrname)
+    SettingStore.xcrw.rwList.forEach((item1) => {
+      if (item1.cjrname === SettingStore.xcrwUser.cjrname) {
+        item1.jzList.forEach((item2) => {
+          xcOwnerHasList.push(item2)
+        })
+      } else {
+        item1.jzList.forEach((item2) => {
+          xcuserHasList.push(item2)
+        })
+      }
+    })
+    if (!exists) {
+      SettingStore.xcrwUser.jzList.forEach((item1) => {
+        xcOwnerHasList.push(item1)
+      })
+    }
+    console.log(xcOwnerHasList)
+    console.log(xcuserHasList)
+    SettingStore.bcjzList = SettingStore.xcjzList.filter((item) => {
+      return !xcuserHasList.includes(item.id) && !xcOwnerHasList.includes(item.id)
+    })
+
+    SettingStore.bcjzList.forEach((item) => {
+      // if (xcOwnerHasList.includes(item.id)) {
+      //   item.isSelect = '已勾选'
+      // } else {
+      item.isSelect = '未勾选'
+      //}
+    })
     setTimeout(() => {
       loading.value = false
     }, 500)
-    ElMessage.success('触发重置方法')
+    ElMessage.success('刷新成功')
   }
   //删除该记录
   const deleteAction = (va1, va2) => {
     //调用接口修改数据
 
     //在接口修改数据成功后，删除该条数据
-    let delList = list.value.filter((item) => item.id !== va2.id)
-    SettingStore.setXcjzList(delList)
+    //调用接口修改数据
+    const ids = SettingStore.xcrwUser.jzList
+    console.log('ids', ids)
+    if (va2.isSelect == '已勾选') {
+      console.log('1111', va2)
+      if (ids.includes(va2.id)) {
+        console.log('包含')
+        UseSettingStore.xcrwUser.jzList.filter((item) => item.id !== va2.id)
+        console.log(UseSettingStore.xcrwUser)
+        //.push(va2.id)
+        //如果搜索条件包含了未勾选
+        if (
+          (UseSettingStore.search.isSelect.length != 0 && UseSettingStore.search.isSelect.includes('未勾选')) ||
+          UseSettingStore.search.isSelect.length == 0
+        ) {
+          console.log('搜索条件', UseSettingStore.search.isSelect)
+          UseSettingStore.bcjzList.forEach((item1) => {
+            if (va2.id == item1.id) {
+              item1.isSelect = '未勾选'
+            }
+          })
+        } else {
+          //不包含 未勾选直接剔除
+          let bcjzList = UseSettingStore.bcjzList.filter((item1) => {
+            return va2.id != item1.id
+          })
+          UseSettingStore.setBcjzList(bcjzList)
+        }
+      } else {
+        console.log('不包含')
+      }
+    }
+    console.log(UseSettingStore.xcrwUser)
+    //在接口修改数据成功后，删除该条数据
+    // let selList = list.value.filter((item) => item.id !== va2.id)
+    // SettingStore.setXcjzList(selList)
   }
 
   const selectAction = (va1, va2) => {
     //调用接口修改数据
-
+    const ids = SettingStore.xcrwUser.jzList
+    console.log('ids', ids)
+    if (va2.isSelect == '未勾选') {
+      console.log('1111', va2)
+      if (!ids.includes(va2.id)) {
+        console.log('不包含')
+        UseSettingStore.xcrwUser.jzList.push(va2.id)
+        //如果搜索条件包含了已勾选
+        if (
+          (UseSettingStore.search.isSelect.length != 0 && UseSettingStore.search.isSelect.includes('已勾选')) ||
+          UseSettingStore.search.isSelect.length == 0
+        ) {
+          console.log('搜索条件', UseSettingStore.search.isSelect)
+          UseSettingStore.bcjzList.forEach((item1) => {
+            if (va2.id == item1.id) {
+              item1.isSelect = '已勾选'
+            }
+          })
+        } else {
+          //不包含已勾选直接剔除
+          let bcjzList = UseSettingStore.bcjzList.filter((item1) => {
+            return va2.id != item1.id
+          })
+          UseSettingStore.setBcjzList(bcjzList)
+        }
+      } else {
+        console.log('包含')
+      }
+    }
+    console.log(UseSettingStore.xcrwUser)
     //在接口修改数据成功后，删除该条数据
     let selList = list.value.filter((item) => item.id !== va2.id)
     SettingStore.setXcjzList(selList)
@@ -176,20 +303,20 @@
 
   onMounted(() => {
     //加载数据
-    selList = UseSettingStore.selJZList
-    if (selList.length != 0) {
-      console.log('进来了')
-      console.log(selList)
-      console.log(list.value)
-      list.value.forEach((item) => {
-        if (selList.indexOf(item.id) != -1) {
-          //store里面存在已保存的id，则xiu
-          item.isSelect = '已勾选'
-        } else {
-          item.isSelect = '未勾选'
-        }
-      })
-    }
+    // selList = UseSettingStore.selJZList
+    // if (selList.length != 0) {
+    //   console.log('进来了')
+    //   console.log(selList)
+    //   console.log(list.value)
+    //   list.value.forEach((item) => {
+    //     if (selList.indexOf(item.id) != -1) {
+    //       //store里面存在已保存的id，则xiu
+    //       item.isSelect = '已勾选'
+    //     } else {
+    //       item.isSelect = '未勾选'
+    //     }
+    //   })
+    // }
   })
 </script>
 

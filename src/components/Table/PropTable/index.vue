@@ -98,6 +98,8 @@
   import type { FormInstance } from 'element-plus'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { reactive } from 'vue'
+  import { useSettingStore } from '@/store/modules/setting'
+  const SettingStore = useSettingStore()
 
   let props = defineProps({
     columns: {
@@ -206,6 +208,23 @@
   }
 
   const filterMethod = (e1, e2) => {
+    let search = {
+      listtype: '', //类型
+      searchType: '', //搜索类型
+      //: '采集中',
+      regionmap: '',
+      type: '',
+      jzName: '', //建筑名称
+      rwName: '', //任务名称
+      xcrwName: '',
+      district: null, //区域
+      checked1: false,
+      checked2: false,
+      streetType: '',
+      standardType: '',
+      buildType: ['优秀历史建筑', '花园住宅'], //房屋类型
+      isSelect: ['未勾选'], //巡查任务条件
+    }
     console.log(e1, e2)
     if (e1 == 1) {
       console.log('修改列表')
@@ -219,7 +238,28 @@
       emit('selectAll')
       ElMessage.success('成功添加' + props.data.length + '幢建筑')
       //}
-    } else if (e2 == '模糊查询' || e2 == '查询') {
+    } else if (e2 == '模糊查询') {
+      search.jzName = props.filters.jzName
+      SettingStore.setSearch(search)
+    } else if (e2 == '查询') {
+      search.district = props.filters.district
+      search.buildType = props.filters.buildType
+      search.isSelect = props.filters.isSelect
+      SettingStore.setSearch(search)
+
+      console.log(SettingStore.search)
+    } else if (e2 == '重置') {
+      props.filters.jzName = ''
+      props.filters.district = null
+      props.filters.buildType = ['优秀历史建筑', '花园住宅']
+      props.filters.isSelect = ['未勾选']
+
+      search.district = props.filters.district
+      search.buildType = props.filters.buildType
+      search.isSelect = props.filters.isSelect
+      SettingStore.setSearch(search)
+      //直接触发方法 修改list
+      emit('reset')
     }
   }
 

@@ -58,13 +58,15 @@
   const props = { multiple: true }
   const cascaderRef = ref(null)
   const UseSettingStore = useSettingStore()
+  //目前没有作用
   const xcId = computed(() => {
     return UseSettingStore.xcrwId
   })
+  //如果是新建 置空xcrw  如果是编辑  赋值
   let ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
-
+  //验证规则
   const rules = reactive({
     name: [
       { required: true, message: '请输入任务名称', trigger: 'blur' },
@@ -134,12 +136,20 @@
           saveXcrw(ruleForm.value).then((res) => {
             if (res.data.result == -11) {
               //let xcssList = res.data.data.xcssList;
+              let date1 = new Date(ruleForm.value.date1)
+              let year1 = date1.getFullYear()
+              let month1 = date1.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+              let xcsjs = `${year1}-${month1.toString().padStart(2, '0')}`
+              let date2 = new Date(ruleForm.value.date2)
+              let year2 = date2.getFullYear()
+              let month2 = date2.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+              let xcsje = `${year2}-${month2.toString().padStart(2, '0')}`
               let newXcssList = UseSettingStore.xcssList
               newXcssList.push({
                 id: 4,
                 renwuName: ruleForm.value.name,
-                xcsjS: ruleForm.value.date1,
-                xcsjE: ruleForm.value.date2,
+                xcsjS: xcsjs,
+                xcsjE: xcsje,
                 type: '季度物业巡查',
                 cjdw: '静安物业中心',
                 cjr: '张三',
@@ -158,12 +168,6 @@
               }, 500)
             }
           })
-          // ruleForm.value.name = ''
-          // ruleForm.value.clubType = ''
-          // ruleForm.value.date1 = ''
-          // ruleForm.value.date2 = ''
-          // //ruleForm.value.delivery = false
-          // ;(ruleForm.value.resource = ''), (ruleForm.value.desc = ''), UseSettingStore.setXcrw(ruleForm)
         }
       } else {
         console.log('error submit!!')
@@ -200,23 +204,7 @@
     }
   }
 
-  // const inBuilds = () => {
-  //   console.log('2222222', ruleForm)
-  //   //缓存当前页面的信息
-  //   UseSettingStore.setXcrw(ruleForm)
-  //   router.push(
-  //     { name: 'comprehensive', params: { type: 'newxcrw' } },
-  //     //,params:{list:JSON.stringify(pointslist1.value)}
-  //   )
-  // }
-  // mounted(()=> {
-  //   //console.log('赋值新建的巡查任务字段111')
-  // })
-  onMounted(() => {
-    //初始化是赋值信息
-    console.log('赋值新建的巡查任务字段')
-    // ruleForm.value = UseSettingStore.xcrw
-  })
+  onMounted(() => {})
 </script>
 <style lang="scss">
   .el-cascader-menu {

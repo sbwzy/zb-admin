@@ -100,17 +100,50 @@
       loading.value = false
     }, 1000)
   }
-
+  //新增用户任务
   const addHandler = () => {
+    //重置所有的用户可选  判断当前巡查任务 是否存在其他用户有任务
+    console.log('触发事件')
+    console.log(SettingStore.xcrwUser)
+    //已有用户列表的用户集合
+    let ids = props.tableData.map((item) => item.cjrname)
+    let ids1 = props.tableData.map((item) => item.shrName)
     SettingStore.xcoptions.forEach((item) => {
-      item.disabled = false
+      //已有用户列表 是否包含某个用户
+      let exists = ids.includes(item.value)
+      //包含的话 是true  不给选
+      if (exists) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
     })
     SettingStore.shoptions.forEach((item) => {
-      item.disabled = false
+      let exists = ids1.includes(item.value)
+      if (exists) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
     })
+
+    let xcrwUser1 = ref({
+      cjrname: '',
+      shrName: '',
+      status: true,
+      jzsl: 0,
+      photo: '',
+      describe: '',
+      createTime: '',
+      jzList: [],
+    })
+    SettingStore.setXcrwUser(xcrwUser1.value)
+    console.log(SettingStore.xcrwUser)
+
     userDialog.value.show()
   }
   const editHandler = (row) => {
+    console.log('点击了编辑')
     userDialog.value.show(row)
   }
 
