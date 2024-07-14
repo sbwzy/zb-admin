@@ -47,7 +47,7 @@
 <script lang="ts" setup>
   import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
   import { MapLocation, Memo, OfficeBuilding, View as IconView } from '@element-plus/icons-vue'
-  import { reactive, ref, onMounted } from 'vue'
+  import { reactive, ref, onMounted, computed } from 'vue'
   import mypage from '@/views/table/ComprehensiveTable/index.vue'
   import { useSettingStore } from '@/store/modules/setting'
   const ruleFormRef = ref<FormInstance>()
@@ -66,8 +66,10 @@
     shrName: [{ required: true, message: '请选择审核员', trigger: 'change' }],
   })
   const SettingStore = useSettingStore()
-  const ruleForm = SettingStore.xcrwUser
 
+  const ruleForm = computed(() => {
+    return SettingStore.xcrwUser
+  })
   //采集员 可以给管理员审核
   //管理员 不可以给自己审核SettingStore.xcoptions
   const xcoptions = SettingStore.xcoptions
@@ -142,14 +144,24 @@
     dialogVisible1.value = true
   }
   const show = (item = {}) => {
+    console.log('1111', item)
+    console.log('1112', item.cjrname)
     title.value = '分配采集员'
     if (item.cjrname) {
+      console.log('2222')
       //调用接口查询采集员信息
-
       title.value = '编辑采集员'
-      Object.keys(item).forEach((key) => {
-        ruleForm[key] = item[key]
+      let xcrwUser1 = ref({
+        cjrname: item.cjrname,
+        shrName: item.shrName,
+        status: item.status,
+        jzsl: item.jzsl,
+        photo: item.photo,
+        describe: item.describe,
+        createTime: item.createTime,
+        jzList: item.jzList,
       })
+      SettingStore.setXcrwUser(xcrwUser1.value)
     }
     dialogVisible.value = true
   }
@@ -185,6 +197,7 @@
   const handleClose = async (done: () => void) => {
     await ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
+        console.log('222', ruleForm.value)
         const now = new Date()
         const year = now.getFullYear()
         const month = String(now.getMonth() + 1).padStart(2, '0')
@@ -202,26 +215,26 @@
           createTime: '',
           jzList: [],
         }
-        rwList.cjrname = ruleForm.cjrname
-        rwList.shrName = ruleForm.shrName
-        rwList.jzsl = ruleForm.jzList.length
+        rwList.cjrname = ruleForm.value.cjrname
+        rwList.shrName = ruleForm.value.shrName
+        rwList.jzsl = ruleForm.value.jzList?.length
         rwList.createTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-        rwList.describe = ruleForm.describe
-        rwList.status = ruleForm.status
-        rwList.jzList = ruleForm.jzList
+        rwList.describe = ruleForm.value.describe
+        rwList.status = ruleForm.value.status
+        rwList.jzList = ruleForm.value.jzList
         console.log('确定', rwList)
         const ids = SettingStore.xcrw.rwList.map((item) => item.cjrname)
-        const exists = ids.includes(ruleForm.cjrname)
+        const exists = ids.includes(ruleForm.value.cjrname)
         if (exists) {
           //如果存在 怎么修改
           SettingStore.xcrw.rwList.forEach((item) => {
-            if (item.cjrname === ruleForm.cjrname) {
-              item.cjrname = ruleForm.cjrname
-              item.shrName = ruleForm.shrName
-              item.jzsl = ruleForm.jzList.length
+            if (item.cjrname === ruleForm.value.cjrname) {
+              item.cjrname = ruleForm.value.cjrname
+              item.shrName = ruleForm.value.shrName
+              item.jzsl = ruleForm.value.jzList?.length
               item.createTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
-              item.describe = ruleForm.describe
-              item.status = ruleForm.status
+              item.describe = ruleForm.value.describe
+              item.status = ruleForm.value.status
             }
           })
         } else {
@@ -238,6 +251,7 @@
         //   status: ruleForm.status,
         //   rwList: ruleForm.jzList,
         // })
+        //清空xcrwUser
 
         dialogVisible.value = false
         //console.log('submit!', ruleForm)

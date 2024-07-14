@@ -174,7 +174,7 @@ export const useSettingStore = defineStore({
     }),
     // 仪表盘 任务总览
     echartsData: ref([]),
-    //建筑列表每次保存的建筑列表
+    //建筑列表每次保存的建筑列表 超管能看全部   管理员、采集员看他那部分的列表
     jzList: ref([
       {
         xiaoQu: '福世花园',
@@ -1424,6 +1424,9 @@ export const useSettingStore = defineStore({
     },
     setXcssList(value) {
       this.xcssList = value
+    },
+    setXcrwUser(value) {
+      this.xcrwUser = value
     },
   },
   // 这部分数据不需要存储
