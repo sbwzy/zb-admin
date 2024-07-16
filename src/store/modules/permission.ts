@@ -71,6 +71,7 @@ export const usePermissionStore = defineStore({
         // 在这判断是否有权限，哪些角色拥有哪些权限
         let accessedRoutes
         console.log('生成路由时打印', roles)
+        console.log('生成路由时打印', asyncRoutes)
         if (roles && roles.length && !roles.includes('admin')) {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         } else {

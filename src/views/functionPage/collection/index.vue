@@ -287,7 +287,7 @@
                 <span>Content</span>
               </el-progress>
 
-              <el-upload
+              <!-- <el-upload
                 ref="uploadRef"
                 action="#"
                 list-type="picture-card"
@@ -302,11 +302,41 @@
                 <el-icon>
                   <Plus />
                 </el-icon>
-              </el-upload>
+              </el-upload> -->
 
-              <el-dialog v-model="dialogVisible" top="25vh" width="98%">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%" />
+              <el-upload
+                v-model="ruleForm[tab.name]"
+                :action="fileUrl"
+                accept="image/jpg,image/jpeg,image/png"
+                list-type="picture-card"
+                :limit="9"
+                :on-success="handleSuccess"
+                :before-upload="beforeAvatarUpload"
+                :before-remove="() => false"
+                :file-list="imageList"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+                <div slot="file" slot-scope="{ file }">
+                  <img class="el-upload-list__item-thumbnail" :src="file.fileUrl" alt="" />
+                  <el-input v-model="file.imageExplain" placeholder="图片说明" clearable> </el-input>
+                  <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
+                    <span class="el-upload-list__item-delete" @click="handleRemove(file, imageList)">
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                </div>
+              </el-upload>
+              //预览的图片弹框
+              <el-dialog class="review-dialog" append-to-body :visible.sync="imgDialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="" />
               </el-dialog>
+
+              <!-- <el-dialog v-model="dialogVisible" top="25vh" width="98%">
+                <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%" />
+              </el-dialog> -->
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -382,6 +412,7 @@
     imglists: any
     tooltip: string
     isShowToolTip: boolean
+    name: string //唯一标识
     // 其他属性...
   }
   const SettingStore = useSettingStore()
@@ -389,7 +420,7 @@
     // 文件上传成功时的处理逻辑
     console.log('File success:', fileList1)
   }
-
+  let fileUrl = 'open_upload_path' //图片文件上传地址
   let fileList1 = []
   const fileList = ref([]) // 存储上传的文件列表
   const uploadRef = ref<InstanceType<typeof ElUpload>>() // 存储上传组件的引用
@@ -440,6 +471,7 @@
   const phoneTypeList = ref<Tab[]>([
     {
       title: '建筑名称标识',
+      name: 'jianZhumcbs',
       icon: 'Picture',
       imglists: [
         {
@@ -458,6 +490,7 @@
     },
     {
       title: '公安绿牌',
+      name: 'gongAnLP',
       icon: 'Picture',
       imglists: [
         {
@@ -472,6 +505,7 @@
     },
     {
       title: '外立面',
+      name: 'waiLiM',
       icon: 'Picture',
       imglists: [
         {
@@ -495,6 +529,7 @@
     },
     {
       title: '铭牌',
+      name: 'mingPai',
       icon: 'Picture',
       imglists: [
         { imgUrl: 'https://example.com/image1.jpg' },
@@ -506,6 +541,7 @@
     },
     {
       title: '产业状态',
+      name: 'chanYeZT',
       icon: 'Picture',
       imglists: [
         { imgUrl: 'https://example.com/image1.jpg' },
@@ -517,6 +553,17 @@
     },
     // 更多标签页数据...
   ])
+  const beforeAvatarUpload = (file) => {
+    const isJPG = ['image/jpg', 'image/jpeg', 'image/png'].includes(file.type)
+    const isLt10M = file.size / 1024 / 1024 < 10
+    if (!isJPG) {
+      ElMessage.error('上传头像图片只能是 JPG/PNG 格式!')
+    }
+    if (!isLt10M) {
+      ElMessage.error('上传头像图片大小不能超过 10MB!')
+    }
+    return isJPG && isLt10M
+  }
 
   const ruleFormRef = ref<FormInstance>()
   const ruleForm = SettingStore.optionSetting
