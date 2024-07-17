@@ -469,7 +469,7 @@
   interface FileType {
     name?: string // 文件名
     url: any // 文件地址
-    desc:string //描述
+    desc: string //描述
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   const SettingStore = useSettingStore()
@@ -531,7 +531,7 @@
         //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/1.jpg',
         //   }
         // }
-        console.log('111',file)
+        console.log('111', file)
         console.log(ruleForm)
         var res = {
           name: file.name,

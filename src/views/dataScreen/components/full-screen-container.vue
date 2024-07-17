@@ -3,11 +3,7 @@
     <!-- <div ref="domRef" class="inner">
       <slot></slot>
     </div> -->
-    <iframe
-      id="child"
-      src="https://dev.ccgis.cn/wuyegl/keshi/index.html"
-      style="width: 100%; height: 100%"
-    ></iframe>
+    <iframe id="child" src="https://dev.ccgis.cn/wuyegl/keshi/index.html" style="width: 100%; height: 100%"></iframe>
   </div>
 </template>
 
