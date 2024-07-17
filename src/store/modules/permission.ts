@@ -70,6 +70,8 @@ export const usePermissionStore = defineStore({
       return new Promise((resolve) => {
         // 在这判断是否有权限，哪些角色拥有哪些权限
         let accessedRoutes
+        console.log('生成路由时打印', roles)
+        console.log('生成路由时打印', asyncRoutes)
         if (roles && roles.length && !roles.includes('admin')) {
           accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
         } else {
@@ -78,10 +80,13 @@ export const usePermissionStore = defineStore({
         accessedRoutes = accessedRoutes.concat(notFoundRouter)
         this.routes = constantRoutes.concat(accessedRoutes)
         this.addRoutes = accessedRoutes
+        console.log('生成路由时打印', accessedRoutes)
+        console.log('生成路由时打印', this.routes)
+        console.log('生成路由时打印', this.addRoutes)
         resolve(accessedRoutes)
       })
     },
-    // 清楚路由
+    // 清除路由
     clearRoutes() {
       this.routes = []
       this.addRoutes = []
