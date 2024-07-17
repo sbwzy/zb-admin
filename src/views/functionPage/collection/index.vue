@@ -257,7 +257,7 @@
 
       <!-- 图片模块 -->
       <div>
-        <el-tabs type="border-card" class="demo-tabs" @tab-change="tabChange">
+        <el-tabs type="border-card" class="demo-tabs">
           <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
             <template #label>
               <span class="custom-tabs-label">
@@ -287,7 +287,6 @@
                 <span>Content</span>
               </el-progress>
               <Upload
-                accept="image/*"
                 :maxCount="10"
                 :error-info="errorInfo"
                 :before-upload="onBeforeUpload"
@@ -470,6 +469,7 @@
   interface FileType {
     name?: string // 文件名
     url: any // 文件地址
+    desc:string //描述
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   const SettingStore = useSettingStore()
@@ -501,7 +501,8 @@
   }
 
   const onBeforeUpload = (file: File) => {
-    const acceptTypes = ['image/jpg', 'image/jpeg', 'image/png', 'application/pdf']
+    console.log(file)
+    const acceptTypes = ['image/jpg', 'image/jpeg', 'image/png']
     if (file.size > 10000 * 1024) {
       // 文件大于 1000KB 时取消上传
       errorInfo.value = '文件必须小于10M'
@@ -530,7 +531,8 @@
         //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/1.jpg',
         //   }
         // }
-        console.log(file)
+        console.log('111',file)
+        console.log(ruleForm)
         var res = {
           name: file.name,
           url: URL.createObjectURL(file),
@@ -546,6 +548,7 @@
 
   const onChange = (files: FileType[]) => {
     console.log('change:', files)
+    console.log(ruleForm)
   }
   const onRemove = (file: FileType) => {
     console.log('remove:', file)

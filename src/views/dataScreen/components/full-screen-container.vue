@@ -1,8 +1,13 @@
 <template>
   <div class="m-full-screen-container">
-    <div ref="domRef" class="inner">
+    <!-- <div ref="domRef" class="inner">
       <slot></slot>
-    </div>
+    </div> -->
+    <iframe
+      id="child"
+      src="https://dev.ccgis.cn/wuyegl/keshi/index.html"
+      style="width: 100%; height: 100%"
+    ></iframe>
   </div>
 </template>
 
@@ -38,6 +43,7 @@
     }
   }
   onMounted(() => {
+    //window.location.href = 'https://dev.ccgis.cn/wuyegl/keshi/index.html'
     mounted.value = true
     autoResizeScreen()
     window.addEventListener('resize', autoResizeScreen)
