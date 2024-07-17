@@ -53,6 +53,7 @@
     color: rgba(0, 0, 0, 0.88);
     transition: all 0.3s;
     flex-direction: row;
+    justify-content: space-evenly;
   }
   .space-vertical {
     flex-direction: column;

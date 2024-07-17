@@ -7,6 +7,8 @@
   interface FileType {
     name?: string // 文件名
     url: any // 文件地址
+    dizhi?: string // 文件名
+
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   interface Props {
@@ -136,6 +138,11 @@
       }
     }
   }
+  const handleDizhiChange = (event, index) => {
+    console.log(FileList)
+    uploadedFiles.value[index].dizhi = event.target.value
+    emits('update:fileList', uploadedFiles.value)
+  }
   function base64Upload(file: File, index: number) {
     var reader = new FileReader()
     reader.readAsDataURL(file) // 以base64方式读取文件
@@ -168,6 +175,7 @@
       uploadedFiles.value.push({
         name: file.name,
         url: e.target?.result,
+        dizhi: '',
       })
       emits('update:fileList', uploadedFiles.value)
       emits('change', uploadedFiles.value)
@@ -311,7 +319,16 @@
               </a>
             </div>
           </div>
-          <input type="text" />
+          <el-row v-if="uploading[n - 1] || uploadedFiles[n - 1]">
+            <el-col :span="8"><span>地址:</span></el-col>
+            <el-col :span="16"
+              ><input
+                :value="uploadedFiles && uploadedFiles[n - 1] ? uploadedFiles[n - 1].dizhi : ''"
+                @input="(event) => handleDizhiChange(event, n - 1)"
+                class="inputMsgClass"
+                type="text"
+            /></el-col>
+          </el-row>
         </div>
       </div>
     </Space>
@@ -323,10 +340,15 @@
     display: inline-block;
     .m-upload-item {
       display: inline-block;
+      padding: 10px;
     }
     .mr8 {
       margin-right: 8px;
     }
+  }
+
+  .inputMsgClass {
+    width: 110%;
   }
   .m-upload {
     position: relative;

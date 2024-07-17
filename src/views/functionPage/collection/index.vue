@@ -470,6 +470,7 @@
     name?: string // 文件名
     url: any // 文件地址
     desc: string //描述
+    dizhi: string
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   const SettingStore = useSettingStore()
@@ -478,7 +479,7 @@
     console.log('File success:', fileList1)
   }
   let fileUrl = '/api//wuyegl/webapi/youligf.picUpload' //图片文件上传地址
-  const imageList = ref([])
+
   let fileList1 = []
   let imgDialogVisible = false
   let dqzhaopye = 'jianZhumcbs'
@@ -1079,6 +1080,7 @@
 
   //打开编辑页面
   const editDetail = () => {
+    console.log(ruleForm)
     if (!canEdit.value) {
       //imgListPre.value = JSON.stringify(imgList.value);
       //bannerDataPre.value = JSON.stringify(bannerData.value);
