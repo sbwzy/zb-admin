@@ -8,18 +8,20 @@
             <el-text
               class="mx-1"
               :style="
-                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == '' || (ruleForm.descZuoBiao != null && ruleForm.descZuoBiao != '')
+                ruleForm.caiJiXQ.qianDaoSJ == null ||
+                ruleForm.caiJiXQ.qianDaoSJ == '' ||
+                (ruleForm.caiJiXQ.descZuoBiao != null && ruleForm.caiJiXQ.descZuoBiao != '')
                   ? 'text-align: right;color:red'
                   : 'text-align: right;'
               "
             >
               &nbsp;
               {{
-                ruleForm.qianDaoSJ == null || ruleForm.qianDaoSJ == ''
+                ruleForm.caiJiXQ.qianDaoSJ == null || ruleForm.caiJiXQ.qianDaoSJ == ''
                   ? '请先定位打卡'
-                  : ruleForm.descZuoBiao == null || ruleForm.descZuoBiao == ''
+                  : ruleForm.caiJiXQ.descZuoBiao == null || ruleForm.caiJiXQ.descZuoBiao == ''
                   ? '已定位打卡'
-                  : ruleForm.descZuoBiao
+                  : ruleForm.caiJiXQ.descZuoBiao
               }}
             </el-text>
           </el-col>
@@ -33,7 +35,7 @@
         <el-form-item label="建筑名称">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.standartName }}
+              {{ ruleForm.caiJiXQ.standartName }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -41,7 +43,7 @@
         <el-form-item label="授权地址">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.shouQuanDZ }}
+              {{ ruleForm.caiJiXQ.shouQuanDZ }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -49,7 +51,7 @@
         <el-form-item label="物业联系人员">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.wyName }}
+              {{ ruleForm.caiJiXQ.wyName }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -57,21 +59,21 @@
         <el-form-item label="物业联系方式">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.wyPhone }}
+              {{ ruleForm.caiJiXQ.wyPhone }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="房屋类型">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.standardType }}
+              {{ ruleForm.caiJiXQ.standardType }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="原产业状态">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.IndustrStatusOld }}
+              {{ ruleForm.caiJiXQ.IndustrStatusOld }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -80,17 +82,21 @@
           label="当前产业状态"
           v-if="
             isEdit ||
-            (ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld)
+            (ruleForm.caiJiXQ.IndustrStatus != '' &&
+              ruleForm.caiJiXQ.IndustrStatus != null &&
+              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld)
           "
           class="demo-uni-row"
           :style="
-            ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+            ruleForm.caiJiXQ.IndustrStatus != '' &&
+            ruleForm.caiJiXQ.IndustrStatus != null &&
+            ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
               ? 'border-left: 2px solid red;'
               : ''
           "
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.IndustrStatus" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.IndustrStatus" placeholder="Select" style="width: 240px">
               <el-option v-for="item in IndustrStatusList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
@@ -99,13 +105,15 @@
             :span="24"
             class="text-balck text-df"
             :style="
-              ruleForm.IndustrStatus != '' && ruleForm.IndustrStatus != null && ruleForm.IndustrStatus != ruleForm.IndustrStatusOld
+              ruleForm.caiJiXQ.IndustrStatus != '' &&
+              ruleForm.caiJiXQ.IndustrStatus != null &&
+              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
                 ? 'text-align: right;color: red'
                 : 'text-align: right'
             "
           >
             <el-text class="mx-1">
-              {{ ruleForm.IndustrStatus }}
+              {{ ruleForm.caiJiXQ.IndustrStatus }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -113,23 +121,30 @@
         <el-form-item label="原房屋用途">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.fangWuYTOld }}
+              {{ ruleForm.caiJiXQ.fangWuYTOld }}
             </el-text>
           </el-col>
         </el-form-item>
 
         <el-form-item
           label="当前房屋用途"
-          v-if="isEdit || (ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld)"
+          v-if="
+            isEdit ||
+            (ruleForm.caiJiXQ.fangWuYT != '' &&
+              ruleForm.caiJiXQ.fangWuYT != null &&
+              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld)
+          "
           class="demo-uni-row"
           :style="
-            ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+            ruleForm.caiJiXQ.fangWuYT != '' &&
+            ruleForm.caiJiXQ.fangWuYT != null &&
+            ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
               ? 'border-left: 2px solid red;'
               : ''
           "
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.fangWuYT" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.fangWuYT" placeholder="Select" style="width: 240px">
               <el-option v-for="item in fangWuYTList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
@@ -138,13 +153,15 @@
             :span="24"
             class="text-balck text-df"
             :style="
-              ruleForm.fangWuYT != '' && ruleForm.fangWuYT != null && ruleForm.fangWuYT != ruleForm.fangWuYTOld
+              ruleForm.caiJiXQ.fangWuYT != '' &&
+              ruleForm.caiJiXQ.fangWuYT != null &&
+              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
                 ? 'text-align: right;color: red'
                 : 'text-align: right'
             "
           >
             <el-text class="mx-1">
-              {{ ruleForm.fangWuYT }}
+              {{ ruleForm.caiJiXQ.fangWuYT }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -152,16 +169,16 @@
         <el-form-item
           label="建筑现状"
           class="demo-uni-row"
-          :style="ruleForm.desc2 != '' && ruleForm.desc2 != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.desc2 != '' && ruleForm.caiJiXQ.desc2 != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.desc2" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.desc2" placeholder="Select" style="width: 240px">
               <el-option v-for="item in desc2List" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.desc2 }}
+              {{ ruleForm.caiJiXQ.desc2 }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -169,16 +186,16 @@
         <el-form-item
           label="现场是否有铭牌"
           class="demo-uni-row"
-          :style="ruleForm.sfmpqs != '' && ruleForm.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.sfmpqs != '' && ruleForm.caiJiXQ.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.sfmpqs" placeholder="Select" style="width: 240px">
+            <el-select v-model="ruleForm.caiJiXQ.sfmpqs" placeholder="Select" style="width: 240px">
               <el-option v-for="item in sfmpqsList" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.sfmpqs }}
+              {{ ruleForm.caiJiXQ.sfmpqs }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -186,14 +203,14 @@
         <el-form-item label="保护铭牌内容">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.bhmpCont }}
+              {{ ruleForm.caiJiXQ.bhmpCont }}
             </el-text>
           </el-col>
         </el-form-item>
         <el-form-item label="使用人">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.shiYongROld }}
+              {{ ruleForm.caiJiXQ.shiYongROld }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -201,14 +218,14 @@
         <el-form-item
           label="现场带看情况"
           class="demo-uni-row"
-          :style="ruleForm.dkdesc != '' && ruleForm.dkdesc != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.dkdesc != '' && ruleForm.caiJiXQ.dkdesc != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+            <el-input v-model="ruleForm.caiJiXQ.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.dkdesc }}
+              {{ ruleForm.caiJiXQ.dkdesc }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -216,22 +233,22 @@
         <el-form-item
           label="外业巡查情况备注"
           class="demo-uni-row"
-          :style="ruleForm.desc != '' && ruleForm.desc != null ? 'border-left: 2px solid red;' : ''"
+          :style="ruleForm.caiJiXQ.desc != '' && ruleForm.caiJiXQ.desc != null ? 'border-left: 2px solid red;' : ''"
         >
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
+            <el-input v-model="ruleForm.caiJiXQ.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.desc }}
+              {{ ruleForm.caiJiXQ.desc }}
             </el-text>
           </el-col>
         </el-form-item>
 
-        <el-form-item label="审核意见" v-if="ruleForm.descShenHe != null && ruleForm.descShenHe != ''">
+        <el-form-item label="审核意见" v-if="ruleForm.caiJiXQ.descShenHe != null && ruleForm.caiJiXQ.descShenHe != ''">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
-              {{ ruleForm.descShenHe }}
+              {{ ruleForm.caiJiXQ.descShenHe }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -240,7 +257,7 @@
 
       <!-- 图片模块 -->
       <div>
-        <el-tabs type="border-card" class="demo-tabs">
+        <el-tabs type="border-card" class="demo-tabs" @tab-change="tabChange">
           <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
             <template #label>
               <span class="custom-tabs-label">
@@ -265,12 +282,36 @@
                 </el-icon>
               </el-tooltip>
             </template>
-            <el-row class="cardContainer" :gutter="20">
+            <el-row class="uploader-item" :gutter="20">
               <el-progress :text-inside="true" :stroke-width="20" :percentage="uploadpercentage" status="exception">
                 <span>Content</span>
               </el-progress>
+              <Upload
+                accept="image/*"
+                :maxCount="10"
+                :error-info="errorInfo"
+                :before-upload="onBeforeUpload"
+                v-model:fileList="ruleForm[tab.name]"
+                @change="onChange"
+                @remove="onRemove"
+              />
 
-              <el-upload
+              <!-- <Upload
+                multiple
+                :maxCount="5"
+                :error-info="errorInfo"
+                :before-upload="onBeforeUpload"
+                upload-mode="custom"
+                :custom-request="onCustomRequest"
+                v-model:fileList="ruleForm[tab.name]"
+                @change="onChange"
+                @remove="onRemove"
+              /> -->
+
+              <!-- 
+              <Upload multiple :maxCount="3" v-model:fileList="ruleForm[tab.name]" /> -->
+              <!-- <imgPreDelUpload :count="6" :imageList="ruleForm[tab.name]"></imgPreDelUpload> -->
+              <!-- <el-upload
                 ref="uploadRef"
                 action="#"
                 list-type="picture-card"
@@ -285,11 +326,66 @@
                 <el-icon>
                   <Plus />
                 </el-icon>
-              </el-upload>
+              </el-upload> -->
 
-              <el-dialog v-model="dialogVisible" top="25vh" width="98%">
+              <!-- <view>
+                <view class="example-body">
+                  <cc-imgPreDelUpload style="visibility: hidden; height: 1px; width: 1px"></cc-imgPreDelUpload>
+                  <view v-for="(item, theindex) in phoneTypeList" :key="theindex" :data-id="theindex">
+                    <cc-imgPreDelUpload
+                      v-if="TabCur == theindex"
+                      :isEdit="isEdit"
+                      :shouQuanDZ="bannerData.shouQuanDZ"
+                      :canEdit="canEdit"
+                      :baseUrl="baseUrl"
+                      :count="6"
+                      :currentType="item.type"
+                      :percentage="percentage[theindex]"
+                      :lodingImg="lodingImg[theindex]"
+                      :imageList="imgList[theindex]"
+                    ></cc-imgPreDelUpload>
+                  </view>
+                </view>
+              </view> -->
+
+              <!-- <el-upload
+                v-model="ruleForm[tab.name]"
+                :action="fileUrl"
+                accept="image/jpg,image/jpeg,image/png"
+                list-type="picture-card"
+                :limit="9"
+                :on-success="handleSuccess"
+                :before-upload="beforeAvatarUpload"
+                :before-remove="() => true"
+                :file-list="imageList"
+              >
+                <template #file="{file }">
+                  <div class="image-container">
+                    <img :src="file.fileUrl" alt="" class="image" />
+                    <el-input>{{ file.imageExplain }}</el-input>
+                  </div>
+                </template> 
+                <div slot="file" slot-scope="{ file }">
+                  <img class="el-upload-list__item-thumbnail" :src="ruleForm[tab.name].fileUrl" alt="" />
+                  <el-input v-model="ruleForm[tab.name].imageExplain" placeholder="图片说明" clearable> </el-input>
+                  <span class="el-upload-list__item-actions">
+                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(ruleForm[tab.name])">
+                      <i class="el-icon-zoom-in"></i>
+                    </span>
+                    <span class="el-upload-list__item-delete" @click="handleRemove(ruleForm[tab.name], imageList)">
+                      <i class="el-icon-delete"></i>
+                    </span>
+                  </span>
+                </div>
+              </el-upload>
+              预览的图片弹框
+              <el-dialog class="review-dialog" append-to-body :visible.sync="imgDialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt="" />
+              </el-dialog> -->
+
+              <!-- <el-dialog v-model="dialogVisible" top="25vh" width="98%">
                 <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%" />
-              </el-dialog>
+              </el-dialog> -->
             </el-row>
           </el-tab-pane>
         </el-tabs>
@@ -347,6 +443,10 @@
   import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
   // 在这里引入接口
   import { youliCJXQGet, getLocationInfo, buildOperation, xinXiGX } from '@/api/user'
+  import { useSettingStore } from '@/store/modules/setting'
+  import imgPreDelUpload from './components/imgPreDelUpload.vue'
+  import Upload from './components/Upload.vue'
+  import { rafTimeout, cancelRaf } from './components/utils'
   import {
     validatorMethod,
     verifyPhone,
@@ -363,25 +463,102 @@
     imglists: any
     tooltip: string
     isShowToolTip: boolean
+    name: string //唯一标识
     // 其他属性...
   }
+
+  interface FileType {
+    name?: string // 文件名
+    url: any // 文件地址
+    [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
+  }
+  const SettingStore = useSettingStore()
   const saveSub = () => {
     // 文件上传成功时的处理逻辑
     console.log('File success:', fileList1)
   }
-
+  let fileUrl = '/api//wuyegl/webapi/youligf.picUpload' //图片文件上传地址
+  const imageList = ref([])
   let fileList1 = []
+  let imgDialogVisible = false
+  let dqzhaopye = 'jianZhumcbs'
+  let errorInfo = ref('') // 上传错误提示信息
   const fileList = ref([]) // 存储上传的文件列表
   const uploadRef = ref<InstanceType<typeof ElUpload>>() // 存储上传组件的引用
 
-  const handleSuccess = (response, file, fileList) => {
+  const handleSuccess = (res, file, fileList) => {
     // 文件上传成功时的处理逻辑
-    console.log('File success:', response, file, fileList)
+    // console.log('File success:', response, file, fileList)
+    console.log(res)
+    console.log(file)
+    if (res.result !== 1 && res.result.url) {
+      ruleForm[dqzhaopye].push({
+        fileUrl: file.url, //图片渲染路径
+        imageUrl: res.result.url, //要上传的路径
+        imageExplain: '', //要上传的图片说明
+      })
+    }
+  }
+
+  const onBeforeUpload = (file: File) => {
+    const acceptTypes = ['image/jpg', 'image/jpeg', 'image/png', 'application/pdf']
+    if (file.size > 10000 * 1024) {
+      // 文件大于 1000KB 时取消上传
+      errorInfo.value = '文件必须小于10M'
+      return false
+    }
+    if (!acceptTypes.includes(file.type)) {
+      // 继续上传
+      errorInfo.value = '只能上传jpg、jpeg、png、pdf格式的文件'
+      return false // 停止上传
+    }
+    return true
+  }
+
+  const onCustomRequest = (file: File) => {
+    return new Promise((resolve, reject) => {
+      rafTimeout(() => {
+        // 模拟接口调用返回name和url
+        // if (file.type === 'application/pdf') {
+        //   var res = {
+        //     name: 'Markdown.pdf',
+        //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/Markdown.pdf',
+        //   }
+        // } else {
+        //   var res = {
+        //     name: '1.jpg',
+        //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/1.jpg',
+        //   }
+        // }
+        console.log(file)
+        var res = {
+          name: file.name,
+          url: URL.createObjectURL(file),
+        }
+        if (res) {
+          resolve(res)
+        } else {
+          reject('upload request fail ...')
+        }
+      }, 200)
+    })
+  }
+
+  const onChange = (files: FileType[]) => {
+    console.log('change:', files)
+  }
+  const onRemove = (file: FileType) => {
+    console.log('remove:', file)
   }
 
   const handleRemove = (file, fileList) => {
     // 文件移除时的处理逻辑
     console.log('File removed:', file, fileList)
+  }
+  //预览
+  const handlePictureCardPreview = (file) => {
+    dialogImageUrl = file.fileUrl
+    imgDialogVisible = true
   }
 
   const handleExceed = (file, fileList) => {
@@ -408,8 +585,11 @@
     }
   }
 
+  const tabChange = (tab) => {
+    console.log(tab)
+  }
   const dialogImageRemark = ref('')
-  const dialogImageUrl = ref('')
+  let dialogImageUrl = ref('')
   const dialogVisible = ref(false)
   const disabled = ref(false)
 
@@ -420,6 +600,7 @@
   const phoneTypeList = ref<Tab[]>([
     {
       title: '建筑名称标识',
+      name: 'jianZhumcbs',
       icon: 'Picture',
       imglists: [
         {
@@ -438,6 +619,7 @@
     },
     {
       title: '公安绿牌',
+      name: 'gongAnLP',
       icon: 'Picture',
       imglists: [
         {
@@ -452,6 +634,7 @@
     },
     {
       title: '外立面',
+      name: 'waiLiM',
       icon: 'Picture',
       imglists: [
         {
@@ -475,6 +658,7 @@
     },
     {
       title: '铭牌',
+      name: 'mingPai',
       icon: 'Picture',
       imglists: [
         { imgUrl: 'https://example.com/image1.jpg' },
@@ -486,6 +670,7 @@
     },
     {
       title: '产业状态',
+      name: 'chanYeZT',
       icon: 'Picture',
       imglists: [
         { imgUrl: 'https://example.com/image1.jpg' },
@@ -497,36 +682,20 @@
     },
     // 更多标签页数据...
   ])
+  const beforeAvatarUpload = (file) => {
+    const isJPG = ['image/jpg', 'image/jpeg', 'image/png'].includes(file.type)
+    const isLt10M = file.size / 1024 / 1024 < 10
+    if (!isJPG) {
+      ElMessage.error('上传头像图片只能是 JPG/PNG 格式!')
+    }
+    if (!isLt10M) {
+      ElMessage.error('上传头像图片大小不能超过 10MB!')
+    }
+    return isJPG && isLt10M
+  }
 
   const ruleFormRef = ref<FormInstance>()
-  const ruleForm = reactive({
-    qianDaoSJ: '',
-    descZuoBiao: '',
-    standartName: '测试名称',
-    shouQuanDZ: '测试地址',
-    wyName: '测试联系人',
-    wyPhone: '测试联系方式',
-    standardType: '测试类型',
-    IndustrStatusOld: '测试状态',
-    IndustrStatus: '测试状态',
-    fangWuYTOld: '测试用途',
-    fangWuYT: '测试用途',
-    desc2: '测试现状',
-    sfmpqs: '测试是否有铭牌',
-    bhmpCont: '测试铭牌内容',
-    shiYongROld: '测试使用人',
-    dkdesc: '测试带看情况',
-    desc: '测试巡查情况',
-    descShenHe: '测试审核意见',
-    phone: '',
-    keyword: '',
-    percent: '',
-    idCard: null,
-    website: null,
-    html: null,
-    date: null,
-    email: null,
-  })
+  const ruleForm = SettingStore.optionSetting
 
   const rules = reactive<FormRules>({
     phone: [
@@ -572,8 +741,6 @@
       },
     ],
   })
-
-  import { useSettingStore } from '@/store/modules/setting'
 
   import { useUserStore } from '@/store/modules/user'
 
@@ -652,7 +819,6 @@
     },
   ])
   // Pinia存储
-  const SettingStore = useSettingStore()
   //当前公房Id
   const currentGfid = ref(SettingStore.gfid)
   //公房Id列表
@@ -721,19 +887,6 @@
     console.log('optionSetting', optionSetting)
     console.log('gfid', gfid)
 
-    //获取传参
-    if (optionSetting) {
-      qianDaoSJ.value = optionSetting.value.qianDaosj ?? null
-      gfid.value = optionSetting.value.gfid ?? null
-      currentTabIndex.value = optionSetting.value.currentTabIndex ?? null
-      pagefrom.value = optionSetting.value.pagefrom ?? null
-      qu.value = optionSetting.value.qu ?? null
-      jieZhen.value = optionSetting.value.jieZhen ?? null
-      xiaoQu.value = optionSetting.value.xiaoQu ?? null
-      lastpagezoom.value = optionSetting.value.lastpagezoom ?? null
-      lastpagecenterX.value = optionSetting.value.lastpagecenterX ?? null
-      lastpagecenterY.value = optionSetting.value.lastpagecenterY ?? null
-    }
     console.log('param', route.params)
     gfid.value = route.params.id as string
     console.log('ingfid', gfid)
@@ -1059,7 +1212,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .remark-input {
     margin-top: 8px;
     width: 100px; /* 根据需要调整宽度 */
@@ -1108,7 +1261,46 @@
     vertical-align: middle;
     margin-left: 4px;
   }
+  .uploader-item {
+    //margin: 60px 0 60px;
+    :deep(.el-upload-list) {
+      .is-success {
+        overflow: hidden;
+        height: auto;
+        width: 192px;
+        border: 0;
+        border-radius: 0;
+        margin-right: 10px;
 
+        img,
+        .el-upload-list__item-actions {
+          height: 108px;
+        }
+        .el-input {
+          .el-input__inner {
+            height: 32px;
+          }
+        }
+      }
+      .is-ready,
+      .is-uploading {
+        display: none;
+      }
+    }
+    :deep(.el-upload) {
+      width: 192px;
+      height: 108px;
+      line-height: 108px;
+      background: transparent;
+      border: 1px solid #dcdfe6;
+      border-radius: 0;
+      margin-bottom: 20px;
+      .el-icon-plus {
+        color: #dcdfe6;
+        font-size: 24px;
+      }
+    }
+  }
   .container {
     display: flex;
     align-items: center;
@@ -1125,5 +1317,11 @@
         display: block;
       }
     }
+  }
+  .image-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

@@ -46,7 +46,7 @@
   import { da } from 'element-plus/es/locale'
 
   import { buildOperation } from '@/api/user'
-  import { getYouliList } from '@/api/user'
+  import { getYouliList, youliCJXQGet } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
   //import { useTagsViewStore } from '@/store/modules/tagsView'
 
@@ -159,7 +159,104 @@
       })
     } else if (e2 == '详情') {
       //进入详情页面
-      router.push({ name: 'collection', params: { id: e1.id } })
+      youliCJXQGet(e1.id).then((res) => {
+        if (res.data.result != 1) {
+          //赋值一个数据
+          let gfCJXQ = {
+            caiJiXQ: {
+              id: 1, //建筑编号
+              buildingID: '1000847380', //公房编号
+              qianDaoSJ: '', //签到时间
+              qianDaoY: '', //签到位置经度
+              qianDaoX: '', //签到位置纬度
+              locYOld: '31.140229456677', //房屋原位置经度
+              locXOld: '121.496543339861', //房屋原位置纬度
+              locY: '31.1402311336331', //房屋新位置经度
+              locX: '121.49651706216', //房屋新位置纬度
+              descZuoBiao: '', //坐标备注
+              standartName: '(4599)上钢物业零星小区（三林老街居委）', //建筑名称
+              shouQuanDZ: '中林街131弄5号', //授权地址
+              wyName: '周华', //物业联系人
+              wyPhone: '13501739801', //物业联系电话
+              standardType: '旧式里弄2', //房屋类型
+              IndustrStatusOld: '测试状态', //原产业状态
+              IndustrStatus: '测试状态', //当前产业状态
+              fangWuYTOld: '居住用房', //原房屋用途
+              fangWuYT: '居住用房', //当前房屋用途
+              desc2: '测试现状', //建筑现状
+              sfmpqs: '是', //现场是否有铭牌
+              bhmpCont:
+                '江南传统民居。砖木结构，中西合璧式。建筑平面对称布局，呈U字型，南侧院墙有仪门；青瓦硬山顶，东西两侧有观音兜式山墙，并外挑阳台，木梁上有斗拱木雕装饰。Traditional houses in the South of Yangtze River. Masonry-timber structure. Integration of Chinese and western style.', //保护铭牌内容
+              shiYongROld: '测试使用人', //使用人
+              shiYongR: '测试使用人', //使用人新
+              dkdesc: '测试带看情况', //现场带看情况
+              desc: '测试巡查情况', //外业巡查情况备注
+              descShenHe: '测试审核意见', //审核意见
+              standardState: '', //建筑状态
+              xiaoquName: '', //小区名称
+            },
+            chanYeZT: [], //产业状态照片
+            gongAnLP: [
+              {
+                desc: null,
+                diZhi: '中林街131弄5号',
+                fileName: 'image',
+                imgID: 31418,
+                picURL: '/wuyegl/webapi/youligf.picDown?imgID=53544255580C',
+                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=53544255580C',
+                zhaopIdx: 0,
+              },
+            ], //公安绿牌照片
+            jianZhumcbs: [
+              {
+                desc: null,
+                diZhi: '',
+                fileName: 'image',
+                imgID: 31402,
+                picURL: '/wuyegl/webapi/youligf.picDown?imgID=696E786E6836',
+                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=696E786E6836',
+                zhaopIdx: 0,
+              },
+            ], //建筑名称标识照片
+            mingPai: [
+              {
+                desc: null,
+                diZhi: '',
+                fileName: 'image',
+                mplx: '优秀历史建筑铭牌',
+                imgID: 31417,
+                picURL: '/wuyegl/webapi/youligf.picDown?imgID=8E899F888AD1',
+                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=8E899F888AD1',
+                zhaopIdx: 0,
+              },
+            ], //铭牌照片
+            waiLiM: [
+              {
+                desc: '东',
+                fileName: 'image',
+                imgID: 31411,
+                picURL: '/wuyegl/webapi/youligf.picDown?imgID=9394829591CC',
+                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                wlmlx: '主立面',
+                zhaopIdx: 0,
+              },
+              {
+                desc: '',
+                fileName: 'image',
+                imgID: 31412,
+                picURL: '/wuyegl/webapi/youligf.picDown?imgID=9295839493CD',
+                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=9295839493CD',
+                wlmlx: '主立面',
+                zhaopIdx: 0,
+              },
+            ], //外立面照片
+          }
+          SettingStore.setOptionSetting(gfCJXQ)
+          setTimeout(async () => {
+            router.push('/function-page/collection')
+          }, 500)
+        }
+      })
     } else if (e2 == '重置' || e2 == '模糊重置') {
       // 将响应式对象置空
       Object.keys(filters.value).forEach((key) => {

@@ -17,21 +17,46 @@ export const useSettingStore = defineStore({
     // 当前App域名
     BASE: 'https://dev.ccgis.cn',
 
-    //页面跳转传参
-    optionSetting: {
-      // 显示设置
-      showSetting: false,
-      qianDaosj: null,
-      gfid: null,
-      currentTabIndex: null,
-      pagefrom: null,
-      qu: null,
-      jieZhen: null,
-      xiaoQu: null,
-      lastpagezoom: null,
-      lastpagecenterX: null,
-      lastpagecenterY: null,
-    },
+    //建筑详情参数
+    optionSetting: ref({
+      //建筑信息
+      caiJiXQ: {
+        id: 1, //建筑编号
+        buildingID: '', //公房编号
+        qianDaoSJ: '', //签到时间
+        qianDaoY: '', //签到位置经度
+        qianDaoX: '', //签到位置纬度
+        locYOld: '', //房屋原位置经度
+        locXOld: '', //房屋原位置纬度
+        locY: '', //房屋新位置经度
+        locX: '', //房屋新位置纬度
+        descZuoBiao: '', //坐标备注
+        standartName: '', //建筑名称
+        shouQuanDZ: '', //授权地址
+        wyName: '', //物业联系人
+        wyPhone: '', //物业联系电话
+        standardType: '', //房屋类型
+        IndustrStatusOld: '', //原产业状态
+        IndustrStatus: '', //当前产业状态
+        fangWuYTOld: '', //原房屋用途
+        fangWuYT: '', //当前房屋用途
+        desc2: '', //建筑现状
+        sfmpqs: '', //现场是否有铭牌
+        bhmpCont: '', //保护铭牌内容
+        shiYongROld: '', //使用人
+        shiYongR: '', //使用人新
+        dkdesc: '', //现场带看情况
+        desc: '', //外业巡查情况备注
+        descShenHe: '', //审核意见
+        standardState: '', //建筑状态
+        xiaoquName: '', //小区名称
+      },
+      chanYeZT: [], //产业状态照片
+      gongAnLP: [], //公安绿牌照片
+      jianZhumcbs: [], //建筑名称标识照片
+      mingPai: [], //铭牌照片
+      waiLiM: [], //外立面照片
+    }),
 
     // 主题设置
     themeConfig: {
@@ -1404,8 +1429,8 @@ export const useSettingStore = defineStore({
       this.themeConfig[key] = val
     },
     // 设置主题
-    setOptionSetting({ key, val }) {
-      this.optionSetting[key] = val
+    setOptionSetting(value) {
+      this.optionSetting = value
     },
     // 切换 Collapse
     setCollapse(value) {

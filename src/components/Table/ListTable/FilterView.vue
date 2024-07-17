@@ -142,7 +142,7 @@
         <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button>
       </el-form-item>
       <!-- 展开/收起按钮 -->
-      <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
+      <!-- <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -157,7 +157,7 @@
         >
           <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
-      </button>
+      </button> -->
     </el-form>
   </div>
 </template>
@@ -177,7 +177,7 @@
     console.log('1')
     emit('parent-method1')
   }
-  const isExpanded = ref(false)
+  const isExpanded = ref(true)
 
   const propss = { multiple: true }
   const stype = ref(3)

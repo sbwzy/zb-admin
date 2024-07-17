@@ -50,6 +50,7 @@
     },
     set(val) {
       ;(async () => {
+        console.log('2', val)
         await UserStore.getInfo([val])
         router.push({
           path: '/',
@@ -60,6 +61,7 @@
   })
 
   const switchRolesAction = (type: string) => {
+    console.log('1', type, currentRoles.value)
     if (type === currentRoles.value) return
     currentRoles.value = currentRoles.value === 'admin' ? 'other' : 'admin'
   }
