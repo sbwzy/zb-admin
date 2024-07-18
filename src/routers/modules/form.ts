@@ -6,7 +6,7 @@ const formRouter = [
   {
     path: '/form',
     component: Layout,
-    redirect: '/form/validateForm',
+    redirect: '/form/dept',
     name: 'form',
     alwaysShow: true,
     meta: {
@@ -15,41 +15,31 @@ const formRouter = [
     },
     children: [
       {
+        path: '/form/dept',
+        component: () => import('@/views/form/dept/index.vue'),
+        name: 'dept',
+        meta: { title: '巡查任务管理', icon: 'MenuIcon' },
+      },
+      {
+        path: '/form/task',
+        component: () => import('@/views/form/task/index.vue'),
+        name: 'task',
+        meta: { title: '建筑信息管理', icon: 'MenuIcon' },
+      },
+      {
+        path: '/form/collection',
+        component: () => import('@/views/form/collection/index.vue'),
+        name: 'collection',
+        hidden: true,
+        meta: { title: '建筑列表页面', icon: 'MenuIcon' },
+      },
+      {
         path: '/form/validateForm',
         component: () => import('@/views/form/validateForm/index.vue'),
         name: 'validateForm',
-        meta: { title: '巡查任务详情', keepAlive: true, icon: 'MenuIcon' },
+        hidden: true,
+        meta: { keepAlive: false },
       },
-      {
-        path: '/form/advancedForm',
-        component: () => import('@/views/form/advancedForm/index.vue'),
-        name: 'advancedForm',
-        meta: { title: '巡查任务列表', icon: 'MenuIcon' },
-      },
-      {
-        path: '/form/displayForm',
-        component: () => import('@/views/form/displayForm/index.vue'),
-        name: 'displayForm',
-        meta: { title: '巡查任务详情', icon: 'MenuIcon' },
-      },
-      // {
-      //   path: '/form/appendForm',
-      //   component: () => import('@/views/form/appendForm/index.vue'),
-      //   name: 'appendForm',
-      //   meta: { title: '勾选记录', keepAlive: true, icon: 'MenuIcon' },
-      // },
-      // {
-      //   path: '/form/moreForm',
-      //   component: () => import('@/views/form/moreForm/index.vue'),
-      //   name: 'moreForm',
-      //   meta: { title: '多表单验证', keepAlive: true, icon: 'MenuIcon' },
-      // },
-      // {
-      //   path: '/form/searchForm',
-      //   component: () => import('@/views/form/searchForm/index.vue'),
-      //   name: 'searchForm',
-      //   meta: { title: '查询 Form', keepAlive: true, icon: 'MenuIcon' },
-      // },
     ],
   },
 ]

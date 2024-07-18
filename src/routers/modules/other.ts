@@ -37,12 +37,12 @@ const othersRouter = [
         name: 'mark-down',
         meta: { title: 'markDown', roles: ['other'], icon: 'MenuIcon' },
       },
-      {
-        path: '/other/print',
-        component: () => import('@/views/other/print/index.vue'),
-        name: 'print',
-        meta: { title: '打印', icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/other/print',
+      //   component: () => import('@/views/other/print/index.vue'),
+      //   name: 'print',
+      //   meta: { title: '打印', icon: 'MenuIcon' },
+      // },
       {
         path: '/other/cropper',
         component: () => import('@/views/other/cropper/index.vue'),

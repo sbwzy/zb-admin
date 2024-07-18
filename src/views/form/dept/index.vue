@@ -185,9 +185,6 @@
           }, 500)
         }
       })
-      // router.push({
-      //   path: '/form/validateForm',
-      // })
     } else if (e2 == '详情') {
       SettingStore.setXcrwId = e1.id
       //调用接口 获取该巡查任务下的建筑任务列表
@@ -222,7 +219,7 @@
           setTimeout(async () => {
             //进入建筑列表页面
             router.push({
-              path: '/system/task',
+              path: '/form/task',
             })
           }, 500)
         }

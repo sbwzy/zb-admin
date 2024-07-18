@@ -14,23 +14,29 @@ const functionPageRouter = [
     },
     children: [
       {
-        path: '/function-page/collection',
-        component: () => import('@/views/functionPage/collection/index.vue'),
-        name: 'collection',
-        meta: { title: '信息采集', keepAlive: true, icon: 'MenuIcon' },
+        path: '/function-page/print',
+        component: () => import('@/views/function-page/print/index.vue'),
+        name: 'print',
+        meta: { title: '打印', icon: 'MenuIcon' },
       },
+      // {
+      //   path: '/function-page/collection',
+      //   component: () => import('@/views/functionPage/collection/index.vue'),
+      //   name: 'collection',
+      //   meta: { title: '信息采集', keepAlive: true, icon: 'MenuIcon' },
+      // },
       // {
       //   path: '/function-page/tools',
       //   component: () => import('@/views/functionPage/tools/index.vue'),
       //   name: 'tools',
       //   meta: { title: '工具链集合', keepAlive: true, icon: 'MenuIcon' },
       // },
-      {
-        path: '/function-page/404',
-        component: () => import('@/views/errorPages/404.vue'),
-        name: 'function-404',
-        meta: { title: '404 页面', keepAlive: true, icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/function-page/404',
+      //   component: () => import('@/views/errorPages/404.vue'),
+      //   name: 'function-404',
+      //   meta: { title: '404 页面', keepAlive: true, icon: 'MenuIcon' },
+      // },
       {
         path: '/function-page/Map',
         // component: () => import('@/views/functionPage/Map/ESRIMap/index.vue'),
@@ -63,12 +69,12 @@ const functionPageRouter = [
           },
         ],
       },
-      {
-        path: '/function-page/403',
-        component: () => import('@/views/errorPages/403.vue'),
-        name: 'function-403',
-        meta: { title: '403 页面', keepAlive: true, icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/function-page/403',
+      //   component: () => import('@/views/errorPages/403.vue'),
+      //   name: 'function-403',
+      //   meta: { title: '403 页面', keepAlive: true, icon: 'MenuIcon' },
+      // },
       // {
       //   path: '/function-page/fullscreen',
       //   component: () => import('@/views/functionPage/fullscreen/index.vue'),

@@ -21,7 +21,7 @@
         <el-card class="box-card">
           <template #header>
             <div class="card-header">
-              <span>系列开源产品</span>
+              <span>今日任务进展</span>
             </div>
           </template>
           <div style="display: flex">
@@ -30,15 +30,14 @@
               class="card-item"
               @click="goTo('https://ext.dcloud.net.cn/plugin?id=7511')"
             >
-              <div style="color: white; margin-bottom: 10px"><h3>zb-table</h3></div>
+              <div style="color: white; margin-bottom: 10px"><h3>任务完成率</h3></div>
               <div style="font-size: 12px; color: white"
-                >uniapp 表格组件
-                支持固定表头和首列、上拉加载更多、及固定多列，表格自适应内容，排序，多选checkbox、可点击删除，编辑、合计功能，兼容多端</div
-              >
+                >今日任务进展 完成90% 其中成员完成采集任务100% 、审核完成情况80% 、有10%的数据驳回需要重新复核
+              </div>
             </el-card>
             <el-card style="flex: 1; cursor: pointer" class="card-item" @click="goTo('https://github.com/zouzhibin/vue-admin-perfect')">
-              <div style="color: white; margin-bottom: 10px"><h3>vue-admin-perfect</h3></div>
-              <div style="font-size: 12px; color: white">系统基于vue3+vuex+ element-plus+ts后台管理系统</div>
+              <div style="color: white; margin-bottom: 10px"><h3>明天任务计划安排</h3></div>
+              <div style="font-size: 12px; color: white">已分配明天任务安排</div>
             </el-card>
           </div>
         </el-card>

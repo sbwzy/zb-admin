@@ -537,6 +537,7 @@
           name: file.name,
           url: URL.createObjectURL(file),
         }
+        console.log(res)
         if (res) {
           resolve(res)
         } else {
