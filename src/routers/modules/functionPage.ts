@@ -50,7 +50,7 @@ const functionPageRouter = [
             meta: { title: 'ESRI地图', keepAlive: true, icon: 'MenuIcon' },
           },
           {
-            path: '/function-page/Map/BingMap/:id/:type',
+            path: '/function-page/Map/BingMap',
             component: () => import('@/views/functionPage/Map/BingMap/index.vue'),
             name: 'BingMap',
             meta: { title: 'Bing地图', keepAlive: true, icon: 'MenuIcon' },
