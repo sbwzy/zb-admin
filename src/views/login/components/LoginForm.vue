@@ -40,7 +40,7 @@
     <el-form-item style="width: 100%">
       <el-button :loading="loading" class="login-btn" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
     </el-form-item>
-    <el-link class="register" type="primary" @click="onRegister">注册账号</el-link>
+    <!-- <el-link class="register" type="primary" @click="onRegister">注册账号</el-link> -->
   </el-form>
 </template>
 <script lang="ts" setup>
@@ -50,12 +50,15 @@
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
+  import { loginInfoUser } from '@/api/user'
+  import { useSettingStore } from '@/store/modules/setting'
 
   const router = useRouter()
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
   const passwordType = ref('password')
   const loading = ref(false)
+  const SettingStore = useSettingStore()
 
   const rules = reactive({
     password: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -78,26 +81,73 @@
     formEl.validate((valid) => {
       if (valid) {
         loading.value = true
-        // 登录
-        setTimeout(async () => {
-          await UserStore.login(ruleForm)
-          await router.push({
-            path: '/',
-          })
-          ElNotification({
-            title: getTimeStateStr(),
-            message: '欢迎登录 优历直管公房数据采集平台',
-            type: 'success',
-            duration: 3000,
-          })
-          loading.value = true
-        }, 1000)
+
+        loginInfoUser(ruleForm.username, ruleForm.password).then((res) => {
+          console.log(res)
+          if (res.data.result == -1) {
+            setTimeout(async () => {
+              //管理员下修改搜索条件
+              let Filters = SettingStore.dynamicFilters
+              Filters.forEach((item) => {
+                if (item.label == '采集状态' && res.data.userRole == '管理员') {
+                  item.options = [
+                    { label: '待审核', value: '待审核' },
+                    { label: '已审核', value: '已审核' },
+                  ]
+                }
+              })
+              SettingStore.setFilters(Filters)
+
+              // await UserStore.login1(ruleForm, '采集员')
+              await UserStore.login(ruleForm)
+              await router.push({
+                path: '/',
+              })
+              ElNotification({
+                title: getTimeStateStr(),
+                message: '欢迎登录 监测管理平台',
+                type: 'success',
+                duration: 3000,
+              })
+              loading.value = true
+            }, 1000)
+          } else {
+            console.log('error submit!')
+            return false
+          }
+        })
       } else {
         console.log('error submit!')
         return false
       }
     })
   }
+
+  // const submitForm = (formEl: FormInstance | undefined) => {
+  //   if (!formEl) return
+  //   formEl.validate((valid) => {
+  //     if (valid) {
+  //       loading.value = true
+  //       // 登录
+  //       setTimeout(async () => {
+  //         await UserStore.login(ruleForm)
+  //         await router.push({
+  //           path: '/',
+  //         })
+  //         ElNotification({
+  //           title: getTimeStateStr(),
+  //           message: '欢迎登录 优历直管公房数据采集平台',
+  //           type: 'success',
+  //           duration: 3000,
+  //         })
+  //         loading.value = true
+  //       }, 1000)
+  //     } else {
+  //       console.log('error submit!')
+  //       return false
+  //     }
+  //   })
+  // }
 
   const props = defineProps({
     onRegister: Function,
