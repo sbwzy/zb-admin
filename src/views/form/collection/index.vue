@@ -257,7 +257,7 @@
 
       <!-- 图片模块 -->
       <div>
-        <el-tabs type="border-card" class="demo-tabs">
+        <el-tabs type="border-card" class="demo-tabs" @tab-change="handletabChange">
           <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
             <template #label>
               <span class="custom-tabs-label">
@@ -470,6 +470,7 @@
     name?: string // 文件名
     url: any // 文件地址
     desc: string //描述
+    dizhi: string
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   const SettingStore = useSettingStore()
@@ -478,7 +479,7 @@
     console.log('File success:', fileList1)
   }
   let fileUrl = '/api//wuyegl/webapi/youligf.picUpload' //图片文件上传地址
-  const imageList = ref([])
+
   let fileList1 = []
   let imgDialogVisible = false
   let dqzhaopye = 'jianZhumcbs'
@@ -567,19 +568,92 @@
 
   const handleExceed = (file, fileList) => {
     // 文件预览时的处理逻辑
-    console.log('File removed:', file, fileList)
+    console.log('File Exceed:', file, fileList)
   }
   const handlePreview = (file) => {
     // 文件预览时的处理逻辑
     console.log('File preview:', file)
   }
 
+  //选择图片
   const handleChange = (file, fileList) => {
     // 文件状态改变时的处理逻辑
     console.log('File changed:', file, fileList)
     // 在这里更新fileList响应式引用
     fileList.value = [fileList.value, file]
     fileList1.push(file)
+    compressImg(file, 0.3, ruleForm.caiJiXQ.shouQuanDZ)
+
+    console.log('File imageList:', imageList)
+  }
+
+  let currentType = '建筑名称标识'
+  const imageList = ref([])
+
+  const compressImg = (file, quality, shouQuanDZ) => {
+    if (Array.isArray(file)) {
+      return Promise.all(file.map((e) => compressImg(e, quality, shouQuanDZ)))
+    } else {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = ({ target: { result: src } }) => {
+          const image = new Image()
+          image.onload = async () => {
+            const canvas = document.createElement('canvas')
+            canvas.width = image.width
+            canvas.height = image.height
+            canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
+            const canvasURL = canvas.toDataURL('image/jpeg', quality)
+            const buffer = atob(canvasURL.split(',')[1])
+            let length = buffer.length
+            const bufferArray = new Uint8Array(new ArrayBuffer(length))
+            while (length--) {
+              bufferArray[length] = buffer.charCodeAt(length)
+            }
+            const miniFile = new File([bufferArray], file.name, { type: 'image/jpeg' })
+
+            let maxzhaopIdx = -1
+            imageList.value.forEach((item) => {
+              if (item.zhaopIdx != null && Number(item.zhaopIdx) > maxzhaopIdx) {
+                maxzhaopIdx = Number(item.zhaopIdx)
+              }
+            })
+
+            const tmpdict = reactive({
+              diZhi: shouQuanDZ,
+              fileName: 'image',
+              picURL: canvasURL,
+              thumbURL: canvasURL,
+              zhaopIdx: maxzhaopIdx + 1,
+              mplx: currentType === '铭牌' ? '优秀历史建筑铭牌' : null,
+              wlmlx: currentType === '外立面' ? '主立面' : null,
+            })
+
+            imageList.value.push(tmpdict)
+
+            //uni.hideLoading();
+
+            resolve({
+              file: miniFile,
+              origin: file,
+              beforeSrc: src,
+              afterSrc: canvasURL,
+              beforeKB: Number((file.size / 1024).toFixed(2)),
+              afterKB: Number((miniFile.size / 1024).toFixed(2)),
+            })
+          }
+          //image.src = src;
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+  }
+
+  // 手动调用上传组件的submit方法
+  const handletabChange = (currentTabIndex) => {
+    currentType = phoneTypeList.value[currentTabIndex].title
+    console.log(currentType)
+    console.log(phoneTypeList.value[currentTabIndex].title)
   }
 
   // 手动调用上传组件的submit方法
@@ -822,7 +896,6 @@
       text: '已灭失',
     },
   ])
-  // Pinia存储
   //当前公房Id
   const currentGfid = ref(SettingStore.gfid)
   //公房Id列表
@@ -866,7 +939,7 @@
   const value2 = ref(0)
   const value = ref(['0', '1'])
   const value1 = ref(['1'])
-  let isEdit = true
+  const isEdit = ref(false)
   const nvueWidth = ref(0)
   const qianDaoSJ = ref(null)
   const currentTabIndex = ref(0)
@@ -1008,16 +1081,17 @@
 
   //打开编辑页面
   const editDetail = () => {
-    if (canEdit.value) {
+    console.log(ruleForm)
+    if (!canEdit.value) {
       //imgListPre.value = JSON.stringify(imgList.value);
       //bannerDataPre.value = JSON.stringify(bannerData.value);
-      isEdit = true
+      isEdit.value = true
       buttonDisabled.value = false
     }
   }
   //关闭编辑页面
   const cancle = () => {
-    isEdit = false
+    isEdit.value = false
     console.log(imgListPre.value)
     console.log(bannerDataPre.value)
     //imgList.value = JSON.parse(imgListPre.value);
@@ -1089,6 +1163,7 @@
     let isnotice = false
     let noticemsg = ''
     try {
+      console.log(fileList1)
       imgList.value.forEach((imgitem, imgindex) => {
         if (
           phoneTypeList.value[imgindex].title === '建筑名称标识' &&
@@ -1208,7 +1283,7 @@
         })
       }
       if (!flag) {
-        isEdit = false
+        isEdit.value = false
         initData(null) // 假设initData()方法已定义
       }
       buttonDisabled.value = false
