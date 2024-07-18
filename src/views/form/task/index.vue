@@ -225,7 +225,7 @@
                 fileName: 'image',
                 mplx: '优秀历史建筑铭牌',
                 imgID: 31417,
-                picURL: '/wuyegl/webapi/youligf.picDown?imgID=8E899F888AD1',
+                url: '/wuyegl/webapi/youligf.picDown?imgID=8E899F888AD1',
                 thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=8E899F888AD1',
                 zhaopIdx: 0,
               },
@@ -253,7 +253,7 @@
           }
           SettingStore.setOptionSetting(gfCJXQ)
           setTimeout(async () => {
-            router.push('/function-page/collection')
+            router.push('/form/collection')
           }, 500)
         }
       })

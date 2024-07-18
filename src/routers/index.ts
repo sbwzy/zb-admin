@@ -28,7 +28,7 @@ import functionPageRouter from './modules/functionPage'
 export const asyncRoutes = [
   ...dataScreenRouter,
   // ...echartsRouter,
-  ...tableRouter,
+  // ...tableRouter,
   ...formRouter,
   // ...othersRouter,
   ...functionPageRouter,

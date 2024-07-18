@@ -48,7 +48,7 @@
 <script lang="ts" setup>
   import printJS from 'print-js'
   import '@/utils/Print'
-  import logo from '@/assets/image/logo.png'
+  import logo from '@/assets/image/logo1.png'
 
   const tableData = [
     {
