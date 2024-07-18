@@ -437,7 +437,7 @@
   import { onMounted, reactive, ref, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import type { FormInstance, FormRules, ElUpload, ElIcon, ElDialog, UploadFile } from 'element-plus'
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ElMessage, ElMessageBox, Action } from 'element-plus'
 
   import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
   // 在这里引入接口
@@ -471,6 +471,7 @@
     url: any // 文件地址
     desc: string //描述
     dizhi: string
+    zhaopIdx: number
     [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
   }
   const SettingStore = useSettingStore()
@@ -503,6 +504,7 @@
 
   const onBeforeUpload = (file: File) => {
     console.log(file)
+
     const acceptTypes = ['image/jpg', 'image/jpeg', 'image/png']
     if (file.size > 10000 * 1024) {
       // 文件大于 1000KB 时取消上传
@@ -588,6 +590,7 @@
   }
 
   let currentType = '建筑名称标识'
+  let currentTypeDevName = 'jianZhumcbs'
   const imageList = ref([])
 
   const compressImg = (file, quality, shouQuanDZ) => {
@@ -596,28 +599,39 @@
     } else {
       return new Promise((resolve) => {
         const reader = new FileReader()
+        console.log('File imageList:')
         reader.onload = ({ target: { result: src } }) => {
           const image = new Image()
+          console.log('File imageList:')
           image.onload = async () => {
+            console.log('File imageList:')
             const canvas = document.createElement('canvas')
+            console.log('File imageList:')
             canvas.width = image.width
+            console.log('File imageList:')
             canvas.height = image.height
+            console.log('File imageList:')
             canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
             const canvasURL = canvas.toDataURL('image/jpeg', quality)
             const buffer = atob(canvasURL.split(',')[1])
             let length = buffer.length
+            console.log('File imageList:')
             const bufferArray = new Uint8Array(new ArrayBuffer(length))
             while (length--) {
               bufferArray[length] = buffer.charCodeAt(length)
             }
+            console.log('File imageList:')
             const miniFile = new File([bufferArray], file.name, { type: 'image/jpeg' })
 
+            console.log('File imageList:')
             let maxzhaopIdx = -1
             imageList.value.forEach((item) => {
               if (item.zhaopIdx != null && Number(item.zhaopIdx) > maxzhaopIdx) {
                 maxzhaopIdx = Number(item.zhaopIdx)
               }
             })
+
+            console.log('File imageList:')
 
             const tmpdict = reactive({
               diZhi: shouQuanDZ,
@@ -630,7 +644,7 @@
             })
 
             imageList.value.push(tmpdict)
-
+            console.log(imageList.value)
             //uni.hideLoading();
 
             resolve({
@@ -652,6 +666,7 @@
   // 手动调用上传组件的submit方法
   const handletabChange = (currentTabIndex) => {
     currentType = phoneTypeList.value[currentTabIndex].title
+    currentTypeDevName = phoneTypeList.value[currentTabIndex].name
     console.log(currentType)
     console.log(phoneTypeList.value[currentTabIndex].title)
   }
@@ -1072,10 +1087,7 @@
     isback.value = true
 
     router.push({
-      path: '/ReSenCompar3',
-      query: {
-        id: '',
-      },
+      path: '/function-page/Map/BingMap',
     })
   }
 

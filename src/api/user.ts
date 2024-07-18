@@ -19,6 +19,13 @@ export function getLocationInfo(data) {
 }
 
 //登录接口
+export const loginInfoUser = (p1, p2) => {
+  return request.post('webapi/login', {
+    // 到时候更新接口
+    username: p1,
+    password: p2,
+  })
+}
 
 //登录 /wuyegl/webapi/login
 export const loginInfo = (p1, p2) => {

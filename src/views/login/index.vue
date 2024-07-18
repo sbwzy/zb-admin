@@ -6,14 +6,14 @@
         <img src="@/assets/image/login/side-logo.png" />
       </div>
       <div class="login-form">
-        <div class="info-qrcode">{{ accountLogin ? '短信登录' : '账号登录' }}</div>
-        <div>
+        <!-- <div class="info-qrcode">{{ accountLogin ? '短信登录' : '账号登录' }}</div> -->
+        <!-- <div>
           <img v-if="accountLogin" src="@/assets/image/login/smsLogin-icon.png" class="qrcode" @click="handleClick" />
           <img v-else src="@/assets/image/login/accountLogin-icon.png" class="qrcode" @click="handleClick" />
-        </div>
-        <SMSLoginForm v-if="accountLogin" :on-register="handleRegister" />
+        </div> -->
+        <LoginForm v-if="accountLogin" :on-register="handleRegister" />
         <ResignForm v-else-if="resignPage" />
-        <LoginForm v-else :on-register="handleRegister" />
+        <SMSLoginForm v-else :on-register="handleRegister" />
       </div>
     </div>
   </div>
