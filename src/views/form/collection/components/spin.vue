@@ -86,7 +86,7 @@
     </div>
   </div>
 </template>
-<style lang="less" scoped>
+<style lang="scss" scoped>
   .m-spin-wrap {
     position: relative;
     height: 100%;

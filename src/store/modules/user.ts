@@ -64,6 +64,7 @@ export const useUserStore = defineStore({
         this.token = null
         this.userInfo = {}
         this.roles = []
+        this.sfRole = ['超级管理员']
         resolve(null)
       })
     },

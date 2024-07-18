@@ -12,6 +12,7 @@
   <!-- </div> -->
   <div class="cover-view1">
     <div class="inner-container first-row">
+      <el-button size="large" type="primary" @click="back()">返回</el-button>
       <el-button size="large" type="primary" @click="save()">打卡定位</el-button>
       <el-text style="font-size: 15px; color: red" v-if="buildInfo.isMorm">{{ buildInfo.qiaoDaoReason }}</el-text>
     </div>
@@ -44,7 +45,8 @@
   import dadianSvg from '@/src/icons/svg/dadian.svg'
   import { youlizrz } from '../../../../../api/youlizrz'
   import { ElMessage, ElMessageBox } from 'element-plus'
-
+  import { useRouter, useRoute } from 'vue-router'
+  const router = useRouter()
   // 切换方法，提供给父组件调用
   const customeMethod1 = () => {
     console.log('3')
@@ -269,6 +271,10 @@
     map.value.on('zoomend', (e) => {
       console.log(e.target.getZoom())
     })
+  }
+  const back = () => {
+    console.log('返回')
+    router.push({ path: '/form/collection' })
   }
   const save = () => {
     console.log('保存')
