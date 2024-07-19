@@ -20,6 +20,9 @@
             </el-form-item>
           </el-col>
         </el-form-item>
+        <el-form-item label="禁用任务">
+          <el-switch v-model="ruleForm.delivery" style="--el-switch-on-color: #ff4949; --el-switch-off-color: #13ce66" />
+        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" />
         </el-form-item>
@@ -30,9 +33,16 @@
     </div>
     <div class="centered-buttons">
       <el-form-item>
-        <el-button type="primary" size="large" @click="submitForm(ruleFormRef, 1)">创建</el-button>
-        <el-button type="info" size="large" @click="submitForm(ruleFormRef, 2)">暂存</el-button>
-        <el-button size="large" @click="resetForm(ruleFormRef)">重置</el-button>
+        <el-button v-if="ruleForm.id == '' || ruleForm.id == null" type="primary" size="large" @click="submitForm(ruleFormRef, 1)"
+          >创建</el-button
+        >
+        <el-button v-if="ruleForm.id != '' && ruleForm.id != null" type="primary" size="large" @click="submitForm(ruleFormRef, 1)"
+          >编辑保存</el-button
+        >
+        <el-button v-if="ruleForm.id == '' || ruleForm.id == null" type="info" size="large" @click="submitForm(ruleFormRef, 2)"
+          >暂存</el-button
+        >
+        <el-button v-if="ruleForm.id == '' || ruleForm.id == null" size="large" @click="resetForm(ruleFormRef)">重置</el-button>
       </el-form-item>
     </div>
   </PageWrapLayout>
@@ -88,21 +98,6 @@
         trigger: 'change',
       },
     ],
-    clubType: [
-      {
-        type: String,
-        required: true,
-        message: '请分配一个团队',
-        trigger: 'change',
-      },
-    ],
-    resource: [
-      {
-        required: true,
-        message: '请选择活动资源\n',
-        trigger: 'change',
-      },
-    ],
     desc: [{ required: false, message: '请填写活动形式', trigger: 'blur' }],
     // rwList: [
     //   (value) => {
@@ -120,7 +115,7 @@
     await formEl.validate((valid, fields) => {
       console.log('222', valid, fields)
       if (valid) {
-        if (ruleForm.value.rwList.length == 0) {
+        if (num == 1 && ruleForm.value.rwList.length == 0) {
           ElMessageBox.alert('当前巡查任务没有进行人员分配,请分配任务后再操作', '提示', {
             // if you want to disable its autofocus
             // autofocus: false,
@@ -135,26 +130,28 @@
         } else {
           saveXcrw(ruleForm.value).then((res) => {
             if (res.data.result == -11) {
-              //let xcssList = res.data.data.xcssList;
-              let date1 = new Date(ruleForm.value.date1)
-              let year1 = date1.getFullYear()
-              let month1 = date1.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
-              let xcsjs = `${year1}-${month1.toString().padStart(2, '0')}`
-              let date2 = new Date(ruleForm.value.date2)
-              let year2 = date2.getFullYear()
-              let month2 = date2.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
-              let xcsje = `${year2}-${month2.toString().padStart(2, '0')}`
-              let newXcssList = UseSettingStore.xcssList
-              newXcssList.push({
-                id: 4,
-                renwuName: ruleForm.value.name,
-                xcsjS: xcsjs,
-                xcsjE: xcsje,
-                type: '季度物业巡查',
-                cjdw: '静安物业中心',
-                cjr: '张三',
-                progress: '未提交',
-              })
+              if (ruleForm.value.id == '') {
+                //let xcssList = res.data.data.xcssList;
+                let date1 = new Date(ruleForm.value.date1)
+                let year1 = date1.getFullYear()
+                let month1 = date1.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+                let xcsjs = `${year1}-${month1.toString().padStart(2, '0')}`
+                let date2 = new Date(ruleForm.value.date2)
+                let year2 = date2.getFullYear()
+                let month2 = date2.getMonth() + 1 // getMonth() 返回的是 0-11，所以需要加 1
+                let xcsje = `${year2}-${month2.toString().padStart(2, '0')}`
+                let newXcssList = UseSettingStore.xcssList
+                newXcssList.push({
+                  id: 4,
+                  renwuName: ruleForm.value.name,
+                  xcsjS: xcsjs,
+                  xcsjE: xcsje,
+                  type: '季度物业巡查',
+                  cjdw: '静安物业中心',
+                  cjr: '张三',
+                  progress: '未提交',
+                })
+              }
               //UseSettingStore.setXcssList(xcssList)
 
               ElMessage({
@@ -163,7 +160,7 @@
               })
               setTimeout(async () => {
                 router.push({
-                  path: '/system/dept',
+                  path: '/form/dept',
                 })
               }, 500)
             }

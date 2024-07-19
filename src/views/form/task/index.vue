@@ -195,6 +195,10 @@
               standardState: '', //建筑状态
               xiaoquName: '', //小区名称
             },
+            lsxcjl: [
+              { data: '2021-09-01 09:09:09', desc: '测试历史采集记录', xcId: '0002', xcName: '21年度巡查记录' },
+              { data: '2022-09-01 09:09:09', desc: '测试历史采集记录', xcId: '0003', xcName: '22年度巡查记录' },
+            ], //历史采集记录
             chanYeZT: [], //产业状态照片
             gongAnLP: [
               {

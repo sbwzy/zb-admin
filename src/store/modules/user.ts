@@ -18,11 +18,12 @@ export const useUserStore = defineStore({
   // 可以同步 也可以异步
   actions: {
     // 登录
-    login(userInfo) {
+    login(userInfo, sfRole) {
       const { username, password, userType } = userInfo
       return new Promise(async (resolve, reject) => {
         this.token = username
         this.userInfo = userInfo
+        this.sfRole = sfRole
         await this.getRoles()
         resolve(username)
       })

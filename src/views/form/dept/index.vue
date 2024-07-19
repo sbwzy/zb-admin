@@ -127,11 +127,12 @@
       xcrwXQ(e1.id).then((res) => {
         if (res.data.result == -11) {
           let xcrw = {
+            id: e1.id,
             name: '2024年9月巡查任务',
             //region: '',
             date1: '2024-09-01',
             date2: '2024-09-30',
-            // delivery: false,
+            delivery: '未开始',
             resource: '',
             desc: '物业中心巡查常规任务',
             clubType: '',
