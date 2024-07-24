@@ -35,7 +35,6 @@ export function xgMM(data) {
   })
 }
 
-
 //登录 /wuyegl/webapi/login
 export const loginInfo = (p1, p2) => {
   return request.post('webapi/login', {

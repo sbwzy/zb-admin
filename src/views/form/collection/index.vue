@@ -254,8 +254,8 @@
         </el-form-item>
         <br /><br /><br />
       </el-form>
-      <el-scrollbar style="height: 200px;">
-        <el-timeline style="max-width: 400px;">
+      <el-scrollbar style="height: 200px">
+        <el-timeline style="max-width: 400px">
           <el-timeline-item center timestamp="2022/4/12" placement="top">
             <el-card>
               <h4>22年底徐房集团第一季度巡查采集</h4>

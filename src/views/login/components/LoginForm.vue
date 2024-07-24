@@ -134,7 +134,7 @@
               let userType = []
               if (ruleForm.username == 'admin') {
                 userType = ['超级管理员']
-              } else if(ruleForm.username !== 'caijiyuan'){
+              } else if (ruleForm.username !== 'caijiyuan') {
                 userType = ['审核员']
               }
 

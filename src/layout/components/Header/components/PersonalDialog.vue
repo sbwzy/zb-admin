@@ -58,7 +58,7 @@
     if (!formEl) return
     formEl.validate((valid) => {
       if (valid) {
-        xgMM(ruleForm).then(async (res)=> {
+        xgMM(ruleForm).then(async (res) => {
           if (res.data.result == 0) {
             await UserStore.logout()
             await router.push({ path: '/login' })
