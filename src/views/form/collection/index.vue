@@ -254,7 +254,25 @@
         </el-form-item>
         <br /><br /><br />
       </el-form>
-
+      <el-scrollbar style="height: 200px;">
+        <el-timeline style="max-width: 400px;">
+          <el-timeline-item center timestamp="2022/4/12" placement="top">
+            <el-card>
+              <h4>22年底徐房集团第一季度巡查采集</h4>
+              <p>xxx 提交于 2018/4/12 15:46</p>
+              <p>xxx 审核于 2018/4/12 20:10</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item timestamp="2018/4/3" placement="top">
+            <el-card>
+              <h4>18年底徐房集团第一季度巡查采集</h4>
+              <p>Tom 提交于 2018/4/3 11:46</p>
+              <p>Tom1 审核于 2018/4/3 17:46</p>
+            </el-card>
+          </el-timeline-item>
+          <el-timeline-item center timestamp="2017/10/2" placement="top">17年度巡查任务采集 </el-timeline-item>
+        </el-timeline>
+      </el-scrollbar>
       <!-- 图片模块 -->
       <div>
         <el-tabs type="border-card" class="demo-tabs" @tab-change="handletabChange">

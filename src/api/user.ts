@@ -26,6 +26,15 @@ export const loginInfoUser = (p1, p2) => {
     password: p2,
   })
 }
+//修改密码
+export function xgMM(data) {
+  return request({
+    url: '/webapi/xgMM',
+    method: 'post',
+    data,
+  })
+}
+
 
 //登录 /wuyegl/webapi/login
 export const loginInfo = (p1, p2) => {

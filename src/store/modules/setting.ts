@@ -1311,11 +1311,11 @@ export const useSettingStore = defineStore({
       this.xcrwUser = value
     },
   },
-  // 这部分数据不需要存储
-  // persist: {
-  //     // 本地存储的名称
-  //     key: "settingState",
-  //     //保存的位置
-  //     storage: window.localStorage,//localstorage
-  // },
+  //这部分数据不需要存储
+  persist: {
+      // 本地存储的名称
+      key: "settingState",
+      //保存的位置
+      storage: window.localStorage,//localstorage
+  },
 })

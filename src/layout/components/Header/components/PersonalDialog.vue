@@ -1,7 +1,7 @@
 <template>
-  <el-dialog v-model="dialogVisible" title="修改密码" width="40%">
+  <el-dialog v-model="dialogVisible" title="修改密码" width="100%">
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm" :size="formSize">
-      <el-form-item label="姓名">
+      <el-form-item label="用户名">
         <el-input v-model="ruleForm.name" disabled></el-input>
       </el-form-item>
       <el-form-item label="旧的密码" prop="password">
@@ -25,6 +25,10 @@
   import type { ElForm } from 'element-plus'
   const dialogVisible = ref(false)
   import { useUserStore } from '@/store/modules/user'
+  import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+  import { xgMM } from '@/api/user'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
   const UserStore = useUserStore()
   const show = () => {
     dialogVisible.value = true
@@ -38,7 +42,7 @@
   const ruleFormRef = ref<FormInstance>()
   const ruleForm = reactive({
     name: UserStore.userInfo.username,
-    password: UserStore.userInfo.password,
+    password: '',
     configPassword: '',
   })
   const rules = reactive({
@@ -54,7 +58,18 @@
     if (!formEl) return
     formEl.validate((valid) => {
       if (valid) {
-        console.log('submit!')
+        xgMM(ruleForm).then(async (res)=> {
+          if (res.data.result == 0) {
+            await UserStore.logout()
+            await router.push({ path: '/login' })
+            ElNotification({
+              title: '修改成功',
+              message: '密码修改成功',
+              type: 'success',
+              duration: 3000,
+            })
+          }
+        })
       } else {
         console.log('error submit!')
         return false

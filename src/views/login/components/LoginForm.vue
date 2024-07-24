@@ -69,7 +69,7 @@
 
   // 表单数据
   const ruleForm = reactive({
-    username: 'admin',
+    username: '18855551800',
     password: '123456',
   })
 
@@ -130,11 +130,18 @@
                 },
               ])
               SettingStore.setXcssList(xcssList.value)
+              //赋值用户信息
+              let userType = []
+              if (ruleForm.username == 'admin') {
+                userType = ['超级管理员']
+              } else if(ruleForm.username !== 'caijiyuan'){
+                userType = ['审核员']
+              }
 
-              let userType = ['审核员']
-              await UserStore.login(ruleForm, userType)
+              let userInfo = { username: ruleForm.username, userType: userType, ssbm: '徐房集团' }
+              UserStore.login(userInfo, userType)
               if (userType.includes('超级管理员')) {
-                await router.push({
+                router.push({
                   path: '/',
                 })
               } else {
@@ -339,13 +346,13 @@
                       SettingStore.setShtgJzList(shtgJzList)
                     }
                     setTimeout(async () => {
-                      await router.push({
+                      router.push({
                         path: '/form/task',
                       })
                     }, 500)
                   })
                 } else {
-                  await router.push({
+                  router.push({
                     path: '/form/dept',
                   })
                 }
@@ -360,7 +367,7 @@
               loading.value = true
             }, 1000)
           } else {
-            console.log('error submit!')
+            console.log('错误请求', res.data.message)
             return false
           }
         })

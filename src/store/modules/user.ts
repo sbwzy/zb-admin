@@ -19,7 +19,7 @@ export const useUserStore = defineStore({
   actions: {
     // 登录
     login(userInfo, sfRole) {
-      const { username, password, userType } = userInfo
+      const { username, userType } = userInfo
       return new Promise(async (resolve, reject) => {
         this.token = username
         this.userInfo = userInfo
