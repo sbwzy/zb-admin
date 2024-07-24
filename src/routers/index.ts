@@ -34,7 +34,7 @@ export const asyncRoutes = [
   ...functionPageRouter,
   // ...chatRouter,
   // ...nestedRouter,
-  // ...excelRouter,
+  ...excelRouter,
   // ...externalLink,
   ...systemRouter,
 ]
