@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { PRIMARY_COLOR } from '../../config'
 import { ref } from 'vue'
+import { UploadUserFile } from 'element-plus'
 
 export const useSettingStore = defineStore({
   // id: 必须的，在所有 Store 中唯一
@@ -35,7 +36,31 @@ export const useSettingStore = defineStore({
         shouQuanDZ: '', //授权地址
         wyName: '', //物业联系人
         wyPhone: '', //物业联系电话
+        galpdz: '',
         standardType: '', //房屋类型
+        djwjqks: '无', //有无搭建违建
+        jcdjwj: 0, //几处搭建违建
+        djwjsm: '',
+        djwjList: ref<UploadUserFile[]>([
+          {
+            name: 'food.jpeg',
+            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+          },
+          {
+            name: 'plant-1.png',
+            url: '/images/plant-1.png',
+          },
+        ]),
+        djwjList1:
+          'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        wjcc: '无',
+        wjcctype: '',
+        wjccList: '',
+        wjccsm: '',
+        shqk: '',
+        shqktype: '',
+        shqkList: '',
+        shqksm: '',
         IndustrStatusOld: '', //原产业状态
         IndustrStatus: '', //当前产业状态
         fangWuYTOld: '', //原房屋用途
@@ -48,7 +73,7 @@ export const useSettingStore = defineStore({
         dkdesc: '', //现场带看情况
         desc: '', //外业巡查情况备注
         descShenHe: '', //审核意见
-        standardState: '', //建筑状态
+        jzState: '', //建筑状态
         xiaoquName: '', //小区名称
       },
       lsxcjl: [], //历史巡查记录
@@ -87,9 +112,11 @@ export const useSettingStore = defineStore({
       weak: false,
     },
     // 采集状态
-    cjZt: ref(['未采集', '采集中', '待审核', '审核驳回', '审核通过']),
+    cjZt: ref(['待检查', '自查无异常', '待审核', '待复核', '复核通过']),
     //当前巡查任务id 初始化时默认是最新创建的巡查记录
     xcrwId: 1,
+    //下属公司
+    compList: ref([]),
     //新增用户的列表
     xcrwUserList: ref([]),
     //新建巡查任务的用户信息
@@ -109,9 +136,9 @@ export const useSettingStore = defineStore({
       name: '',
       date1: '',
       date2: '',
-      delivery: false,
+      delivery: true,
       resource: '',
-      desc: '',
+      comps: '',
       clubType: '',
       rwList: [
         // {
@@ -231,7 +258,38 @@ export const useSettingStore = defineStore({
     //建筑列表每次保存的建筑列表 超管能看全部   管理员、采集员看他那部分的列表
     jzList: ref(),
     //当前巡查任务下未采集的建筑列表
-    wcjJzList: ref([]),
+    wcjJzList: ref([
+      {
+        xiaoQu: '福世花园', //小区名称
+        //jieZhen: '江苏路街道', // 街镇应该也不需要
+        zjZt: '待检查', //自查状态
+        shouQuanDZ: '安化路201弄4号', //授权地址
+        fwyt: '超市', //房屋业态 (幢)
+        fangWuYTOld: '非居住营业用房', //房屋用途 是户 不显示
+        xsqk: '修缮中', //修缮情况
+        id: '00012',
+      },
+      {
+        xiaoQu: '福世花园', //小区名称
+        //jieZhen: '江苏路街道', // 街镇应该也不需要
+        zjZt: '待检查', //自查状态
+        shouQuanDZ: '安化路201弄5号', //授权地址
+        fwyt: '居住用房', //房屋业态 (幢)
+        fangWuYTOld: '居住用房', //房屋用途 是户 不显示
+        xsqk: '近三年未修缮', //修缮情况
+        id: '00011',
+      },
+      {
+        xiaoQu: '福世花园', //小区名称
+        //jieZhen: '江苏路街道', // 街镇应该也不需要
+        zjZt: '待检查', //自查状态
+        shouQuanDZ: '安化路201弄6号', //授权地址
+        fwyt: '餐饮', //房屋业态 (幢)
+        fangWuYTOld: '非居住营业用房', //房屋用途 是户 不显示
+        xsqk: '近三年完成过修缮', //修缮情况
+        id: '00010',
+      },
+    ]),
     //当前巡查任务下采集中的建筑列表
     cjzJzList: ref([]),
     //当前巡查任务下待审核的建筑列表
@@ -1287,6 +1345,9 @@ export const useSettingStore = defineStore({
     },
     setXcrwId(value) {
       this.xcrwId = value
+    },
+    setCompList(value) {
+      this.compList = value
     },
     //
     setWcjJzList(value) {

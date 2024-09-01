@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup name="ESRIMap">
-  import leafletMap from '../ecnuGisMap/index'
+  // import leafletMap from 'ecnuGisMap/index'
 </script>
 
 <style lang="scss" scoped></style>

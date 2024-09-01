@@ -10,7 +10,7 @@ export const useUserStore = defineStore({
     // 登录用户信息
     userInfo: {},
     // 角色
-    sfRole: ['超级管理员'],
+    sfRole: [],
     // 角色(弃用)
     roles: localStorage.roles ? JSON.parse(localStorage.roles) : [],
   }),
@@ -18,14 +18,14 @@ export const useUserStore = defineStore({
   // 可以同步 也可以异步
   actions: {
     // 登录
-    login(userInfo, sfRole) {
-      const { username, userType } = userInfo
+    login(userInfo) {
+      //const { username, userType } = userInfo
       return new Promise(async (resolve, reject) => {
-        this.token = username
+        this.token = userInfo.username
         this.userInfo = userInfo
-        this.sfRole = sfRole
+        this.sfRole = userInfo.userType
         await this.getRoles()
-        resolve(username)
+        resolve(userInfo.username)
       })
     },
     //手机登录
@@ -65,7 +65,7 @@ export const useUserStore = defineStore({
         this.token = null
         this.userInfo = {}
         this.roles = []
-        this.sfRole = ['超级管理员']
+        this.sfRole = []
         resolve(null)
       })
     },

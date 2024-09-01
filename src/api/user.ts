@@ -71,11 +71,10 @@ export function buildListinfo1(data) {
 }
 
 //获取建筑列表
-export function buildListinfo(data) {
-  return request({
-    url: '/webapi/youligf.youliQuery',
-    method: 'post',
-    data,
+export function buildListinfo(xcrwid, usergroup) {
+  return request.post('webapi/youligf.youliQuery', {
+    gfid: xcrwid,
+    usergroup: usergroup,
   })
 }
 
@@ -193,5 +192,5 @@ interface xcrwParams {
   }>
 }
 export function saveXcrw(params: xcrwParams) {
-  return request.post('webapi/youligf.youliQuery', params)
+  return request.post('webapi/youligf.youlixcQuery', params)
 }

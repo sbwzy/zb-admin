@@ -73,7 +73,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 代理跨域（模拟示例）
       proxy: {
         '/api': {
-          target: 'https://ccgis.cn', // easymock
+          target: 'https://dev.ccgis.cn', // easymock
           changeOrigin: true,
           secure: true,
           protocolRewrite: 'https',

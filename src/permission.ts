@@ -12,6 +12,7 @@ let hasRoles = true
 
 router.beforeEach(async (to, from, next) => {
   // 开启进度条
+
   NProgress.start()
   // 设置标题
   if (typeof to.meta.title === 'string') {

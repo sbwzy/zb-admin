@@ -12,7 +12,7 @@
   import { useSettingStore } from '@/store/modules/setting'
   // 配置element中文
   import zhCn from 'element-plus/es/locale/lang/zh-cn'
-
+  console.log('打印顺序')
   const SettingStore = useSettingStore()
   // 配置全局组件大小
   // 2024-04-07

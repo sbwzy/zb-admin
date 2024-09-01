@@ -36,7 +36,7 @@ export const asyncRoutes = [
   // ...nestedRouter,
   // ...excelRouter,
   // ...externalLink,
-  ...systemRouter,
+  //...systemRouter,
 ]
 
 /**

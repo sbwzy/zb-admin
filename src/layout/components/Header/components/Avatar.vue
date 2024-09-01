@@ -15,9 +15,9 @@
         <!-- <el-dropdown-item :command="0" divided @click="switchRolesAction('other')">
           {{ currentRoles === 'other' ? '当前角色' : '切换角色' }}：采集员
         </el-dropdown-item> -->
-        <el-dropdown-item :command="3" divided @click="modifyPassword">
+        <!-- <el-dropdown-item :command="3" divided @click="modifyPassword">
           <el-icon><Edit /></el-icon>修改密码
-        </el-dropdown-item>
+        </el-dropdown-item> -->
         <el-dropdown-item :command="4" divided @click="logOut">
           <el-icon><SwitchButton /></el-icon>退出登录
         </el-dropdown-item>

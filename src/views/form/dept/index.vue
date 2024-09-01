@@ -10,7 +10,7 @@
       >
       </filterView>
     </div>
-    <div v-if="UserStore.sfRole.includes('超级管理员')">
+    <div v-if="UserStore.sfRole.includes('管理员')">
       <el-button style="float: right" type="primary" @click="addHandler">
         <el-icon>
           <Plus />
@@ -125,7 +125,7 @@
       //查看 巡查任务的详情
       //调用接口赋值巡查任务内容
       xcrwXQ(e1.id).then((res) => {
-        if (res.data.result == -11) {
+        if (res.data.result == -1) {
           let xcrw = {
             id: e1.id,
             name: '2024年9月巡查任务',
@@ -190,7 +190,7 @@
       SettingStore.setXcrwId = e1.id
       //调用接口 获取该巡查任务下的建筑任务列表
       //未采集列表 、采集中列表、待审核列表、审核驳回列表、审核通过列表
-      buildListinfo(e1.id).then((res) => {
+      buildListinfo(e1.id, UserStore.userInfo.ssbm).then((res) => {
         console.log(res)
         if (res.data.result == -11) {
           //赋值五个列表的值

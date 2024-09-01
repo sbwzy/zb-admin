@@ -13,12 +13,12 @@ const functionPageRouter = [
       icon: 'ElementPlus',
     },
     children: [
-      {
-        path: '/function-page/print',
-        component: () => import('@/views/function-page/print/index.vue'),
-        name: 'print',
-        meta: { title: '打印', icon: 'MenuIcon' },
-      },
+      // {
+      //   path: '/function-page/print',
+      //   component: () => import('@/views/function-page/print/index.vue'),
+      //   name: 'print',
+      //   meta: { title: '打印', icon: 'MenuIcon' },
+      // },
       // {
       //   path: '/function-page/collection',
       //   component: () => import('@/views/functionPage/collection/index.vue'),
@@ -43,12 +43,12 @@ const functionPageRouter = [
         name: 'Map',
         meta: { title: '地图', icon: 'MenuIcon' },
         children: [
-          {
-            path: '/function-page/Map/ecnuGisMap',
-            component: () => import('@/views/functionPage/Map/ecnuGisMap/index.vue'),
-            name: 'ecnuGisMap',
-            meta: { title: 'Gis地图', keepAlive: true, icon: 'MenuIcon' },
-          },
+          // {
+          //   path: '/function-page/Map/ecnuGisMap',
+          //   component: () => import('@/views/functionPage/Map/ecnuGisMap/index.vue'),
+          //   name: 'ecnuGisMap',
+          //   meta: { title: 'Gis地图', keepAlive: true, icon: 'MenuIcon' },
+          // },
           {
             path: '/function-page/Map/ESRIMap',
             component: () => import('@/views/functionPage/Map/ESRIMap/index.vue'),
@@ -59,7 +59,7 @@ const functionPageRouter = [
             path: '/function-page/Map/BingMap',
             component: () => import('@/views/functionPage/Map/BingMap/index.vue'),
             name: 'BingMap',
-            meta: { title: 'Bing地图', keepAlive: true, icon: 'MenuIcon' },
+            meta: { title: '建筑定位落地图', keepAlive: true, icon: 'MenuIcon' },
           },
           {
             path: '/function-page/Map/AMap',

@@ -4,13 +4,13 @@
       <!--item?.jieZhen == '即将实施' ? '#1890FF' : '#39b54a',-->
       <div style="display: flex">
         <div class="topTitleV">{{ listtype == 'build' ? item.xiaoQu : item.renwuName }}</div>
-        <div v-if="listtype == 'xcrw' && UserStore.sfRole.includes('超级管理员')" class="rigFlagV">
+        <!-- <div v-if="listtype == 'xcrw' && UserStore.sfRole.includes('超级管理员')" class="rigFlagV">
           <el-button type="primary" size="small" @click="parentTypeMethod(item, '编辑')">
             详情<el-icon class="el-icon--right"><Pointer /></el-icon>
           </el-button>
         </div>
         <div
-          v-if="listtype == 'build' && item.cjZt == '采集中' && !UserStore.sfRole.includes('超级管理员')"
+          v-if="listtype == 'build' && item.zjZt == '待检查' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -19,13 +19,10 @@
           <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
             提交<el-icon class="el-icon--right"><Upload /></el-icon>
           </el-button>
-          <!-- <el-button type="primary" size="small" @click="OptionItem(item,2)">
-            转派<el-icon class="el-icon--right"><Connection /></el-icon>
-          </el-button> -->
-        </div>
+        </div> -->
 
-        <div
-          v-if="listtype == 'build' && item.cjZt == '待审核' && !UserStore.sfRole.includes('超级管理员')"
+        <!-- <div
+          v-if="listtype == 'build' && item.zjZt == '待审核' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -34,9 +31,9 @@
           <el-button type="primary" size="small" @click="parentTypeMethod(item, '撤回')">
             撤回<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
           </el-button>
-        </div>
-        <div
-          v-if="listtype == 'build' && item.cjZt == '审核驳回' && !UserStore.sfRole.includes('超级管理员')"
+        </div> -->
+        <!-- <div
+          v-if="listtype == 'build' && item.zjZt == '审核驳回' && !UserStore.sfRole.includes('超级管理员')"
           :style="{
             display: 'flex',
           }"
@@ -45,7 +42,7 @@
           <el-button type="primary" size="small" @click="parentTypeMethod(item, '提交')">
             重新提交<el-icon class="el-icon--right"><RefreshLeft /></el-icon>
           </el-button>
-        </div>
+        </div> -->
       </div>
 
       <div
@@ -67,9 +64,16 @@
         <div class="detailV">{{ item.xcsjS }} - {{ item.xcsjE }}</div>
       </div>
       <div style="display: flex" @click="parentTypeMethod(item, '详情')">
-        <div class="titleV">类型:</div>
+        <div class="titleV">房屋业态:</div>
         <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
-          {{ listtype == 'build' ? item.standardType : item.type }}
+          {{ listtype == 'build' ? item.fwyt : item.type }}
+          <span style="color: #333333; margin-left: 2px"></span>
+        </div>
+      </div>
+      <div style="display: flex" @click="parentTypeMethod(item, '详情')">
+        <div class="titleV">修缮状态:</div>
+        <div class="detailV" :style="{ color: item.xsqk == '修缮中' ? '#B22222' : '#39b54a' }">
+          {{ listtype == 'build' ? item.xsqk : item.xsqk }}
           <span style="color: #333333; margin-left: 2px"></span>
         </div>
       </div>
@@ -81,7 +85,7 @@
         </div>
       </div>
       <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
-        <div class="titleV">房屋用途:</div>
+        <div class="titleV">原房屋用途:</div>
         <div class="detailV">{{ item.fangWuYTOld }}</div>
       </div>
       <div v-else-if="listtype == 'xcrw'" style="display: flex" @click="parentTypeMethod(item, '详情')">
@@ -125,7 +129,7 @@
 
   //'/function-page/collection'
   const bindTag = (item) => {
-    return [item.standardType, item.fangWuYTOld]
+    return [item.fwyt, item.xsqk] //item.standardType, item.fangWuYTOld
   }
 
   onMounted(() => {})

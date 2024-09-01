@@ -20,7 +20,14 @@
             </el-form-item>
           </el-col>
         </el-form-item>
-        <el-form-item label="禁用任务">
+        <el-form-item label="选择物业公司">
+          <el-checkbox-group v-model="ruleForm.comps" @change="handleCheckedCompsChange">
+            <el-checkbox v-for="comp in Comps" :key="comp" :label="comp" :value="comp">
+              {{ comp }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="启用任务">
           <el-switch v-model="ruleForm.delivery" style="--el-switch-on-color: #ff4949; --el-switch-off-color: #13ce66" />
         </el-form-item>
         <el-form-item label="备注" prop="desc">
@@ -29,7 +36,7 @@
       </el-form>
     </div>
     <div class="app-container m-user">
-      <UserTable :table-data="ruleForm.rwList" />
+      <UserTable :table-data="ruleForm.rwList" :group="UserStore.userInfo.rolelevel == '3' ? grouplist1 : grouplist" />
     </div>
     <div class="centered-buttons">
       <el-form-item>
@@ -60,7 +67,9 @@
   import { ru } from 'element-plus/es/locale'
   import { files } from 'jszip'
   import { saveXcrw } from '@/api/user'
+  import { useUserStore } from '@/store/modules/user'
   //import { userData } from '@/mock/system'
+  const UserStore = useUserStore()
   const router = useRouter()
   //const tableData = ref(userData)
   const formSize = ref('small')
@@ -68,6 +77,11 @@
   const props = { multiple: true }
   const cascaderRef = ref(null)
   const UseSettingStore = useSettingStore()
+  const checkAll = ref(true)
+  const isIndeterminate = ref(true)
+  const Comps = computed(() => {
+    return UseSettingStore.compList
+  })
   //目前没有作用
   const xcId = computed(() => {
     return UseSettingStore.xcrwId
@@ -76,6 +90,66 @@
   let ruleForm = computed(() => {
     return UseSettingStore.xcrw
   })
+  const grouplist = [
+    {
+      name: '物业公司',
+      prop: 'wygs',
+      width: '180',
+    },
+    {
+      name: '物业负责人',
+      prop: 'wyfzr',
+      width: '120',
+    },
+    {
+      name: '物业负责人电话',
+      prop: 'wyfzrp',
+      width: '180',
+    },
+    {
+      name: '已分配建筑数量',
+      prop: 'yfpjzsl',
+      width: '120',
+    },
+    {
+      name: '未分配建筑数量',
+      prop: 'wfpjzsl',
+      width: '120',
+    },
+    {
+      name: '创建时间',
+      prop: 'createTime',
+      width: '280',
+    },
+  ]
+
+  const grouplist1 = [
+    {
+      name: '采集员',
+      prop: 'cjrname',
+      width: '120',
+    },
+    {
+      name: '审核员',
+      prop: 'shrName',
+      width: '120',
+    },
+    {
+      name: '用户状态',
+      prop: 'status',
+      width: '160',
+    },
+    {
+      name: '任务建筑数量',
+      prop: 'jzsl',
+      width: '160',
+    },
+    {
+      name: '创建时间',
+      prop: 'createTime',
+      width: '280',
+    },
+  ]
   //验证规则
   const rules = reactive({
     name: [
@@ -106,6 +180,11 @@
     //   },
     // ],
   })
+  const handleCheckedCompsChange = (value: string[]) => {
+    const checkedCount = value.length
+    checkAll.value = checkedCount === Comps.value.length
+    isIndeterminate.value = checkedCount > 0 && checkedCount < Comps.value.length
+  }
   //保存后 把store中的数据清空
   const submitForm = async (formEl: FormInstance | undefined, num) => {
     // let delivery = UseSettingStore.selJZList.length > 0 ? true : false

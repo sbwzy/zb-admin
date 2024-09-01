@@ -1,16 +1,10 @@
 <template>
   <div class="app-container">
-    <el-segmented v-model="initvalue" :options="cjZt" block @change="changeValue">
-      <!-- <template #default="{ item }">
-        <div class="flex flex-col items-center gap-2 p-2">
-          {{item}}·{{datacurrList.length}}
-        </div>
-      </template> -->
-    </el-segmented>
+    <el-segmented v-model="initvalue" :options="cjZt" @change="changeValue"> </el-segmented>
     <filterView
       :filterss="dynamicFilters"
       :filters="filters"
-      :allSelect="initvalue == '采集中' ? true : false"
+      :allSelect="false"
       :listtype="listType"
       :parent-type-method="filterMethod"
     ></filterView>
@@ -71,7 +65,7 @@
   const dynamicFilters = SettingStore.dynamicFilters
 
   //根据当前用户身份设置初始分段  初始这样设计
-  const initvalue = ref(UserStore.sfRole.includes('审核员') ? '待审核' : '未采集')
+  const initvalue = ref('待检查')
   const cjZt = computed(() => {
     return SettingStore.cjZt
   })
@@ -81,13 +75,13 @@
   })
 
   const dataList = computed(() => {
-    if (initvalue.value == '未采集') {
+    if (initvalue.value == '待检查') {
       return SettingStore.wcjJzList
-    } else if (initvalue.value == '采集中') {
+    } else if (initvalue.value == '自查无异常') {
       return SettingStore.cjzJzList
     } else if (initvalue.value == '待审核') {
       return SettingStore.dshJzList
-    } else if (initvalue.value == '审核驳回') {
+    } else if (initvalue.value == '待复核') {
       return SettingStore.shbhJzList
     } else {
       return SettingStore.shtgJzList
@@ -139,12 +133,13 @@
         if (res.data.result != 1) {
           // 默认修改数据
           dataList.value.push({
-            xiaoQu: '福世花园',
-            jieZhen: '江苏路街道',
-            cjZt: '采集中',
-            shouQuanDZ: '安化路201弄4号',
-            standardType: '花园住宅',
-            fangWuYTOld: '非居住办公用房',
+            xiaoQu: '福世花园', //小区名称
+            //jieZhen: '江苏路街道', // 街镇应该也不需要
+            zjZt: '待检查', //自查状态
+            shouQuanDZ: '安化路201弄4号', //授权地址
+            fwyt: '超市', //房屋业态 (幢)
+            fangWuYTOld: '非居住办公用房', //房屋用途 是户 不显示
+            xsqk: '修缮中', //修缮情况
             id: '00012',
           })
           SettingStore.setJzList(dataList.value)
@@ -169,24 +164,23 @@
               qianDaoSJ: '', //签到时间
               qianDaoY: '', //签到位置经度
               qianDaoX: '', //签到位置纬度
-              locYOld: '31.140229456677', //房屋原位置经度
-              locXOld: '121.496543339861', //房屋原位置纬度
+              //locYOld: '31.140229456677', //房屋原位置经度
+              //locXOld: '121.496543339861', //房屋原位置纬度
               locY: '31.1402311336331', //房屋新位置经度
               locX: '121.49651706216', //房屋新位置纬度
               descZuoBiao: '', //坐标备注
-              standartName: '(4599)上钢物业零星小区（三林老街居委）', //建筑名称
-              shouQuanDZ: '中林街131弄5号', //授权地址
-              wyName: '周华', //物业联系人
-              wyPhone: '13501739801', //物业联系电话
-              standardType: '旧式里弄2', //房屋类型
+              standartName: '', //建筑名称
+              shouQuanDZ: '测试状态', //授权地址
+              wyName: '测试状态', //物业联系人
+              wyPhone: '测试状态', //物业联系电话
+              standardType: '测试状态', //房屋类型
               IndustrStatusOld: '测试状态', //原产业状态
               IndustrStatus: '测试状态', //当前产业状态
               fangWuYTOld: '居住用房', //原房屋用途
               fangWuYT: '居住用房', //当前房屋用途
               desc2: '测试现状', //建筑现状
               sfmpqs: '是', //现场是否有铭牌
-              bhmpCont:
-                '江南传统民居。砖木结构，中西合璧式。建筑平面对称布局，呈U字型，南侧院墙有仪门；青瓦硬山顶，东西两侧有观音兜式山墙，并外挑阳台，木梁上有斗拱木雕装饰。Traditional houses in the South of Yangtze River. Masonry-timber structure. Integration of Chinese and western style.', //保护铭牌内容
+              bhmpCont: '江南', //保护铭牌内容
               shiYongROld: '测试使用人', //使用人
               shiYongR: '测试使用人', //使用人新
               dkdesc: '测试带看情况', //现场带看情况
@@ -206,7 +200,7 @@
                 diZhi: '中林街131弄5号',
                 fileName: 'image',
                 imgID: 31418,
-                url: '/wuyegl/webapi/youligf.picDown?imgID=53544255580C',
+                url: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
                 thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=53544255580C',
                 zhaopIdx: 0,
               },
@@ -239,8 +233,8 @@
                 desc: '东',
                 fileName: 'image',
                 imgID: 31411,
-                picURL: '/wuyegl/webapi/youligf.picDown?imgID=9394829591CC',
-                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                url: 'https://ccgis.cn/wuyegl/webapi/youligf.picDown?imgID=9394829591CC',
+                thumbURL: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
                 wlmlx: '主立面',
                 zhaopIdx: 0,
               },
@@ -248,7 +242,7 @@
                 desc: '',
                 fileName: 'image',
                 imgID: 31412,
-                picURL: '/wuyegl/webapi/youligf.picDown?imgID=9295839493CD',
+                url: '/wuyegl/webapi/youligf.picDown?imgID=9295839493CD',
                 thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=9295839493CD',
                 wlmlx: '主立面',
                 zhaopIdx: 0,

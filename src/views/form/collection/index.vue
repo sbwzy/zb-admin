@@ -3,7 +3,7 @@
     <div class="app-container-local right-align-inputs">
       <!-- 表单 -->
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto" status-icon label-position="left">
-        <el-form-item label="打卡定位">
+        <el-form-item label="房屋落点">
           <el-col :span="20" class="text-center">
             <el-text
               class="mx-1"
@@ -15,19 +15,19 @@
                   : 'text-align: right;'
               "
             >
-              &nbsp;
+              <!-- &nbsp;
               {{
                 ruleForm.caiJiXQ.qianDaoSJ == null || ruleForm.caiJiXQ.qianDaoSJ == ''
                   ? '请先定位打卡'
                   : ruleForm.caiJiXQ.descZuoBiao == null || ruleForm.caiJiXQ.descZuoBiao == ''
                   ? '已定位打卡'
                   : ruleForm.caiJiXQ.descZuoBiao
-              }}
+              }} -->
             </el-text>
           </el-col>
           <el-col :span="4" class="text-center">
-            <el-icon>
-              <Location @click="dingWeiDaKa()" color="#999999" />
+            <el-icon :size="20">
+              <Location @click="dingWeiDaKa()" color="#00BFFF" />
             </el-icon>
           </el-col>
         </el-form-item>
@@ -48,29 +48,30 @@
           </el-col>
         </el-form-item>
 
-        <el-form-item label="物业联系人员">
+        <!-- <el-form-item label="物业联系人员">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.wyName }}
             </el-text>
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item label="物业联系方式">
+        <!-- <el-form-item label="物业联系方式">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.wyPhone }}
             </el-text>
           </el-col>
-        </el-form-item>
-        <el-form-item label="房屋类型">
+        </el-form-item> -->
+
+        <!-- <el-form-item label="原房屋用途">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.standardType }}
             </el-text>
           </el-col>
-        </el-form-item>
-        <el-form-item label="原产业状态">
+        </el-form-item> -->
+        <el-form-item label="原房屋业态">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.IndustrStatusOld }}
@@ -79,7 +80,7 @@
         </el-form-item>
 
         <el-form-item
-          label="当前产业状态"
+          label="当前房屋业态"
           v-if="
             isEdit ||
             (ruleForm.caiJiXQ.IndustrStatus != '' &&
@@ -118,7 +119,7 @@
           </el-col>
         </el-form-item>
 
-        <el-form-item label="原房屋用途">
+        <!-- <el-form-item label="原房屋用途">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.fangWuYTOld }}
@@ -164,9 +165,9 @@
               {{ ruleForm.caiJiXQ.fangWuYT }}
             </el-text>
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item
+        <!-- <el-form-item
           label="建筑现状"
           class="demo-uni-row"
           :style="ruleForm.caiJiXQ.desc2 != '' && ruleForm.caiJiXQ.desc2 != null ? 'border-left: 2px solid red;' : ''"
@@ -179,6 +180,16 @@
           <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.desc2 }}
+            </el-text>
+          </el-col>
+        </el-form-item> -->
+        <el-form-item label="公安绿牌地址" class="demo-uni-row">
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input v-model="ruleForm.caiJiXQ.galpdz" style="width: 240px" autosize type="textarea" placeholder="请输入公安路牌地址" />
+          </el-col>
+          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.galpdz }}
             </el-text>
           </el-col>
         </el-form-item>
@@ -207,19 +218,15 @@
             </el-text>
           </el-col>
         </el-form-item>
-        <el-form-item label="使用人">
+        <!-- <el-form-item label="使用人">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.shiYongROld }}
             </el-text>
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
 
-        <el-form-item
-          label="现场带看情况"
-          class="demo-uni-row"
-          :style="ruleForm.caiJiXQ.dkdesc != '' && ruleForm.caiJiXQ.dkdesc != null ? 'border-left: 2px solid red;' : ''"
-        >
+        <el-form-item label="现场带看情况" class="demo-uni-row">
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
             <el-input v-model="ruleForm.caiJiXQ.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
@@ -230,11 +237,7 @@
           </el-col>
         </el-form-item>
 
-        <el-form-item
-          label="外业巡查情况备注"
-          class="demo-uni-row"
-          :style="ruleForm.caiJiXQ.desc != '' && ruleForm.caiJiXQ.desc != null ? 'border-left: 2px solid red;' : ''"
-        >
+        <el-form-item label="外业巡查情况备注" class="demo-uni-row">
           <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
             <el-input v-model="ruleForm.caiJiXQ.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
           </el-col>
@@ -245,35 +248,442 @@
           </el-col>
         </el-form-item>
 
-        <el-form-item label="审核意见" v-if="ruleForm.caiJiXQ.descShenHe != null && ruleForm.caiJiXQ.descShenHe != ''">
+        <el-form-item
+          label="搭建违建使用情况"
+          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.caiJiXQ.djwjqks" placeholder="是否存在搭建违建情况" style="width: 240px">
+              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null ? 'text-align: right;color: red' : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.djwjqks }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="搭建违建数量"
+          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input-number v-model="ruleForm.caiJiXQ.jcdjwj" :min="1" :max="20" value-on-clear="0" />
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.jcdjwj }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          label="搭建违建照片取证"
+          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-upload
+              v-model:file-list="ruleForm.caiJiXQ.djwjList"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            >
+              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+              <el-icon><Plus /></el-icon>
+            </el-upload>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
+            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
+            <!-- <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.jcdjwj }}
+            </el-text> -->
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="搭建违建说明"
+          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input
+              v-model="ruleForm.caiJiXQ.djwjsm"
+              style="width: 240px"
+              autosize
+              type="textarea"
+              placeholder="请输入搭建违建现场情况"
+            />
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null ? 'text-align: right;color: red' : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1" style="color: red">
+              {{ ruleForm.caiJiXQ.djwjsm }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="违规拆除情况"
+          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.caiJiXQ.wjcc" placeholder="是否存在违规拆除情况" style="width: 240px">
+              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null ? 'text-align: right;color: red' : 'text-align: right'"
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.wjcc }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="违规拆除类型"
+          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.djwjqks == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.caiJiXQ.wjcctype" placeholder="是否存在违规拆除情况" style="width: 240px">
+              <el-option v-for="item in sftypeList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.wjcctype }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          label="违规拆除照片取证"
+          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-upload
+              v-model:file-list="ruleForm.caiJiXQ.wjccList"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            >
+              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+              <el-icon><Plus /></el-icon>
+            </el-upload>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
+            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
+            <!-- <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.jcdjwj }}
+            </el-text> -->
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="违规拆除情况说明"
+          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input
+              v-model="ruleForm.caiJiXQ.wjccsm"
+              style="width: 240px"
+              autosize
+              type="textarea"
+              placeholder="请输入违规拆除现场情况"
+            />
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null ? 'text-align: right;color: red' : 'text-align: right'"
+          >
+            <el-text class="mx-1" style="color: red">
+              {{ ruleForm.caiJiXQ.wjccsm }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="损坏情况"
+          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.caiJiXQ.shqk" placeholder="是否存在损坏情况" style="width: 240px">
+              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null ? 'text-align: right;color: red' : 'text-align: right'"
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.shqk }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="损坏情况类型"
+          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-select v-model="ruleForm.caiJiXQ.shqktype" multiple placeholder="损坏情况类型" style="width: 240px">
+              <el-option v-for="item in sftypeList1" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.shqktype }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          label="损坏情况照片取证"
+          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有')"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-upload
+              v-model:file-list="ruleForm.caiJiXQ.shqkList"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+            >
+              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+              <el-icon><Plus /></el-icon>
+            </el-upload>
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="
+              ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+                ? 'text-align: right;color: red'
+                : 'text-align: right'
+            "
+          >
+            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
+            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
+            <!-- <el-text class="mx-1">
+              {{ ruleForm.caiJiXQ.jcdjwj }}
+            </el-text> -->
+          </el-col>
+        </el-form-item>
+
+        <el-form-item
+          label="损坏情况说明"
+          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null)"
+          class="demo-uni-row"
+          :style="
+            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
+              ? 'border-left: 2px solid red;'
+              : ''
+          "
+        >
+          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
+            <el-input
+              v-model="ruleForm.caiJiXQ.shqksm"
+              style="width: 240px"
+              autosize
+              type="textarea"
+              placeholder="请输入违规拆除现场情况"
+            />
+          </el-col>
+          <el-col
+            v-if="!isEdit"
+            :span="24"
+            class="text-balck text-df"
+            :style="ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null ? 'text-align: right;color: red' : 'text-align: right'"
+          >
+            <el-text class="mx-1" style="color: red">
+              {{ ruleForm.caiJiXQ.wjccsm }}
+            </el-text>
+          </el-col>
+        </el-form-item>
+        <!-- <el-form-item label="审核意见" v-if="ruleForm.caiJiXQ.descShenHe != null && ruleForm.caiJiXQ.descShenHe != ''">
           <el-col :span="24" class="text-balck text-df" style="text-align: right">
             <el-text class="mx-1">
               {{ ruleForm.caiJiXQ.descShenHe }}
             </el-text>
           </el-col>
-        </el-form-item>
-        <br /><br /><br />
+        </el-form-item> -->
+        <!-- <br /><br /><br /> -->
       </el-form>
-      <el-scrollbar style="height: 200px">
+      <el-scrollbar style="height: 200px; margin-left: -30px">
         <el-timeline style="max-width: 400px">
-          <el-timeline-item center timestamp="2022/4/12" placement="top">
-            <el-card>
+          <el-timeline-item center timestamp="2024/8/1" placement="top">
+            2024-8月集团自查任务采集完成
+            <!-- <el-card>
               <h4>22年底徐房集团第一季度巡查采集</h4>
               <p>xxx 提交于 2018/4/12 15:46</p>
               <p>xxx 审核于 2018/4/12 20:10</p>
-            </el-card>
+            </el-card> -->
           </el-timeline-item>
-          <el-timeline-item timestamp="2018/4/3" placement="top">
+          <el-timeline-item timestamp="2024/8/1" placement="top">
             <el-card>
-              <h4>18年底徐房集团第一季度巡查采集</h4>
-              <p>Tom 提交于 2018/4/3 11:46</p>
-              <p>Tom1 审核于 2018/4/3 17:46</p>
+              <h4>2024-8月集团自查任务异常上报</h4>
+              <p>xxx(物业经理)审核于 2024/8/1 15:46</p>
             </el-card>
           </el-timeline-item>
-          <el-timeline-item center timestamp="2017/10/2" placement="top">17年度巡查任务采集 </el-timeline-item>
+          <el-timeline-item timestamp="2024/8/2" placement="top">
+            <el-card>
+              <h4>2024-8月集团自查任务异常上报</h4>
+              <p>xxx(物业经理)审核于 2024/8/2 9:00</p>
+            </el-card>
+          </el-timeline-item>
+          <!-- <el-timeline-item center timestamp="2017/10/2" placement="top">17年度巡查任务采集 </el-timeline-item> -->
         </el-timeline>
       </el-scrollbar>
       <!-- 图片模块 -->
+      <el-dialog v-model="dialogFormVisible" title="异常信息上报" width="100%">
+        <el-form :model="form">
+          <el-form-item label="异常处理意见" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="异常处理" :label-width="formLabelWidth">
+            <el-select v-model="form.region" placeholder="请选择处理类型">
+              <el-option label="自行处理" value="自行处理" />
+              <el-option label="上报处理" value="上报处理" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false"> 上报 </el-button>
+          </div>
+        </template>
+      </el-dialog>
       <div>
         <el-tabs type="border-card" class="demo-tabs" @tab-change="handletabChange">
           <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
@@ -438,7 +848,7 @@
         <el-button @click="save('')" class="mini-btn">暂存</el-button>
       </el-col>
       <el-col :span="6">
-        <el-button class="mini-btn" @click="save('提交')">保存并提交</el-button>
+        <el-button class="mini-btn" @click="save1">异常上报</el-button>
       </el-col>
       <el-col :span="2" />
     </el-row>
@@ -454,7 +864,7 @@
 <script lang="ts" setup>
   import { onMounted, reactive, ref, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import type { FormInstance, FormRules, ElUpload, ElIcon, ElDialog, UploadFile } from 'element-plus'
+  import type { FormInstance, FormRules, ElUpload, ElIcon, ElDialog, UploadFile, UploadProps, UploadUserFile } from 'element-plus'
   import { ElMessage, ElMessageBox, Action } from 'element-plus'
 
   import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
@@ -506,6 +916,21 @@
   const fileList = ref([]) // 存储上传的文件列表
   const uploadRef = ref<InstanceType<typeof ElUpload>>() // 存储上传组件的引用
 
+  const dialogTableVisible = ref(false)
+  const dialogFormVisible = ref(false)
+  const formLabelWidth = '140px'
+
+  const form = reactive({
+    name: '',
+    region: '',
+    date1: '',
+    date2: '',
+    delivery: false,
+    type: [],
+    resource: '',
+    desc: '',
+  })
+
   const handleSuccess = (res, file, fileList) => {
     // 文件上传成功时的处理逻辑
     // console.log('File success:', response, file, fileList)
@@ -519,7 +944,9 @@
       })
     }
   }
-
+  const save1 = () => {
+    dialogFormVisible.value = !dialogFormVisible.value
+  }
   const onBeforeUpload = (file: File) => {
     console.log(file)
 
@@ -864,6 +1291,54 @@
     {
       value: '否',
       text: '否',
+    },
+  ])
+  const sfList = ref([
+    {
+      value: '有',
+      text: '有',
+    },
+    {
+      value: '无',
+      text: '无',
+    },
+  ])
+
+  const sftypeList = ref([
+    {
+      value: '部分',
+      text: '部分',
+    },
+    {
+      value: '整体',
+      text: '整体',
+    },
+  ])
+
+  const sftypeList1 = ref([
+    {
+      value: '外墙开裂',
+      text: '外墙开裂',
+    },
+    {
+      value: '门窗腐朽变形',
+      text: '门窗腐朽变形',
+    },
+    {
+      value: '墙体倾斜',
+      text: '墙体倾斜',
+    },
+    {
+      value: '外墙渗水',
+      text: '外墙渗水',
+    },
+    {
+      value: '屋面不平整',
+      text: '屋面不平整',
+    },
+    {
+      value: '其他',
+      text: '其他',
     },
   ])
 

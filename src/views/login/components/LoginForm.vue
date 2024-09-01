@@ -44,10 +44,10 @@
   </el-form>
 </template>
 <script lang="ts" setup>
-  import { ref, reactive, defineProps } from 'vue'
+  import { ref, reactive, defineProps, onMounted } from 'vue'
   import type { FormInstance } from 'element-plus'
   import { ElNotification } from 'element-plus'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { getTimeStateStr } from '@/utils/index'
   import { loginInfoUser } from '@/api/user'
@@ -56,6 +56,9 @@
   import dayjs from 'dayjs' // 引入dayjs库用于日期处理
 
   const router = useRouter()
+  const route = useRoute()
+  let code = route.query.token
+  console.log('获取传递过来的token', code)
   const UserStore = useUserStore()
   const ruleFormRef = ref<FormInstance>()
   const passwordType = ref('password')
@@ -69,8 +72,8 @@
 
   // 表单数据
   const ruleForm = reactive({
-    username: '18855551800',
-    password: '123456',
+    username: '15755586070',
+    password: '6070',
   })
 
   // 显示密码图标
@@ -85,7 +88,7 @@
         loading.value = true
 
         loginInfoUser(ruleForm.username, ruleForm.password).then((res) => {
-          if (res.data.result == -1) {
+          if (res.data.result == 1) {
             setTimeout(async () => {
               /**
                * A.判断当前用户身份
@@ -97,7 +100,10 @@
                * C.跳转页面
                **/
               //巡查任务列表 res.data.data.xcssList
+              //let xcssList = res.data.data.xcssList
+              /*
               let xcssList = ref([
+
                 {
                   id: 1,
                   renwuName: '24年度第一季度巡查任务',
@@ -129,32 +135,50 @@
                   progress: '未开始',
                 },
               ])
-              SettingStore.setXcssList(xcssList.value)
-              //赋值用户信息
-              let userType = []
-              if (ruleForm.username == 'admin') {
-                userType = ['超级管理员']
-              } else if (ruleForm.username !== 'caijiyuan') {
-                userType = ['审核员']
-              }
+              */
 
-              let userInfo = { username: ruleForm.username, userType: userType, ssbm: '徐房集团' }
-              UserStore.login(userInfo, userType)
-              if (userType.includes('超级管理员')) {
+              /* 240805 
+
+              如果当前用户是 1级物业中心角色 管理员
+              
+              如果当前用户是 2级房管集团角色 审核员
+              
+              如果当前用户是 3级物业公司角色 采集员
+              
+              **/
+              let compList = []
+              res.data.compList.data.forEach((item) => {
+                compList.push(item.wygs)
+              })
+              SettingStore.setXcssList(res.data.xcssList.data)
+              //console.log(SettingStore.xcssList)
+              SettingStore.setCompList(compList)
+              //console.log(SettingStore.compList)
+              //赋值用户信息
+              let userInfo = {
+                username: ruleForm.username,
+                userType: res.data.userinfo.data[0].role,
+                ssbm: res.data.userinfo.data[0].ssbm,
+                rolelevel: res.data.userinfo.data[0].rolelevel,
+              }
+              UserStore.login(userInfo)
+              console.log(userInfo.userType.includes('超级管理员'))
+              if (userInfo.userType.includes('超级管理员')) {
                 router.push({
                   path: '/',
                 })
               } else {
                 //找到最近的巡查任务直接进入建筑列表
                 let cussids = []
-                xcssList.value.forEach((item) => {
+                console.log(res.data.xcssList.data)
+                res.data.xcssList.data.forEach((item) => {
                   if (item.progress == '进行中' && dayjs(item.xcsjS) <= dayjs() && dayjs() <= dayjs(item.xcsjE)) {
                     cussids.push(item)
                   }
                 })
                 if (cussids.length == 1) {
                   SettingStore.setXcrwId = cussids[0].id
-                  buildListinfo(cussids[0].id).then((res) => {
+                  buildListinfo(cussids[0].id, userInfo.ssbm).then((res) => {
                     if (res.data.result == -11) {
                       let jzList = [
                         {
@@ -380,6 +404,10 @@
 
   const props = defineProps({
     onRegister: Function,
+  })
+
+  onMounted(() => {
+    //直接触发 跳转
   })
 </script>
 

@@ -319,7 +319,7 @@
               </a>
             </div>
           </div>
-          <el-row v-if="uploading[n - 1] || uploadedFiles[n - 1]">
+          <!-- <el-row v-if="uploading[n - 1] || uploadedFiles[n - 1]">
             <el-col :span="8"><span>地址:</span></el-col>
             <el-col :span="16"
               ><input
@@ -328,7 +328,7 @@
                 class="inputMsgClass"
                 type="text"
             /></el-col>
-          </el-row>
+          </el-row> -->
         </div>
       </div>
     </Space>

@@ -13,16 +13,21 @@
     </div> -->
     <div class="footer">
       <div class="util">
-        <el-button type="primary" @click="addHandler">
+        <el-button
+          type="primary"
+          v-if="UserStore.userInfo.rolelevel == '3' && UserStore.userInfo.userType.includes('管理员')"
+          @click="addHandler"
+        >
           <el-icon><Plus /></el-icon>
           分配用户任务
         </el-button>
       </div>
       <div class="table-inner">
         <el-table v-loading="loading" :data="tableData" style="width: 100%; height: 100%" border>
-          <el-table-column prop="cjrname" label="采集员" align="center" width="120" />
-          <!-- <el-table-column prop="nickname" label="昵称" align="center" /> -->
-          <!-- <el-table-column prop="sex" label="性别" align="center" /> -->
+          <el-table-column v-for="(column, index) in group" show-overflow-tooltip :label="column.name" :prop="column.prop" align="center" />
+          <!-- <el-table-column prop="cjrname" label="采集员" align="center" width="120" />
+          <el-table-column prop="nickname" label="昵称" align="center" />
+          <el-table-column prop="sex" label="性别" align="center" /> 
           <el-table-column prop="shrName" label="审核员" align="center" width="140" />
           <el-table-column prop="photo" label="手机号" align="center" width="160" />
           <el-table-column prop="jzsl" label="任务建筑数量" align="center" width="160" />
@@ -36,10 +41,17 @@
                 @change="changeStatus(scope.row)"
               />
             </template>
-          </el-table-column>
+          </el-table-column> 
           <el-table-column prop="describe" :show-overflow-tooltip="true" width="280" label="采集员描述" align="center" />
-          <el-table-column prop="createTime" label="创建时间" align="center" width="280" />
-          <el-table-column prop="operator" label="操作" width="120px" align="center" fixed="right">
+          <el-table-column prop="createTime" label="创建时间" align="center" width="280" /> -->
+          <el-table-column
+            prop="operator"
+            label="操作"
+            width="120px"
+            align="center"
+            fixed="right"
+            v-if="UserStore.userInfo.rolelevel == '3' && UserStore.userInfo.userType.includes('管理员')"
+          >
             <template #default="scope">
               <el-button type="primary" size="small" icon="Edit" circle @click="editHandler(scope.row)"></el-button>
               <el-button type="danger" size="small" icon="Delete" circle @click="del(scope.row)"></el-button>
@@ -69,9 +81,17 @@
   import { userData } from '@/mock/system'
   import UserDialog from './userDialog.vue'
   import { useSettingStore } from '@/store/modules/setting'
+  import { useUserStore } from '@/store/modules/user'
   const SettingStore = useSettingStore()
+  const UserStore = useUserStore()
   let props = defineProps({
     tableData: {
+      type: Array,
+      default() {
+        return []
+      },
+    },
+    group: {
       type: Array,
       default() {
         return []
@@ -85,7 +105,7 @@
   const formInline = reactive({})
   const loading = ref(true)
   const currentPage1 = ref(1)
-
+  console.log('11', props.group)
   const onSubmit = () => {
     console.log('submit!', formInline)
     loading.value = true

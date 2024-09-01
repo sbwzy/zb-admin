@@ -11,23 +11,26 @@
   <!-- </div> -->
   <!-- </div> -->
   <div class="cover-view1">
-    <div class="inner-container first-row">
+    <!-- <div class="inner-container first-row">
+      <el-page-header @back="goBack"></el-page-header>
       <el-button size="large" type="primary" @click="back()">返回</el-button>
       <el-button size="large" type="primary" @click="save()">打卡定位</el-button>
       <el-text style="font-size: 15px; color: red" v-if="buildInfo.isMorm">{{ buildInfo.qiaoDaoReason }}</el-text>
-    </div>
+    </div> -->
     <div class="inner-container second-row">
-      <div class="item"
-        ><div style="width: 30px; height: 30px; background-color: #3af960; border-radius: 100%"></div>
-        <el-text style="font-size: 15px">建筑规划点位</el-text>
+      <div>
+        <el-page-header @back="goBack"></el-page-header>
       </div>
+      <div style="margin-left: -40px; margin-right: 20px">
+        <el-text style="font-size: 15px">{{ props.buildInfo.buildName }}</el-text>
+      </div>
+      <!-- <div class="item"
+        ><div style="width: 25px; height: 25px; background-color: #3af960; border-radius: 100%"></div>
+        <el-text style="font-size: 15px">房屋定位落点</el-text>
+      </div> -->
       <div class="item"
-        ><div style="width: 30px; height: 30px; background-color: #ffd633; border-radius: 100%"></div>
-        <el-text style="font-size: 15px">上次巡查点位</el-text></div
-      >
-      <div class="item"
-        ><div style="width: 30px; height: 30px; background-color: #ff3333; border-radius: 100%"></div>
-        <el-text style="font-size: 15px">上次签到位置</el-text></div
+        ><div style="width: 25px; height: 25px; background-color: #3af960; border-radius: 100%"></div>
+        <el-text style="font-size: 15px">房屋定位落点</el-text></div
       >
       <!-- <div class="item"></div> -->
     </div>
@@ -127,8 +130,8 @@
   let newCenter = ref([]) //屏幕中心位置
   let center1 = ref([]) //当前签到人所在位置
   let marker1 = ref([])
-  let marker2 = ref([])
-  let marker3 = ref([])
+  //let marker2 = ref([])
+  //let marker3 = ref([])
   let reason = ref('')
   //原本建筑位置 3AF960
   const dxzicon = L.divIcon({
@@ -172,12 +175,12 @@
     //建筑原规划点位信息 //原规划点位与签到位置的判断
     //if(props.buildInfo.locX == props.buildInfo.tdtX){
     //设置原建筑规划点位marker
-    marker1.value = L.marker([props.buildInfo.locX, props.buildInfo.locY], { icon: dxzicon }).bindPopup('原建筑点位')
+    marker1.value = L.marker([props.buildInfo.locX, props.buildInfo.locY], { icon: dxzicon }).bindPopup('房屋定位落点')
     //}
     //上次打点位置信息
-    marker2.value = L.marker([props.buildInfo.tdtX, props.buildInfo.tdtY], { icon: yxzicon }).bindPopup('上次巡查位置')
+    //marker2.value = L.marker([props.buildInfo.tdtX, props.buildInfo.tdtY], { icon: yxzicon }).bindPopup('房屋定位落点')
     //上次签到位置 (如果当前角色是管理员可以看到)
-    marker3.value = L.marker([props.buildInfo.qianDaoX, props.buildInfo.qianDaoY], { icon: ryqdwz }).bindPopup('上次签到位置')
+    //marker3.value = L.marker([props.buildInfo.qianDaoX, props.buildInfo.qianDaoY], { icon: ryqdwz }).bindPopup('上次签到位置')
 
     polygonList.forEach((item) => {
       var item1 = item.geometry.coordinates
@@ -208,8 +211,8 @@
       maxZoom: 22,
     })
     let tiandiMap = {}
-    tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value, marker2.value, marker3.value]) //.addTo(map.value)
-
+    //tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value, marker2.value, marker3.value]) //.addTo(map.value)
+    tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value]) //.addTo(map.value)
     map.value = L.map(mapContainer.value, {
       center: [props.buildInfo.locX, props.buildInfo.locY],
       zoom: 19,
@@ -272,7 +275,7 @@
       console.log(e.target.getZoom())
     })
   }
-  const back = () => {
+  const goBack = () => {
     console.log('返回')
     router.push({ path: '/form/collection' })
   }
@@ -339,7 +342,7 @@
     if (map.value) {
       map.value.remove()
       map.value = null
-      map.value.off('move')
+      //map.value.off('move')
     }
   })
   //监测到值已经变动了 但是数据没有被刷新
@@ -410,7 +413,7 @@
 
   .second-row {
     /* 自动调整，根据需要可以设定具体宽度以适应四个元素 */
-    flex: 0 0 calc(30% - 15px);
+    flex: 0 0 calc(25%);
     gap: 10px;
   }
 
