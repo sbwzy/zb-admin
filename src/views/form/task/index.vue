@@ -42,6 +42,7 @@
   import { buildOperation } from '@/api/user'
   import { getYouliList, youliCJXQGet } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+  import { MoreFilled } from '@element-plus/icons-vue'
   //import { useTagsViewStore } from '@/store/modules/tagsView'
 
   //const TagsViewStore = useTagsViewStore()
@@ -159,95 +160,152 @@
           //赋值一个数据
           let gfCJXQ = {
             caiJiXQ: {
-              id: 1, //建筑编号
-              buildingID: '1000847380', //公房编号
-              qianDaoSJ: '', //签到时间
-              qianDaoY: '', //签到位置经度
-              qianDaoX: '', //签到位置纬度
-              //locYOld: '31.140229456677', //房屋原位置经度
-              //locXOld: '121.496543339861', //房屋原位置纬度
-              locY: '31.1402311336331', //房屋新位置经度
-              locX: '121.49651706216', //房屋新位置纬度
-              descZuoBiao: '', //坐标备注
-              standartName: '', //建筑名称
-              shouQuanDZ: '测试状态', //授权地址
-              wyName: '测试状态', //物业联系人
-              wyPhone: '测试状态', //物业联系电话
-              standardType: '测试状态', //房屋类型
-              IndustrStatusOld: '测试状态', //原产业状态
-              IndustrStatus: '测试状态', //当前产业状态
-              fangWuYTOld: '居住用房', //原房屋用途
-              fangWuYT: '居住用房', //当前房屋用途
-              desc2: '测试现状', //建筑现状
-              sfmpqs: '是', //现场是否有铭牌
-              bhmpCont: '江南', //保护铭牌内容
-              shiYongROld: '测试使用人', //使用人
-              shiYongR: '测试使用人', //使用人新
-              dkdesc: '测试带看情况', //现场带看情况
-              desc: '测试巡查情况', //外业巡查情况备注
-              descShenHe: '测试审核意见', //审核意见
-              standardState: '', //建筑状态
-              xiaoquName: '', //小区名称
+              id: 2252, //建筑编号
+              MPZId: '100091082', //门牌幢编号
+              locY: '31.2426820469793', //房屋新位置经度
+              locX: '121.460209310194', //房屋新位置纬度
+              XQMC: '南京东路街道新桥1小区', //建筑名称  小区名称
+              XQDZ: '南苏州路1305-1307号', //授权地址  小区地址
+              FWLX: '仓库堆栈', //授权房屋类型
+              ZRZMS: '', //自然幢描述
+              CZMP: '是', //是否存在铭牌
+              ZSQK: '否', //是否在征收地块
+              MPNR: '仓库建筑。1933年建，砖木结构。装饰艺术派风格。清水砖墙。立面檐口、窗台、窗楣及壁柱有灰色水泥几何形压花装饰，中部成“山”字形，突出主入口。1998年台湾设计师登昆艳用作工作室，开创上海近代工业建筑保护利用的实践。', //保护铭牌内容
+              GALP: '南苏州路1305号', //公安绿牌地址
+              DKQK: '', //现场带看情况
+              XGALP: '南苏州路1305号', //当前公安绿牌地址
+              XFWLX: '仓库堆栈', //当前房屋类型
+              PHSY: '', //破坏使用类型
+              PHQK: '', //破坏情况说明
+              PHQKPHOTOS: [], //破坏情况照片
+              DJWJ: '', //是否搭建违建
+              DJWJSL: '', //搭建违建数量
+              DJWJSM: '', //搭建违建说明
+              DJWJPHOTOS: [], //搭建违建照片
+              WGCH: '', //是否违规拆除
+              WGCHLX: '', //违规拆除类型
+              WGCHSM: '', //违规拆除说明
+              WGCHPHOTOS: [], //违规拆除照片
+              SHQK: '', //损坏情况
+              SHSM: '', //损坏情况说明
+              SHPHOTOS: [], //损坏照片
+              ZSFH: '否', //征收复核
+              ZSFHSM: '', //征收复核说明
+              XSQK: '', //修缮情况
+              XSQKSM: '', //修缮情况说明
+              XSQKPHOTOS: [], //修缮照片
+              ResidentList: [
+                {
+                  MPZId: '100091082', //门牌幢编号
+                  DYHID: 'A01', //户编号
+                  SH: '01', //室号
+                  CB: '', //产编
+                  KZZT: false, //是否空置
+                  KZSM: '', //空置说明
+                  FWYT: '非居生产', //房屋用途
+                  XFWLX: '', //当前房屋用途
+                  FWYTPHOTOS: [], //房屋用途现状照片
+                },
+              ],
             },
             lsxcjl: [
-              { data: '2021-09-01 09:09:09', desc: '测试历史采集记录', xcId: '0002', xcName: '21年度巡查记录' },
-              { data: '2022-09-01 09:09:09', desc: '测试历史采集记录', xcId: '0003', xcName: '22年度巡查记录' },
+              { ZT: '24年度7月份该建筑开始采集', TIME: '2024-8-1 13:30', xcrwId: 'XCRW02', Id: '2252', icon: MoreFilled, type: 'success' },
+              {
+                ZT: '24年度7月份该建筑提交异常信息',
+                TIME: '2024-8-1 13:46',
+                xcrwId: 'XCRW02',
+                Id: '2252',
+                color: '#0bbd87',
+                type: 'primay',
+              },
+              { ZT: '24年度7月份该建筑由xxx(物业经理)审核完成', TIME: '2024-8-2 11:46', xcrwId: 'XCRW02', Id: '2252', hollow: true },
             ], //历史采集记录
-            chanYeZT: [], //产业状态照片
-            gongAnLP: [
+            phoneTypeList: [
               {
-                desc: null,
-                diZhi: '中林街131弄5号',
-                fileName: 'image',
-                imgID: 31418,
-                url: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=53544255580C',
-                zhaopIdx: 0,
-              },
-            ], //公安绿牌照片
-            jianZhumcbs: [
-              {
-                desc: null,
-                diZhi: '',
-                fileName: 'image',
-                imgID: 31402,
-                picURL: '/wuyegl/webapi/youligf.picDown?imgID=696E786E6836',
-                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=696E786E6836',
-                zhaopIdx: 0,
-              },
-            ], //建筑名称标识照片
-            mingPai: [
-              {
-                desc: null,
-                diZhi: '',
-                fileName: 'image',
-                mplx: '优秀历史建筑铭牌',
-                imgID: 31417,
-                url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.5/1.jpg',
-                thumbURL: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/1.jpg',
-                zhaopIdx: 0,
-              },
-            ], //铭牌照片
-            waiLiM: [
-              {
-                desc: '东',
-                fileName: 'image',
-                imgID: 31411,
-                url: 'https://ccgis.cn/wuyegl/webapi/youligf.picDown?imgID=9394829591CC',
-                thumbURL: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-                wlmlx: '主立面',
-                zhaopIdx: 0,
+                title: '建筑名称标识',
+                name: 'jianZhumcbs',
+                icon: 'Picture',
+                imglists: [
+                  {
+                    imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Deer',
+                    imgID: 31418,
+                  },
+                  {
+                    imgUrl: ' https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Horse',
+                    imgID: 31418,
+                  },
+                ],
+                tooltip: '指建筑物具体名称，如xx小区、xx学校等<br/>，若无标志，拍摄建筑物大门即可',
+                //等等其他属性
               },
               {
-                desc: '',
-                fileName: 'image',
-                imgID: 31412,
-                url: '/wuyegl/webapi/youligf.picDown?imgID=9295839493CD',
-                thumbURL: '/wuyegl/webapi/youligf.picThumb?imgID=9295839493CD',
-                wlmlx: '主立面',
-                zhaopIdx: 0,
+                title: '公安绿牌',
+                name: 'gongAnLP',
+                icon: 'Picture',
+                imglists: [
+                  {
+                    imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Mountain Lion',
+                    imgID: 31418,
+                    //等等属性
+                  },
+                  // 更多图片...
+                ],
+                tooltip: '',
+                isShowToolTip: false,
+                // 其他属性...
               },
-            ], //外立面照片
+              {
+                title: '外立面',
+                name: 'waiLiM',
+                icon: 'Picture',
+                imglists: [
+                  {
+                    imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Deer',
+                  },
+                  {
+                    imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Horse',
+                  },
+                  {
+                    imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
+                    name: 'Mountain Lion',
+                  },
+                  // 更多图片...
+                ],
+                tooltip: '',
+                isShowToolTip: false,
+                // 其他属性...
+              },
+              {
+                title: '铭牌',
+                name: 'mingPai',
+                icon: 'Picture',
+                imglists: [
+                  { imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC' },
+                  // 更多图片...
+                ],
+                tooltip: '',
+                isShowToolTip: false,
+                // 其他属性...
+              },
+              {
+                title: '产业状态',
+                name: 'chanYeZT',
+                icon: 'Picture',
+                imglists: [
+                  { imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC' },
+                  // 更多图片...
+                ],
+                tooltip: '',
+                isShowToolTip: false,
+                // 其他属性...
+              },
+              // 更多标签页数据...
+            ],
           }
           SettingStore.setOptionSetting(gfCJXQ)
           setTimeout(async () => {

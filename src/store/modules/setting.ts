@@ -22,66 +22,44 @@ export const useSettingStore = defineStore({
     optionSetting: ref({
       //建筑信息
       caiJiXQ: {
-        id: 1, //建筑编号
-        buildingID: '', //公房编号
-        qianDaoSJ: '', //签到时间
-        qianDaoY: '', //签到位置经度
-        qianDaoX: '', //签到位置纬度
-        locYOld: '', //房屋原位置经度
-        locXOld: '', //房屋原位置纬度
-        locY: '', //房屋新位置经度
-        locX: '', //房屋新位置纬度
-        descZuoBiao: '', //坐标备注
-        standartName: '', //建筑名称
-        shouQuanDZ: '', //授权地址
-        wyName: '', //物业联系人
-        wyPhone: '', //物业联系电话
-        galpdz: '',
-        standardType: '', //房屋类型
-        djwjqks: '无', //有无搭建违建
-        jcdjwj: 0, //几处搭建违建
-        djwjsm: '',
-        djwjList: ref<UploadUserFile[]>([
-          {
-            name: 'food.jpeg',
-            url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-          },
-          {
-            name: 'plant-1.png',
-            url: '/images/plant-1.png',
-          },
-        ]),
-        djwjList1:
-          'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        wjcc: '无',
-        wjcctype: '',
-        wjccList: '',
-        wjccsm: '',
-        shqk: '',
-        shqktype: '',
-        shqkList: '',
-        shqksm: '',
-        IndustrStatusOld: '', //原产业状态
-        IndustrStatus: '', //当前产业状态
-        fangWuYTOld: '', //原房屋用途
-        fangWuYT: '', //当前房屋用途
-        desc2: '', //建筑现状
-        sfmpqs: '', //现场是否有铭牌
-        bhmpCont: '', //保护铭牌内容
-        shiYongROld: '', //使用人
-        shiYongR: '', //使用人新
-        dkdesc: '', //现场带看情况
-        desc: '', //外业巡查情况备注
-        descShenHe: '', //审核意见
-        jzState: '', //建筑状态
-        xiaoquName: '', //小区名称
+        id: 2252, //建筑编号
+        MPZId: '100091082', //门牌幢编号
+        locY: '31.2426820469793', //房屋新位置经度
+        locX: '121.460209310194', //房屋新位置纬度
+        XQMC: '南京东路街道新桥1小区', //建筑名称  小区名称
+        XQDZ: '南苏州路1305-1307号', //授权地址  小区地址
+        FWLX: '仓库堆栈', //授权房屋类型
+        ZRZMS: '', //自然幢描述
+        CZMP: '是', //是否存在铭牌
+        ZSQK: '否', //是否在征收地块
+        MPNR: '仓库建筑。1933年建，砖木结构。装饰艺术派风格。清水砖墙。立面檐口、窗台、窗楣及壁柱有灰色水泥几何形压花装饰，中部成“山”字形，突出主入口。1998年台湾设计师登昆艳用作工作室，开创上海近代工业建筑保护利用的实践。', //保护铭牌内容
+        GALP: '南苏州路1305号', //公安绿牌地址
+        DKQK: '', //现场带看情况
+        XGALP: '', //当前公安绿牌地址
+        XFWLX: '', //当前房屋类型
+        PHSY: '', //破坏使用类型
+        PHQK: '', //破坏情况说明
+        PHQKPHOTOS: [], //破坏情况照片
+        DJWJ: '', //是否搭建违建
+        DJWJSL: '', //搭建违建数量
+        DJWJSM: '', //搭建违建说明
+        DJWJPHOTOS: [], //搭建违建照片
+        WGCH: '', //是否违规拆除
+        WGCHLX: '', //违规拆除类型
+        WGCHSM: '', //违规拆除说明
+        WGCHPHOTOS: [], //违规拆除照片
+        SHQK: '', //损坏情况
+        SHSM: '', //损坏情况说明
+        SHPHOTOS: [], //损坏照片
+        ZSFH: '否', //征收复核
+        ZSFHSM: '', //征收复核说明
+        XSQK: '', //修缮情况
+        XSQKSM: '', //修缮情况说明
+        XSQKPHOTOS: [], //修缮照片
+        ResidentList: [],
       },
       lsxcjl: [], //历史巡查记录
-      chanYeZT: [], //产业状态照片
-      gongAnLP: [], //公安绿牌照片
-      jianZhumcbs: [], //建筑名称标识照片
-      mingPai: [], //铭牌照片
-      waiLiM: [], //外立面照片
+      phoneTypeList: [], //照片信息
     }),
 
     // 主题设置
@@ -113,6 +91,118 @@ export const useSettingStore = defineStore({
     },
     // 采集状态
     cjZt: ref(['待检查', '自查无异常', '待审核', '待复核', '复核通过']),
+    fWLXList: ref([
+      {
+        value: '居住用房',
+        text: '居住用房',
+      },
+      {
+        value: '超市（便利店)',
+        text: '超市（便利店)',
+      },
+      {
+        value: '商店',
+        text: '商店',
+      },
+      {
+        value: '专业市场',
+        text: '专业市场',
+      },
+      {
+        value: '餐饮',
+        text: '餐饮',
+      },
+      {
+        value: '旅馆',
+        text: '旅馆',
+      },
+      {
+        value: '办公楼',
+        text: '办公楼',
+      },
+      {
+        value: '工厂',
+        text: '工厂',
+      },
+      {
+        value: '站场码头',
+        text: '站场码头',
+      },
+      {
+        value: '仓库堆栈',
+        text: '仓库堆栈',
+      },
+      {
+        value: '学校',
+        text: '学校',
+      },
+      {
+        value: '文化馆',
+        text: '文化馆',
+      },
+      {
+        value: '体育场',
+        text: '体育场',
+      },
+      {
+        value: '影剧院',
+        text: '影剧院',
+      },
+      {
+        value: '福利院',
+        text: '福利院',
+      },
+      {
+        value: '医院',
+        text: '医院',
+      },
+      {
+        value: '农业建筑',
+        text: '农业建筑',
+      },
+      {
+        value: '公共设施用房',
+        text: '公共设施用房',
+      },
+      {
+        value: '寺庙教堂',
+        text: '寺庙教堂',
+      },
+      {
+        value: '宗祠山庄',
+        text: '宗祠山庄',
+      },
+      {
+        value: '其他',
+        text: '其他',
+      },
+    ]),
+    pHSYList: ref([
+      {
+        value: '超负荷使用',
+        text: '超负荷使用',
+      },
+      {
+        value: '堆栈',
+        text: '堆栈',
+      },
+      {
+        value: '拆改承重结构',
+        text: '拆改承重结构',
+      },
+      {
+        value: '大量增加隔墙',
+        text: '大量增加隔墙',
+      },
+      {
+        value: '开挖地下空间',
+        text: '开挖地下空间',
+      },
+      {
+        value: '其他',
+        text: '其他',
+      },
+    ]),
     //当前巡查任务id 初始化时默认是最新创建的巡查记录
     xcrwId: 1,
     //下属公司

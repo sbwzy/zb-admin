@@ -72,6 +72,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       cors: true,
       // 代理跨域（模拟示例）
       proxy: {
+        //部署直接禁用
         '/api': {
           target: 'https://dev.ccgis.cn', // easymock
           changeOrigin: true,

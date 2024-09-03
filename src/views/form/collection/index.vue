@@ -1,926 +1,537 @@
 <template>
-  <div class="app-container">
-    <div class="app-container-local right-align-inputs">
-      <!-- 表单 -->
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="auto" status-icon label-position="left">
-        <el-form-item label="房屋落点">
-          <el-col :span="20" class="text-center">
-            <el-text
-              class="mx-1"
-              :style="
-                ruleForm.caiJiXQ.qianDaoSJ == null ||
-                ruleForm.caiJiXQ.qianDaoSJ == '' ||
-                (ruleForm.caiJiXQ.descZuoBiao != null && ruleForm.caiJiXQ.descZuoBiao != '')
-                  ? 'text-align: right;color:red'
-                  : 'text-align: right;'
-              "
-            >
-              <!-- &nbsp;
-              {{
-                ruleForm.caiJiXQ.qianDaoSJ == null || ruleForm.caiJiXQ.qianDaoSJ == ''
-                  ? '请先定位打卡'
-                  : ruleForm.caiJiXQ.descZuoBiao == null || ruleForm.caiJiXQ.descZuoBiao == ''
-                  ? '已定位打卡'
-                  : ruleForm.caiJiXQ.descZuoBiao
-              }} -->
-            </el-text>
-          </el-col>
-          <el-col :span="4" class="text-center">
-            <el-icon :size="20">
+  <div class="collction">
+    <div class="collction__box">
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span style="color: #00bfff">房屋落点</span>
+          <el-icon :size="20" style="float: right">
+            <Location @click="dingWeiDaKa()" color="#00BFFF" />
+          </el-icon>
+        </div>
+        <!-- <div class="collction__box__content__text">
+          <el-icon :size="20">
               <Location @click="dingWeiDaKa()" color="#00BFFF" />
             </el-icon>
-          </el-col>
+        </div> -->
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>建筑名称</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.XQMC }}</span>
+        </div>
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>授权地址</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.XQDZ }}</span>
+        </div>
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>授权房屋类型</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.FWLX }}</span>
+        </div>
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>保护铭牌内容</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.MPNR }}</span>
+        </div>
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>公安绿牌地址</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.GALP }}</span>
+        </div>
+      </div>
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>现场带看情况</span>
+        </div>
+        <div class="collction__box__content__text">
+          <span> {{ form.caiJiXQ.DKQK }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="collction__box collction__box__form">
+      <el-form
+        label-position="top"
+        require-asterisk-position="right"
+        ref="ruleFormRef"
+        :model="form.caiJiXQ"
+        style="max-width: 600px"
+        label-width="auto"
+        :rules="rules"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item v-if="isEdit || form.caiJiXQ.FWLX != form.caiJiXQ.XFWLX" label="当前房屋类型" prop="xfwlx">
+          <el-select v-if="isEdit" v-model="form.caiJiXQ.XFWLX" placeholder="选择房屋类型" style="width: 100%">
+            <el-option v-for="item in fWLXList" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.FWLX != form.caiJiXQ.XFWLX ? 'color:red' : ''">{{ form.caiJiXQ.XFWLX }}</span>
+          </div>
         </el-form-item>
-
-        <el-form-item label="建筑名称">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.standartName }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.GALP != form.caiJiXQ.XGALP" label="当前公安绿牌地址" prop="galpdz">
+          <el-input v-model="form.caiJiXQ.XGALP" v-if="isEdit" type="textarea" placeholder="请输入新公安绿牌地址" />
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.GALP != form.caiJiXQ.XGALP ? 'color:red' : ''">{{ form.caiJiXQ.XGALP }}</span>
+          </div>
         </el-form-item>
-
-        <el-form-item label="授权地址">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.shouQuanDZ }}
-            </el-text>
-          </el-col>
+        <!--------------------------破坏情况---------------------------------------->
+        <el-form-item v-if="isEdit || form.caiJiXQ.PHSY != ''" label="破坏情况类型" prop="phsy">
+          <el-select v-if="isEdit" v-model="form.caiJiXQ.PHSY" placeholder="破坏情况类型" multiple style="width: 100%">
+            <el-option v-for="item in pHSYList" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.PHSY != '' ? 'color:red' : ''">{{ form.caiJiXQ.PHSY }}</span>
+          </div>
         </el-form-item>
-
-        <!-- <el-form-item label="物业联系人员">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.wyName }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-
-        <!-- <el-form-item label="物业联系方式">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.wyPhone }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-
-        <!-- <el-form-item label="原房屋用途">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.standardType }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-        <el-form-item label="原房屋业态">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.IndustrStatusOld }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.PHSY != ''" label="破坏情况说明" prop="phqksm">
+          <el-input v-model="form.caiJiXQ.PHQK" v-if="isEdit" type="textarea" placeholder="请输入现场破坏情况" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.PHQK }}</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="当前房屋业态"
-          v-if="
-            isEdit ||
-            (ruleForm.caiJiXQ.IndustrStatus != '' &&
-              ruleForm.caiJiXQ.IndustrStatus != null &&
-              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld)
-          "
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.IndustrStatus != '' &&
-            ruleForm.caiJiXQ.IndustrStatus != null &&
-            ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.IndustrStatus" placeholder="Select" style="width: 240px">
-              <el-option v-for="item in IndustrStatusList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.IndustrStatus != '' &&
-              ruleForm.caiJiXQ.IndustrStatus != null &&
-              ruleForm.caiJiXQ.IndustrStatus != ruleForm.caiJiXQ.IndustrStatusOld
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.IndustrStatus }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <!-- <el-form-item label="原房屋用途">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.fangWuYTOld }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          label="当前房屋用途"
-          v-if="
-            isEdit ||
-            (ruleForm.caiJiXQ.fangWuYT != '' &&
-              ruleForm.caiJiXQ.fangWuYT != null &&
-              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld)
-          "
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.fangWuYT != '' &&
-            ruleForm.caiJiXQ.fangWuYT != null &&
-            ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.fangWuYT" placeholder="Select" style="width: 240px">
-              <el-option v-for="item in fangWuYTList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.fangWuYT != '' &&
-              ruleForm.caiJiXQ.fangWuYT != null &&
-              ruleForm.caiJiXQ.fangWuYT != ruleForm.caiJiXQ.fangWuYTOld
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.fangWuYT }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-
-        <!-- <el-form-item
-          label="建筑现状"
-          class="demo-uni-row"
-          :style="ruleForm.caiJiXQ.desc2 != '' && ruleForm.caiJiXQ.desc2 != null ? 'border-left: 2px solid red;' : ''"
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.desc2" placeholder="Select" style="width: 240px">
-              <el-option v-for="item in desc2List" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.desc2 }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-        <el-form-item label="公安绿牌地址" class="demo-uni-row">
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.caiJiXQ.galpdz" style="width: 240px" autosize type="textarea" placeholder="请输入公安路牌地址" />
-          </el-col>
-          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.galpdz }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          label="现场是否有铭牌"
-          class="demo-uni-row"
-          :style="ruleForm.caiJiXQ.sfmpqs != '' && ruleForm.caiJiXQ.sfmpqs != null ? 'border-left: 2px solid red;' : ''"
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.sfmpqs" placeholder="Select" style="width: 240px">
-              <el-option v-for="item in sfmpqsList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.sfmpqs }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item label="保护铭牌内容">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.bhmpCont }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-        <!-- <el-form-item label="使用人">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.shiYongROld }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-
-        <el-form-item label="现场带看情况" class="demo-uni-row">
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.caiJiXQ.dkdesc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
-          </el-col>
-          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.dkdesc }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item label="外业巡查情况备注" class="demo-uni-row">
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input v-model="ruleForm.caiJiXQ.desc" style="width: 240px" autosize type="textarea" placeholder="请输入现场带看情况" />
-          </el-col>
-          <el-col v-if="!isEdit" :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.desc }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          label="搭建违建使用情况"
-          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.djwjqks" placeholder="是否存在搭建违建情况" style="width: 240px">
-              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null ? 'text-align: right;color: red' : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.djwjqks }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-
-        <el-form-item
-          label="搭建违建数量"
-          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input-number v-model="ruleForm.caiJiXQ.jcdjwj" :min="1" :max="20" value-on-clear="0" />
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.jcdjwj }}
-            </el-text>
-          </el-col>
-        </el-form-item>
-        <el-form-item
-          label="搭建违建照片取证"
-          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-upload
-              v-model:file-list="ruleForm.caiJiXQ.djwjList"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-            >
-              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+        <el-form-item v-if="isEdit || form.caiJiXQ.PHSY != ''" label="现场破坏照片取证" prop="phqkphotos">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.PHQKPHOTOS && form.caiJiXQ.PHQKPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.PHQKPHOTOS" :key="index">
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="form.caiJiXQ.PHQKPHOTOS.map((item) => item.url)"
+                :src="item.url"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('PHQKPHOTOS', index)" v-if="isEdit">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload" v-if="isEdit">
               <el-icon><Plus /></el-icon>
-            </el-upload>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
-            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
-            <!-- <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.jcdjwj }}
-            </el-text> -->
-          </el-col>
+              <input
+                type="file"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, 'PHQKPHOTOS')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="collction__box__form__text" v-else>
+            <span>暂无</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="搭建违建说明"
-          v-if="isEdit || (ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null && ruleForm.caiJiXQ.djwjqks == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input
-              v-model="ruleForm.caiJiXQ.djwjsm"
-              style="width: 240px"
-              autosize
-              type="textarea"
-              placeholder="请输入搭建违建现场情况"
-            />
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.djwjqks != '' && ruleForm.caiJiXQ.djwjqks != null ? 'text-align: right;color: red' : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1" style="color: red">
-              {{ ruleForm.caiJiXQ.djwjsm }}
-            </el-text>
-          </el-col>
+        <!--------------------------------搭建违建---------------------------------->
+        <el-form-item v-if="isEdit || form.caiJiXQ.DJWJ == '是'" label="是否搭建违建" prop="djwj">
+          <el-select v-if="isEdit" v-model="form.caiJiXQ.DJWJ" placeholder="是否搭建违建" style="width: 100%">
+            <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.DJWJ == '是' ? 'color:red' : ''">{{ form.caiJiXQ.DJWJ }}</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="违规拆除情况"
-          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.wjcc" placeholder="是否存在违规拆除情况" style="width: 240px">
-              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null ? 'text-align: right;color: red' : 'text-align: right'"
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.wjcc }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.DJWJ == '是'" label="搭建违建数量" prop="jcdjwj">
+          <el-input-number
+            v-model="form.caiJiXQ.DJWJSL"
+            placeholder="请输入搭建违建的数量"
+            v-if="isEdit"
+            :min="1"
+            :max="999"
+            controls-position="right"
+          />
+          <div class="collction__box__form__text" v-else>
+            <span>{{ form.caiJiXQ.DJWJSL }}</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="违规拆除类型"
-          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.djwjqks == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.wjcctype" placeholder="是否存在违规拆除情况" style="width: 240px">
-              <el-option v-for="item in sftypeList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.wjcctype }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.DJWJ == '是'" label="搭建违建说明" prop="djwjsm">
+          <el-input v-model="form.caiJiXQ.DJWJSM" v-if="isEdit" type="textarea" placeholder="请输入现场搭建违建情况" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.DJWJSM }}</span>
+          </div>
         </el-form-item>
-        <el-form-item
-          label="违规拆除照片取证"
-          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-upload
-              v-model:file-list="ruleForm.caiJiXQ.wjccList"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-            >
-              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+        <el-form-item v-if="isEdit || form.caiJiXQ.DJWJ == '是'" label="搭建违建照片取证" prop="djwjPhotos">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.DJWJPHOTOS && form.caiJiXQ.DJWJPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.DJWJPHOTOS" :key="index">
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="form.caiJiXQ.DJWJPHOTOS.map((item) => item.url)"
+                :src="item.url"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('DJWJPHOTOS', index)" v-if="isEdit">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload" v-if="isEdit">
               <el-icon><Plus /></el-icon>
-            </el-upload>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
-            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
-            <!-- <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.jcdjwj }}
-            </el-text> -->
-          </el-col>
+              <input
+                type="file"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, 'DJWJPHOTOS')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="collction__box__form__text" v-else>
+            <span>暂无</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="违规拆除情况说明"
-          v-if="isEdit || (ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null && ruleForm.caiJiXQ.wjcc == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input
-              v-model="ruleForm.caiJiXQ.wjccsm"
-              style="width: 240px"
-              autosize
-              type="textarea"
-              placeholder="请输入违规拆除现场情况"
-            />
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="ruleForm.caiJiXQ.wjcc != '' && ruleForm.caiJiXQ.wjcc != null ? 'text-align: right;color: red' : 'text-align: right'"
-          >
-            <el-text class="mx-1" style="color: red">
-              {{ ruleForm.caiJiXQ.wjccsm }}
-            </el-text>
-          </el-col>
+        <!-----------------------------------违规拆除------------------------------->
+        <el-form-item v-if="isEdit || form.caiJiXQ.WGCH == '是'" label="是否违规拆除" prop="wgch">
+          <el-select v-model="form.caiJiXQ.WGCH" v-if="isEdit" placeholder="是否存在违规拆除情况">
+            <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.WGCH == '是' ? 'color:red' : ''">{{ form.caiJiXQ.WGCH }} </span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="损坏情况"
-          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.shqk" placeholder="是否存在损坏情况" style="width: 240px">
-              <el-option v-for="item in sfList" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null ? 'text-align: right;color: red' : 'text-align: right'"
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.shqk }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.WGCH == '是'" label="违规拆除情况" prop="wgchlx">
+          <el-select v-model="form.caiJiXQ.WGCHLX" v-if="isEdit" placeholder="违规拆除类型">
+            <el-option v-for="item in wgcjqklx" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.WGCHLX }} </span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="损坏情况类型"
-          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-select v-model="ruleForm.caiJiXQ.shqktype" multiple placeholder="损坏情况类型" style="width: 240px">
-              <el-option v-for="item in sftypeList1" :key="item.value" :label="item.text" :value="item.value" />
-            </el-select>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.shqktype }}
-            </el-text>
-          </el-col>
+        <el-form-item v-if="isEdit || form.caiJiXQ.WGCH == '是'" label="违建拆除说明" prop="wgchsm">
+          <el-input v-model="form.caiJiXQ.WGCHSM" v-if="isEdit" type="textarea" placeholder="请输入现场违建拆除情况" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.WGCHSM }}</span>
+          </div>
         </el-form-item>
-        <el-form-item
-          label="损坏情况照片取证"
-          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有')"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-upload
-              v-model:file-list="ruleForm.caiJiXQ.shqkList"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-            >
-              <!--action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+        <el-form-item v-if="isEdit || form.caiJiXQ.WGCH == '是'" label="违规拆除照片取证" prop="wgchphotos">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.WGCHPHOTOS && form.caiJiXQ.WGCHPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.WGCHPHOTOS" :key="index">
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="form.caiJiXQ.WGCHPHOTOS"
+                :src="item"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('WGCHPHOTOS', index)" v-if="isEdit">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload" v-if="isEdit">
               <el-icon><Plus /></el-icon>
-            </el-upload>
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="
-              ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-                ? 'text-align: right;color: red'
-                : 'text-align: right'
-            "
-          >
-            <!-- <el-image v-for="url in ruleForm.caiJiXQ.djwjList" :key="url" :src="ruleForm.caiJiXQ.djwjList1" /> -->
-            <el-image :src="ruleForm.caiJiXQ.djwjList1" />
-            <!-- <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.jcdjwj }}
-            </el-text> -->
-          </el-col>
+              <input
+                type="file"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, 'WGCHPHOTOS')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="collction__box__form__text" v-else>
+            <span>'暂无'</span>
+          </div>
         </el-form-item>
-
-        <el-form-item
-          label="损坏情况说明"
-          v-if="isEdit || (ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null)"
-          class="demo-uni-row"
-          :style="
-            ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null && ruleForm.caiJiXQ.shqk == '有'
-              ? 'border-left: 2px solid red;'
-              : ''
-          "
-        >
-          <el-col :span="24" v-if="isEdit" class="text-balck text-df" style="text-align: center">
-            <el-input
-              v-model="ruleForm.caiJiXQ.shqksm"
-              style="width: 240px"
-              autosize
-              type="textarea"
-              placeholder="请输入违规拆除现场情况"
-            />
-          </el-col>
-          <el-col
-            v-if="!isEdit"
-            :span="24"
-            class="text-balck text-df"
-            :style="ruleForm.caiJiXQ.shqk != '' && ruleForm.caiJiXQ.shqk != null ? 'text-align: right;color: red' : 'text-align: right'"
-          >
-            <el-text class="mx-1" style="color: red">
-              {{ ruleForm.caiJiXQ.wjccsm }}
-            </el-text>
-          </el-col>
+        <!------------------------------------破坏情况------------------------------>
+        <el-form-item v-if="isEdit || form.caiJiXQ.SHQK != ''" label="损坏情况" prop="shqk">
+          <el-select v-model="form.caiJiXQ.SHQK" v-if="isEdit" multiple placeholder="损坏情况类型">
+            <el-option v-for="item in shqklx" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.SHQK != '' ? 'color:red' : ''">{{ form.caiJiXQ.SHQK }} </span>
+          </div>
         </el-form-item>
-        <!-- <el-form-item label="审核意见" v-if="ruleForm.caiJiXQ.descShenHe != null && ruleForm.caiJiXQ.descShenHe != ''">
-          <el-col :span="24" class="text-balck text-df" style="text-align: right">
-            <el-text class="mx-1">
-              {{ ruleForm.caiJiXQ.descShenHe }}
-            </el-text>
-          </el-col>
-        </el-form-item> -->
-        <!-- <br /><br /><br /> -->
+        <el-form-item v-if="isEdit || form.caiJiXQ.SHQK != ''" label="损坏情况说明" prop="shqksm">
+          <el-input v-model="form.caiJiXQ.SHSM" v-if="isEdit" type="textarea" placeholder="现场损坏情况说明" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.SHSM }}</span>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="isEdit || form.caiJiXQ.SHQK != ''" label="损坏情况照片取证" prop="shqkphotos">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.SHQKPHOTOS && form.caiJiXQ.SHQKPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.SHQKPHOTOS" :key="index">
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="form.caiJiXQ.SHQKPHOTOS"
+                :src="item"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('SHQKPHOTOS', index)" v-if="isEdit">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload" v-if="isEdit">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, 'SHQKPHOTOS')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="collction__box__form__text" v-else>
+            <span>暂无</span>
+          </div>
+        </el-form-item>
+        <!---------------------------------征收复核--------------------------------->
+        <el-form-item v-if="isEdit || form.caiJiXQ.ZSQK != form.caiJiXQ.ZSFH" label="是否纳入征收" prop="wgchsm">
+          <el-select v-model="form.caiJiXQ.ZSFH" v-if="isEdit" placeholder="是否纳入征收范围">
+            <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.ZSQK != form.caiJiXQ.ZSFH ? 'color:red' : ''">{{ form.caiJiXQ.ZSFH }} </span>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="isEdit || form.caiJiXQ.ZSQK != form.caiJiXQ.ZSFH" label="征收复核说明" prop="zsfhsm">
+          <el-input v-model="form.caiJiXQ.ZSFHSM" v-if="isEdit" type="textarea" placeholder="现场征收情况说明" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.ZSFHSM }}</span>
+          </div>
+        </el-form-item>
+        <!---------------------------------修缮情况--------------------------------->
+        <el-form-item v-if="isEdit || form.caiJiXQ.XSQK == '修缮中'" label="修缮情况" prop="xsqk">
+          <el-select v-model="form.caiJiXQ.XSQK" v-if="isEdit" multiple placeholder="修缮情况">
+            <el-option v-for="item in xsqkType" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <div class="collction__box__form__text" v-else>
+            <span :style="form.caiJiXQ.XSQK == '修缮中' ? 'color:red' : ''">{{ form.caiJiXQ.XSQK }} </span>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="isEdit || form.caiJiXQ.XSQK == '修缮中'" label="修缮情况说明" prop="xsqksm">
+          <el-input v-model="form.caiJiXQ.XSQKSM" v-if="isEdit" type="textarea" placeholder="现场修缮情况说明" />
+          <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ form.caiJiXQ.XSQKSM }}</span>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="isEdit || form.caiJiXQ.XSQK == '修缮中'" label="修缮情况照片" prop="xsqkphotos">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.XSQKPHOTOS && form.caiJiXQ.XSQKPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.XSQKPHOTOS" :key="index">
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="form.caiJiXQ.XSQKPHOTOS"
+                :src="item"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('XSQKPHOTOS', index)" v-if="isEdit">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload" v-if="isEdit">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, 'XSQKPHOTOS')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <div class="collction__box__form__text" v-else>
+            <span>暂无</span>
+          </div>
+        </el-form-item>
       </el-form>
-      <el-scrollbar style="height: 200px; margin-left: -30px">
-        <el-timeline style="max-width: 400px">
-          <el-timeline-item center timestamp="2024/8/1" placement="top">
-            2024-8月集团自查任务采集完成
-            <!-- <el-card>
-              <h4>22年底徐房集团第一季度巡查采集</h4>
-              <p>xxx 提交于 2018/4/12 15:46</p>
-              <p>xxx 审核于 2018/4/12 20:10</p>
-            </el-card> -->
-          </el-timeline-item>
-          <el-timeline-item timestamp="2024/8/1" placement="top">
-            <el-card>
-              <h4>2024-8月集团自查任务异常上报</h4>
-              <p>xxx(物业经理)审核于 2024/8/1 15:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2024/8/2" placement="top">
-            <el-card>
-              <h4>2024-8月集团自查任务异常上报</h4>
-              <p>xxx(物业经理)审核于 2024/8/2 9:00</p>
-            </el-card>
-          </el-timeline-item>
-          <!-- <el-timeline-item center timestamp="2017/10/2" placement="top">17年度巡查任务采集 </el-timeline-item> -->
-        </el-timeline>
-      </el-scrollbar>
-      <!-- 图片模块 -->
-      <el-dialog v-model="dialogFormVisible" title="异常信息上报" width="100%">
-        <el-form :model="form">
-          <el-form-item label="异常处理意见" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="异常处理" :label-width="formLabelWidth">
-            <el-select v-model="form.region" placeholder="请选择处理类型">
-              <el-option label="自行处理" value="自行处理" />
-              <el-option label="上报处理" value="上报处理" />
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <div class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false"> 上报 </el-button>
+    </div>
+    <!---------------------------------建筑历史--------------------------------->
+    <div class="collction__box">
+      <div class="collction__box__content">
+        <div class="collction__box__content__title">
+          <span>建筑历史</span>
+        </div>
+        <div class="collction__box__timeline">
+          <el-timeline style="max-width: 400px">
+            <el-timeline-item
+              v-for="(item, index) in form.lsxcjl"
+              :key="item"
+              :icon="item.icon"
+              :type="item.type"
+              :color="item.color"
+              :size="item.size"
+              :happend="item.happend"
+              center
+              :timestamp="item.TIME"
+              lacement="top"
+            >
+              {{ item.ZT }}
+            </el-timeline-item>
+          </el-timeline>
+        </div>
+      </div>
+    </div>
+    <!---------------------------------图片模块--------------------------------->
+    <div class="collction__box">
+      <div class="collction__box__content">
+        <div class="collction__nav">
+          <div class="collction__navpostion">
+            <div class="collction__navbox" ref="navBox">
+              <span
+                :ref="(el) => (itemRefs[index] = el)"
+                v-for="(item, index) in form.phoneTypeList"
+                :key="index"
+                @click="handleClick(index, $event)"
+              >
+                {{ item.title }}
+              </span>
+              <p class="collction__solid" :style="{ left: phoneTypeIndex * 90 + 'px' }">
+                <span></span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!---按照要求显示提示-->
+        <!-- <div class="collction__navtitle">{{ form.phoneTypeList[phoneTypeIndex].tooltip }}</div> -->
+        <div class="collction__box__image">
+          <div class="collction__box__image__content" v-for="(item, index) in form.phoneTypeList[phoneTypeIndex].imglists" :key="index">
+            <el-image
+              style="width: 100px; height: 100px"
+              :initial-index="index"
+              :preview-src-list="form.phoneTypeList[phoneTypeIndex].imglists.map((item) => item.imgUrl)"
+              :src="item.imgUrl"
+              fit="cover"
+            />
+          </div>
+          <!-- <div class="collction__box__image__upload" v-if="isEdit">
+            <el-icon><Plus /></el-icon>
+            <input
+              type="file"
+              class="collction__box__image__upload--input"
+              @change="handleFileChange($event, phoneTypeList[phoneTypeIndex])"
+              accept="image/*"
+            />
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="collction__edit">
+      <template v-if="!isEdit">
+        <template v-if="userInfo.groupName == '外业管理员' && bannerData.standardState == '待审核'">
+          <div class="collction__edit__abnormal" @click.stop="centerDialogVisibleOpen(false)">
+            <el-icon><Edit /></el-icon>
+            <span class="collction__edit__btn--text">驳回</span>
+          </div>
+          <div class="collction__edit__pass" @click.stop="centerDialogVisibleOpen(true)">
+            <el-icon><Edit /></el-icon>
+            <span class="collction__edit__btn--text">通过</span>
           </div>
         </template>
-      </el-dialog>
-      <div>
-        <el-tabs type="border-card" class="demo-tabs" @tab-change="handletabChange">
-          <el-tab-pane v-for="(tab, index) in phoneTypeList" :key="index">
-            <template #label>
-              <span class="custom-tabs-label">
-                <el-icon>
-                  <component :is="tab.icon" />
-                </el-icon>
-                <span>{{ tab.title }}</span> </span
-              >&nbsp;
-              <!-- 动态判断是否展示tooltip -->
-              <el-tooltip
-                v-if="tab.isShowToolTip"
-                class="box-item"
-                effect="dark"
-                :content="tab.tooltip"
-                :disabled="!tab.isShowToolTip"
-                placement="bottom"
-                show-arrow="false"
-                raw-content="true"
-              >
-                <el-icon>
-                  <InfoFilled />
-                </el-icon>
-              </el-tooltip>
-            </template>
-            <el-row class="uploader-item" :gutter="20">
-              <el-progress :text-inside="true" :stroke-width="20" :percentage="uploadpercentage" status="exception">
-                <span>Content</span>
-              </el-progress>
-              <Upload
-                :maxCount="10"
-                :error-info="errorInfo"
-                :before-upload="onBeforeUpload"
-                v-model:fileList="ruleForm[tab.name]"
-                @change="onChange"
-                @remove="onRemove"
-              />
-
-              <!-- <Upload
-                multiple
-                :maxCount="5"
-                :error-info="errorInfo"
-                :before-upload="onBeforeUpload"
-                upload-mode="custom"
-                :custom-request="onCustomRequest"
-                v-model:fileList="ruleForm[tab.name]"
-                @change="onChange"
-                @remove="onRemove"
-              /> -->
-
-              <!-- 
-              <Upload multiple :maxCount="3" v-model:fileList="ruleForm[tab.name]" /> -->
-              <!-- <imgPreDelUpload :count="6" :imageList="ruleForm[tab.name]"></imgPreDelUpload> -->
-              <!-- <el-upload
-                ref="uploadRef"
-                action="#"
-                list-type="picture-card"
-                :on-success="handleSuccess"
-                :file-list="fileList"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :on-exceed="handleExceed"
-                :on-change="handleChange"
-                :auto-upload="false"
-              >
-                <el-icon>
-                  <Plus />
-                </el-icon>
-              </el-upload> -->
-
-              <!-- <view>
-                <view class="example-body">
-                  <cc-imgPreDelUpload style="visibility: hidden; height: 1px; width: 1px"></cc-imgPreDelUpload>
-                  <view v-for="(item, theindex) in phoneTypeList" :key="theindex" :data-id="theindex">
-                    <cc-imgPreDelUpload
-                      v-if="TabCur == theindex"
-                      :isEdit="isEdit"
-                      :shouQuanDZ="bannerData.shouQuanDZ"
-                      :canEdit="canEdit"
-                      :baseUrl="baseUrl"
-                      :count="6"
-                      :currentType="item.type"
-                      :percentage="percentage[theindex]"
-                      :lodingImg="lodingImg[theindex]"
-                      :imageList="imgList[theindex]"
-                    ></cc-imgPreDelUpload>
-                  </view>
-                </view>
-              </view> -->
-
-              <!-- <el-upload
-                v-model="ruleForm[tab.name]"
-                :action="fileUrl"
-                accept="image/jpg,image/jpeg,image/png"
-                list-type="picture-card"
-                :limit="9"
-                :on-success="handleSuccess"
-                :before-upload="beforeAvatarUpload"
-                :before-remove="() => true"
-                :file-list="imageList"
-              >
-                <template #file="{file }">
-                  <div class="image-container">
-                    <img :src="file.fileUrl" alt="" class="image" />
-                    <el-input>{{ file.imageExplain }}</el-input>
-                  </div>
-                </template> 
-                <div slot="file" slot-scope="{ file }">
-                  <img class="el-upload-list__item-thumbnail" :src="ruleForm[tab.name].fileUrl" alt="" />
-                  <el-input v-model="ruleForm[tab.name].imageExplain" placeholder="图片说明" clearable> </el-input>
-                  <span class="el-upload-list__item-actions">
-                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(ruleForm[tab.name])">
-                      <i class="el-icon-zoom-in"></i>
-                    </span>
-                    <span class="el-upload-list__item-delete" @click="handleRemove(ruleForm[tab.name], imageList)">
-                      <i class="el-icon-delete"></i>
-                    </span>
-                  </span>
-                </div>
-              </el-upload>
-              预览的图片弹框
-              <el-dialog class="review-dialog" append-to-body :visible.sync="imgDialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt="" />
-              </el-dialog> -->
-
-              <!-- <el-dialog v-model="dialogVisible" top="25vh" width="98%">
-                <img w-full :src="dialogImageUrl" alt="Preview Image" style="width: 100%" />
-              </el-dialog> -->
-            </el-row>
-          </el-tab-pane>
-        </el-tabs>
+        <div class="collction__edit__btn" @click.stop="isEditChange(true)">
+          <el-icon><Edit /></el-icon>
+          <span class="collction__edit__btn--text">编辑</span>
+        </div>
+      </template>
+      <template v-else>
+        <div class="collction__edit__abnormal" @click.stop="dialogFormVisibleShow">
+          <el-icon><InfoFilled /></el-icon>
+          <span>异常上报</span>
+        </div>
+        <div class="collction__edit__save" @click.stop="isEditChange(true)">
+          <el-icon><DocumentChecked /></el-icon>
+          <span>暂存</span>
+        </div>
+        <div class="collction__edit__cancel" @click.stop="isEditChange(false)">
+          <el-icon><CircleClose /></el-icon>
+          <span>取消</span>
+        </div>
+      </template>
+    </div>
+    <div class="dialog" v-if="centerDialogVisible">
+      <div class="dialog__content">
+        <h3 class="dialog__content--title">{{ apply ? '审核通过' : '审核拒绝' }}</h3>
+        <div class="dialog__content__box">
+          <el-input v-model="contetForm.name" type="textarea" :placeholder="`请输入${apply ? '审核意见' : '驳回理由'}`" />
+        </div>
+        <div class="dialog__content__footer">
+          <div @click.stop="centerDialogVisible = false">取消</div>
+          <div @click.stop="approveConfirm">确定</div>
+        </div>
       </div>
-
-      <!-- 审核模块 -->
-      <div v-if="userInfo.groupName == '外业管理员' && bannerData.standardState == '待审核'" style="">
-        <div style="height: auto; overflow: auto; border-bottom: none; border-top: 6px solid #e3e4e5" class="itemCloum" title="">
-          <uni-card style="height: auto; margin: 0" title="">
-            <uni-easyinput v-model="approvalComment" type="textarea" placeholder="请录入审核意见:" />
-            <view class="" style="text-align: center; padding-top: 5rpx">
-              <uni-row class="demo-uni-row" style="">
-                <uni-col :span="12" class="text-grey">
-                  <button @click="approveRefuse()" class="mini-btn" style="background-color: red; color: white" size="mini">驳回</button>
-                </uni-col>
-                <uni-col :span="12" class="text-balck text-df" style="text-align: center">
-                  <button @click="approveConfirm()" class="mini-btn" style="" size="mini">通过</button>
-                </uni-col>
-              </uni-row>
-            </view>
-          </uni-card>
+    </div>
+    <div class="dialog" v-if="dialogFormVisible">
+      <div class="dialog__content">
+        <h3 class="dialog__content--title">异常信息上报</h3>
+        <div class="dialog__content__box">
+          <el-input v-model="contetForm.name" type="textarea" placeholder="请输入异常处理意见" />
+          <el-select style="margin: 20px 0" v-model="contetForm.region" placeholder="请选择处理类型">
+            <el-option label="自行处理" value="自行处理" />
+            <el-option label="上报处理" value="上报处理" />
+          </el-select>
+        </div>
+        <div class="dialog__content__footer">
+          <div @click.stop="dialogFormVisible = false">取消</div>
+          <div>确定</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="button-sp-area foot-button" style="position: fixed; bottom: 0px; width: 100%; background: #fafafa">
-    <el-row v-if="isEdit">
-      <el-col :span="2" />
-      <el-col :span="6">
-        <el-button class="mini-btn" @click="cancle()">取消</el-button>
-      </el-col>
-      <el-col :span="8">
-        <el-button @click="save('')" class="mini-btn">暂存</el-button>
-      </el-col>
-      <el-col :span="6">
-        <el-button class="mini-btn" @click="save1">异常上报</el-button>
-      </el-col>
-      <el-col :span="2" />
-    </el-row>
-    <el-row v-if="!isEdit">
-      <el-col :span="8"></el-col>
-      <el-col :span="8">
-        <el-button @click="editDetail()" class="mini-btn">编辑</el-button>
-      </el-col>
-      <el-col :span="8"></el-col>
-    </el-row>
-  </div>
 </template>
+
 <script lang="ts" setup>
-  import { onMounted, reactive, ref, computed } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import type { FormInstance, FormRules, ElUpload, ElIcon, ElDialog, UploadFile, UploadProps, UploadUserFile } from 'element-plus'
-  import { ElMessage, ElMessageBox, Action } from 'element-plus'
-
-  import { Plus, ZoomIn, Download, Delete } from '@element-plus/icons-vue'
-  // 在这里引入接口
-  import { youliCJXQGet, getLocationInfo, buildOperation, xinXiGX } from '@/api/user'
+  import { onMounted, ref, computed, reactive } from 'vue'
+  import { storeToRefs } from 'pinia'
   import { useSettingStore } from '@/store/modules/setting'
-  import imgPreDelUpload from './components/imgPreDelUpload.vue'
-  import Upload from './components/Upload.vue'
-  import { rafTimeout, cancelRaf } from './components/utils'
-  import {
-    validatorMethod,
-    verifyPhone,
-    verifyTextColor,
-    verifyIdCard,
-    verifyWebsite,
-    verifyHtml,
-    verifyDate,
-    verifyEmail,
-  } from '@/utils/validate'
-  interface Tab {
-    title: string
-    icon: string
-    imglists: any
-    tooltip: string
-    isShowToolTip: boolean
-    name: string //唯一标识
-    // 其他属性...
-  }
-
-  interface FileType {
-    name?: string // 文件名
-    url: any // 文件地址
-    desc: string //描述
-    dizhi: string
-    zhaopIdx: number
-    [propName: string]: any // 添加一个字符串索引签名，用于包含带有任意数量的其他属性
-  }
+  import { useUserStore } from '@/store/modules/user'
+  import { youliCJXQGet, getLocationInfo, buildOperation, xinXiGX } from '@/api/user'
+  import { FormRules } from 'element-plus'
+  import { useRoute, useRouter } from 'vue-router'
+  import { MoreFilled } from '@element-plus/icons-vue'
+  import { ElMessage } from 'element-plus'
+  const router = useRouter()
   const SettingStore = useSettingStore()
-  const saveSub = () => {
-    // 文件上传成功时的处理逻辑
-    console.log('File success:', fileList1)
+  // 获取数据
+  const { optionSetting, gfIdList, gfid, fWLXList, pHSYList } = storeToRefs(SettingStore)
+  // 引入接口
+  const route = useRoute()
+  // 获取路由参数
+  const currentBuildingId = route.params.id
+  // 是否编辑
+  const isEdit = ref(false)
+  // 获取当前公房id
+  const currentGfIdList = ref(gfIdList.value)
+  // 获取当前公房id
+  const currentGfid = ref(gfid.value)
+  // 获取当前公房信息
+  const centerDialogVisible = ref(false)
+  // 滚动盒子主体
+  const navBox = ref(null)
+  // 子盒子路径
+  const itemRefs = ref([])
+  // 验证 需要红色标识填写
+  const rules = computed((): FormRules => {
+    if (isEdit.value) {
+      return {
+        //galpdz: [{ required: true, message: '请输入公安绿牌地址', trigger: 'blur' }],
+      }
+    }
+    return {}
+  })
+  const ruleFormRef = ref()
+  // 处理点击事件
+  function handleClick(index, event) {
+    phoneTypeIndex.value = index // 更新当前索引
+
+    // 滚动到中间
+    if (itemRefs.value[index]) {
+      itemRefs.value[index].scrollIntoView({
+        behavior: 'smooth', // 平滑滚动
+        block: 'center', // 滚动到父容器的中间
+        inline: 'center', // 对于水平滚动的情况下，也滚动到中间
+      })
+    }
   }
-  let fileUrl = '/api//wuyegl/webapi/youligf.picUpload' //图片文件上传地址
-
-  let fileList1 = []
-  let imgDialogVisible = false
-  let dqzhaopye = 'jianZhumcbs'
-  let errorInfo = ref('') // 上传错误提示信息
-  const fileList = ref([]) // 存储上传的文件列表
-  const uploadRef = ref<InstanceType<typeof ElUpload>>() // 存储上传组件的引用
-
-  const dialogTableVisible = ref(false)
-  const dialogFormVisible = ref(false)
-  const formLabelWidth = '140px'
-
-  const form = reactive({
+  // 表单数据
+  const form = ref(optionSetting.value)
+  // 提交反馈数据
+  let contetForm = reactive({
     name: '',
     region: '',
     date1: '',
@@ -930,211 +541,213 @@
     resource: '',
     desc: '',
   })
+  // 是否显示弹窗
+  const dialogFormVisible = ref(false)
+  // 提交异常信息
 
-  const handleSuccess = (res, file, fileList) => {
-    // 文件上传成功时的处理逻辑
-    // console.log('File success:', response, file, fileList)
-    console.log(res)
-    console.log(file)
-    if (res.result !== 1 && res.result.url) {
-      ruleForm[dqzhaopye].push({
-        fileUrl: file.url, //图片渲染路径
-        imageUrl: res.result.url, //要上传的路径
-        imageExplain: '', //要上传的图片说明
+  // 是否显示异常信息弹窗
+  const dialogFormVisibleShow = () => {
+    contetForm.name = null
+    contetForm.region = null
+    dialogFormVisible.value = true
+  }
+
+  // true 同意 false 驳回
+  const apply = ref(true)
+  // 审核内容
+  const approvalComment = ref('')
+  //提交审批
+  const approveConfirm = async () => {
+    if (!approvalComment.value && !apply.value) return ElMessage.warning('请填写审核意见！')
+    await buildOperation(gfid.value, apply ? '审批同意' : '审批拒绝', approvalComment.value)
+    centerDialogVisible.value = false
+    initData(null)
+  }
+  const centerDialogVisibleOpen = (value: boolean) => {
+    apply.value = value
+    centerDialogVisible.value = true
+  }
+
+  // removalType
+  //选项列表值
+  const parent = ref([
+    {
+      value: '是',
+      text: '是',
+    },
+    {
+      value: '否',
+      text: '否',
+    },
+  ])
+  const wgcjqklx = ref([
+    {
+      value: '部分被违规拆除',
+      text: '部分被违规拆除',
+    },
+    {
+      value: '整体被违规拆除',
+      text: '整体被违规拆除',
+    },
+  ])
+  const shqklx = ref([
+    {
+      value: '外墙开裂',
+      text: '外墙开裂',
+    },
+    {
+      value: '门窗腐朽变形',
+      text: '门窗腐朽变形',
+    },
+    {
+      value: '墙体倾斜',
+      text: '墙体倾斜',
+    },
+    {
+      value: '外墙渗水',
+      text: '外墙渗水',
+    },
+    {
+      value: '屋面不平整',
+      text: '屋面不平整',
+    },
+    {
+      value: '其他',
+      text: '其他',
+    },
+  ])
+
+  const xsqkType = ref([
+    {
+      value: '近三年未修缮',
+      text: '近三年未修缮',
+    },
+    {
+      value: '修缮中',
+      text: '修缮中',
+    },
+    {
+      value: '近三年完成过修缮',
+      text: '近三年完成过修缮',
+    },
+  ])
+  // 上传文件函数
+  const handleFileChange = (event, item) => {
+    const file = event.target.files[0] // 获取选中的文件
+    if (file) {
+      console.log('文件地址', file)
+      item.imglists.push({
+        imgUrl: URL.createObjectURL(file),
       })
-    }
-  }
-  const save1 = () => {
-    dialogFormVisible.value = !dialogFormVisible.value
-  }
-  const onBeforeUpload = (file: File) => {
-    console.log(file)
-
-    const acceptTypes = ['image/jpg', 'image/jpeg', 'image/png']
-    if (file.size > 10000 * 1024) {
-      // 文件大于 1000KB 时取消上传
-      errorInfo.value = '文件必须小于10M'
-      return false
-    }
-    if (!acceptTypes.includes(file.type)) {
-      // 继续上传
-      errorInfo.value = '只能上传jpg、jpeg、png、pdf格式的文件'
-      return false // 停止上传
-    }
-    return true
-  }
-
-  const onCustomRequest = (file: File) => {
-    return new Promise((resolve, reject) => {
-      rafTimeout(() => {
-        // 模拟接口调用返回name和url
-        // if (file.type === 'application/pdf') {
-        //   var res = {
-        //     name: 'Markdown.pdf',
-        //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/Markdown.pdf',
-        //   }
-        // } else {
-        //   var res = {
-        //     name: '1.jpg',
-        //     url: 'https://cdn.jsdelivr.net/gh/themusecatcher/resources@0.0.3/1.jpg',
-        //   }
-        // }
-        console.log('111', file)
-        console.log(ruleForm)
-        var res = {
-          name: file.name,
-          url: URL.createObjectURL(file),
-        }
-        console.log(res)
-        if (res) {
-          resolve(res)
-        } else {
-          reject('upload request fail ...')
-        }
-      }, 200)
-    })
-  }
-
-  const onChange = (files: FileType[]) => {
-    console.log('change:', files)
-    console.log(ruleForm)
-  }
-  const onRemove = (file: FileType) => {
-    console.log('remove:', file)
-  }
-
-  const handleRemove = (file, fileList) => {
-    // 文件移除时的处理逻辑
-    console.log('File removed:', file, fileList)
-  }
-  //预览
-  const handlePictureCardPreview = (file) => {
-    dialogImageUrl = file.fileUrl
-    imgDialogVisible = true
-  }
-
-  const handleExceed = (file, fileList) => {
-    // 文件预览时的处理逻辑
-    console.log('File Exceed:', file, fileList)
-  }
-  const handlePreview = (file) => {
-    // 文件预览时的处理逻辑
-    console.log('File preview:', file)
-  }
-
-  //选择图片
-  const handleChange = (file, fileList) => {
-    // 文件状态改变时的处理逻辑
-    console.log('File changed:', file, fileList)
-    // 在这里更新fileList响应式引用
-    fileList.value = [fileList.value, file]
-    fileList1.push(file)
-    compressImg(file, 0.3, ruleForm.caiJiXQ.shouQuanDZ)
-
-    console.log('File imageList:', imageList)
-  }
-
-  let currentType = '建筑名称标识'
-  let currentTypeDevName = 'jianZhumcbs'
-  const imageList = ref([])
-
-  const compressImg = (file, quality, shouQuanDZ) => {
-    if (Array.isArray(file)) {
-      return Promise.all(file.map((e) => compressImg(e, quality, shouQuanDZ)))
+      console.log('预览', URL.createObjectURL(file))
     } else {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        console.log('File imageList:')
-        reader.onload = ({ target: { result: src } }) => {
-          const image = new Image()
-          console.log('File imageList:')
-          image.onload = async () => {
-            console.log('File imageList:')
-            const canvas = document.createElement('canvas')
-            console.log('File imageList:')
-            canvas.width = image.width
-            console.log('File imageList:')
-            canvas.height = image.height
-            console.log('File imageList:')
-            canvas.getContext('2d').drawImage(image, 0, 0, image.width, image.height)
-            const canvasURL = canvas.toDataURL('image/jpeg', quality)
-            const buffer = atob(canvasURL.split(',')[1])
-            let length = buffer.length
-            console.log('File imageList:')
-            const bufferArray = new Uint8Array(new ArrayBuffer(length))
-            while (length--) {
-              bufferArray[length] = buffer.charCodeAt(length)
-            }
-            console.log('File imageList:')
-            const miniFile = new File([bufferArray], file.name, { type: 'image/jpeg' })
+    }
+  }
 
-            console.log('File imageList:')
-            let maxzhaopIdx = -1
-            imageList.value.forEach((item) => {
-              if (item.zhaopIdx != null && Number(item.zhaopIdx) > maxzhaopIdx) {
-                maxzhaopIdx = Number(item.zhaopIdx)
-              }
-            })
+  // 上传文件函数
+  const handleImageChange = (event, name, urlName?: string) => {
+    const file = event.target.files[0] // 获取选中的文件
+    let zpBase64
+    // 创建一个新的 FileReader 对象
+    const reader = new FileReader()
+    // 读取 File 对象
+    reader.readAsDataURL(file)
+    // 加载完成后
+    reader.onload = function () {
+      // 将读取的数据转换为 base64 编码的字符串
+      //const base64String = reader.result.split(',')[1]
+      zpBase64 = reader.result // base64
+      //this.serviceIcon = reader.result;
+      // 解析为 Promise 对象，并返回 base64 编码的字符串
+      ////resolve('data:image/jpeg;base64,' + base64String)
+    }
+    // 加载失败时
+    reader.onerror = async function (err) {
+      //reject(new Error('Failed to load file'))
+      console.log(err)
+    }
+    //let zpBase64
 
-            console.log('File imageList:')
+    //const reader = new FileReader();
+    //const formData = new FormData()
+    //formData.append('image', file)
+    //const aBlob = new Blob([file], { type: file.type }) // 指定转换成blob的类型
 
-            const tmpdict = reactive({
-              diZhi: shouQuanDZ,
-              fileName: 'image',
-              picURL: canvasURL,
-              thumbURL: canvasURL,
-              zhaopIdx: maxzhaopIdx + 1,
-              mplx: currentType === '铭牌' ? '优秀历史建筑铭牌' : null,
-              wlmlx: currentType === '外立面' ? '主立面' : null,
-            })
-
-            imageList.value.push(tmpdict)
-            console.log(imageList.value)
-            //uni.hideLoading();
-
-            resolve({
-              file: miniFile,
-              origin: file,
-              beforeSrc: src,
-              afterSrc: canvasURL,
-              beforeKB: Number((file.size / 1024).toFixed(2)),
-              afterKB: Number((miniFile.size / 1024).toFixed(2)),
-            })
-          }
-          //image.src = src;
-        }
-        reader.readAsDataURL(file)
+    if (file) {
+      // 文件流地址
+      console.log('文件地址', file)
+      console.log('name', name)
+      console.log('urlName', urlName)
+      console.log('zpBase64', zpBase64)
+      // console.log('aBlob', aBlob)
+      // console.log('formData', formData)
+      // URL.createObjectURL(file) 本地预览壁纸
+      if (!Array.isArray(form.value.caiJiXQ[name])) {
+        form.value.caiJiXQ[name] = []
+      }
+      //if (urlName) {
+      form.value.caiJiXQ[name].push({
+        ['url']: URL.createObjectURL(file),
+        ['name']: file.name,
+        ['file']: zpBase64,
       })
+      //} else {
+      //form.value.caiJiXQ[name].push(URL.createObjectURL(file))
+      //}
+      console.log('预览', URL.createObjectURL(file))
+    } else {
+    }
+  }
+  const fileToBase64 = (file) => {
+    // 创建一个新的 FileReader 对象
+    const reader = new FileReader()
+    // 读取 File 对象
+    reader.readAsDataURL(file)
+    // 加载完成后
+    reader.onload = function () {
+      // 将读取的数据转换为 base64 编码的字符串
+      //const base64String = reader.result.split(',')[1]
+      return reader.result
+      // 解析为 Promise 对象，并返回 base64 编码的字符串
+      ////resolve('data:image/jpeg;base64,' + base64String)
+    }
+    // 加载失败时
+    reader.onerror = function (err) {
+      //reject(new Error('Failed to load file'))
+      return err
     }
   }
 
-  // 手动调用上传组件的submit方法
-  const handletabChange = (currentTabIndex) => {
-    currentType = phoneTypeList.value[currentTabIndex].title
-    currentTypeDevName = phoneTypeList.value[currentTabIndex].name
-    console.log(currentType)
-    console.log(phoneTypeList.value[currentTabIndex].title)
+  const deleteImage = (name: string, index: number) => {
+    form.value.caiJiXQ[name].splice(index, 1)
   }
-
-  // 手动调用上传组件的submit方法
-  const submitUpload = () => {
-    if (uploadRef.value) {
-      uploadRef.value.submit()
-    }
+  /**
+   * @description: 编辑状态切换
+   * @param {boolean} val
+   * @return {*}
+   */
+  const isEditChange = (val: boolean) => {
+    isEdit.value = val
   }
-
-  const tabChange = (tab) => {
-    console.log(tab)
+  const baseUrl = ref('')
+  const messageText = ref('保存成功')
+  const buttonDisabled = ref(false)
+  const msgType = ref('')
+  const bannerData = ref<any>({})
+  const canEdit = ref(false)
+  const screamHeight = ref(0)
+  const nvueWidth = ref(0)
+  interface Tab {
+    title: string
+    icon: string
+    imglists: any
+    tooltip: string
+    isShowToolTip: boolean
+    name: string //唯一标识
+    // 其他属性...
   }
-  const dialogImageRemark = ref('')
-  let dialogImageUrl = ref('')
-  const dialogVisible = ref(false)
-  const disabled = ref(false)
-
-  const router = useRouter()
-  const route = useRoute()
-  const currentBuildingId = route.params.id
-
+  // 标识下标
+  const phoneTypeIndex = ref(0)
   const phoneTypeList = ref<Tab[]>([
     {
       title: '建筑名称标识',
@@ -1142,11 +755,11 @@
       icon: 'Picture',
       imglists: [
         {
-          imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
           name: 'Deer',
         },
         {
-          imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+          imgUrl: ' https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
           name: 'Horse',
         },
         // 更多图片...
@@ -1176,11 +789,11 @@
       icon: 'Picture',
       imglists: [
         {
-          imgUrl: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
           name: 'Deer',
         },
         {
-          imgUrl: 'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
           name: 'Horse',
         },
         {
@@ -1220,269 +833,27 @@
     },
     // 更多标签页数据...
   ])
-  const beforeAvatarUpload = (file) => {
-    const isJPG = ['image/jpg', 'image/jpeg', 'image/png'].includes(file.type)
-    const isLt10M = file.size / 1024 / 1024 < 10
-    if (!isJPG) {
-      ElMessage.error('上传头像图片只能是 JPG/PNG 格式!')
-    }
-    if (!isLt10M) {
-      ElMessage.error('上传头像图片大小不能超过 10MB!')
-    }
-    return isJPG && isLt10M
+
+  //跳转定位页面
+  const dingWeiDaKa = () => {
+    router.push({
+      path: '/function-page/Map/BingMap',
+    })
   }
 
-  const ruleFormRef = ref<FormInstance>()
-  const ruleForm = SettingStore.optionSetting
-
-  const rules = reactive<FormRules>({
-    phone: [
-      {
-        required: true,
-        validator: validatorMethod(verifyPhone, '请输入正确的手机号'),
-        trigger: ['blur', 'change'],
-      },
-    ],
-    idCard: [
-      {
-        required: true,
-        validator: validatorMethod(verifyIdCard, '请输入正确的身份证'),
-        trigger: ['blur', 'change'],
-      },
-    ],
-    website: [
-      {
-        required: true,
-        validator: validatorMethod(verifyWebsite, '请输入正确的网址'),
-        trigger: ['blur', 'change'],
-      },
-    ],
-    html: [
-      {
-        required: true,
-        validator: validatorMethod(verifyHtml, '请输入正确的html标签'),
-        trigger: ['blur', 'change'],
-      },
-    ],
-    date: [
-      {
-        required: true,
-        validator: validatorMethod(verifyDate, '请输入正确的日期'),
-        trigger: ['blur', 'change'],
-      },
-    ],
-    email: [
-      {
-        required: true,
-        validator: validatorMethod(verifyEmail, '请输入正确的邮箱'),
-        trigger: ['blur', 'change'],
-      },
-    ],
+  const userInfo: any = computed((): any => {
+    return useUserStore().userInfo
   })
-
-  import { useUserStore } from '@/store/modules/user'
-
-  //选项列表值
-  const sfmpqsList = ref([
-    {
-      value: '是',
-      text: '是',
-    },
-    {
-      value: '否',
-      text: '否',
-    },
-  ])
-  const sfList = ref([
-    {
-      value: '有',
-      text: '有',
-    },
-    {
-      value: '无',
-      text: '无',
-    },
-  ])
-
-  const sftypeList = ref([
-    {
-      value: '部分',
-      text: '部分',
-    },
-    {
-      value: '整体',
-      text: '整体',
-    },
-  ])
-
-  const sftypeList1 = ref([
-    {
-      value: '外墙开裂',
-      text: '外墙开裂',
-    },
-    {
-      value: '门窗腐朽变形',
-      text: '门窗腐朽变形',
-    },
-    {
-      value: '墙体倾斜',
-      text: '墙体倾斜',
-    },
-    {
-      value: '外墙渗水',
-      text: '外墙渗水',
-    },
-    {
-      value: '屋面不平整',
-      text: '屋面不平整',
-    },
-    {
-      value: '其他',
-      text: '其他',
-    },
-  ])
-
-  const desc2List = ref([
-    {
-      value: '',
-      text: '无',
-    },
-    {
-      value: '缺绿牌',
-      text: '缺绿牌',
-    },
-    {
-      value: '多绿牌',
-      text: '多绿牌',
-    },
-  ])
-
-  const fangWuYTList = ref([
-    {
-      value: '非居住办公用房',
-      text: '非居住办公用房',
-    },
-    {
-      value: '非居住生产用房',
-      text: '非居住生产用房',
-    },
-    {
-      value: '非居住营业用房',
-      text: '非居住营业用房',
-    },
-
-    {
-      value: '非居住办公用房、非居住生产用房',
-      text: '非居住办公用房、非居住生产用房',
-    },
-    {
-      value: '非居住生产用房、非居住营业用房',
-      text: '非居住生产用房、非居住营业用房',
-    },
-    {
-      value: '非居住营业用房、非居住办公用房',
-      text: '非居住营业用房、非居住办公用房',
-    },
-
-    {
-      value: '居住用房',
-      text: '居住用房',
-    },
-  ])
-
-  const IndustrStatusList = ref([
-    {
-      value: '正常',
-      text: '正常',
-    },
-    {
-      value: '已列入征收',
-      text: '已列入征收',
-    },
-    {
-      value: '已灭失',
-      text: '已灭失',
-    },
-  ])
-  //当前公房Id
-  const currentGfid = ref(SettingStore.gfid)
-  //公房Id列表
-  const currentGfIdList = ref(SettingStore.gfIdList)
-
-  //其他变量
-
-  // 定义响应式数据
-  const uploadState = ref('')
-  const imguping = ref(false)
-  const totalImgCount = ref(0)
-  const successImgCount = ref(0)
-  const failedImgCount = ref(0)
-  const uploadpercentage = ref(0)
-  const buttonDisabled = ref(false)
-  const lastpagezoom = ref(14)
-  const lastpagecenterX = ref(31.24534249284188)
-  const lastpagecenterY = ref(121.47915601730348)
-  const currentgfIdListindex = ref(1)
-  const gfIdListlength = ref(1)
-  const approvalComment = ref('')
-  const approvalStatus = ref('')
-  const canEdit = ref(false)
-  const userInfo = useUserStore().userInfo as any
-  const baseUrl = ref('')
-  const lodingImg = ref([])
-  const TabCur = ref(0)
-  const gfid = ref('')
-  const scrollLeft = ref(0)
-  const percentage = ref([[], [], [], [], []])
   const imgList = ref([[], [], [], [], []])
-  const imgListPre = ref('')
-  const tooltipVisible = ref(false)
-  const currentTooltipText = ref('')
-  const tooltipPosition = ref({ left: 0, top: 0 })
-  const delIndex = ref(null)
-  const choosedIndex = ref(0)
-  const screamHeight = ref(0)
-  const msgType = ref('')
-  const messageText = ref('保存成功')
-  const value2 = ref(0)
-  const value = ref(['0', '1'])
-  const value1 = ref(['1'])
-  const isEdit = ref(false)
-  const nvueWidth = ref(0)
-  const qianDaoSJ = ref(null)
-  const currentTabIndex = ref(0)
-  const bannerData = ref({}) as any
-  const addressListsStr = ref('')
-  const bannerDataPre = ref('')
-  const scroll = ref(0)
-  const pagefrom = ref(0)
-  const qu = ref('')
-  const jieZhen = ref('')
-  const xiaoQu = ref('')
-  const isback = ref(false)
-  //页面传输参数
-  const optionSetting = ref(SettingStore.optionSetting)
-
   onMounted(() => {
     const gfIdListLength = currentGfIdList.value.length
     const currentGfIdListIndex = currentGfIdList.value.findIndex((value) => value === currentGfid.value) + 1
-
     SettingStore.setGfid('12362')
-    console.log('currentGfid', currentGfid)
-    console.log('optionSetting', optionSetting)
-    console.log('gfid', gfid)
-
-    console.log('param', route.params)
     gfid.value = route.params.id as string
-    console.log('ingfid', gfid)
     screamHeight.value = window.innerHeight
     nvueWidth.value = window.innerWidth
-    console.log('nvueWidth', nvueWidth.value)
-    console.log('screamHeight', screamHeight.value)
-    console.log('nvueWidth', nvueWidth.value)
     initData(null)
   })
-
   const initData = (qianDaosj) => {
     buttonDisabled.value = false
     baseUrl.value = SettingStore.BASE
@@ -1517,7 +888,7 @@
               res.data.chanYeZT.data,
             ]
             imgList.value = imgListData
-            sortImg()
+            // sortImg()
           }
         })
         .catch((error) => {
@@ -1528,384 +899,408 @@
       messageText.value = err.message
     }
   }
+  // const save = async (type) => {
+  //   let resMsg = ''
+  //   let flag = false
+  //   let isnotice = false
+  //   let noticemsg = ''
+  //   try {
+  //     imgList.value.forEach((imgitem, imgindex) => {
+  //       if (
+  //         phoneTypeList.value[imgindex].title === '建筑名称标识' &&
+  //         (bannerData.value.xiaoquName === '' || bannerData.value.xiaoquName === null) &&
+  //         !(imgitem === null || imgitem.length === 0)
+  //       ) {
+  //         flag = true
+  //         noticemsg = '数据库中未匹配到建筑名称，请勿上传建筑名称标识图片!'
+  //         isnotice = true
+  //       }
+  //       if (phoneTypeList.value[imgindex].title === '公安绿牌') {
+  //         imgitem.forEach((item, index) => {
+  //           if (item.diZhi === null || item.diZhi === '') {
+  //             flag = true
+  //             noticemsg = '请填写绿牌对应的地址!'
+  //             isnotice = true
+  //           }
+  //         })
+  //       }
+  //     })
 
-  // Function to sort images (assuming it's defined elsewhere or inline)
-  //排序
-  const sortImg = () => {
-    imgList.value.forEach(function (item, index) {
-      item.sort(function (a, b) {
-        if (a.zhaopIdx < b.zhaopIdx) {
-          return -1
-        }
-        if (a.zhaopIdx > b.zhaopIdx) {
-          return 1
-        }
-        return 0
-      })
-    })
-  }
+  //     if (flag) {
+  //       throw new Error(noticemsg)
+  //     } else {
+  //       if (bannerData.value.IndustrStatus !== '正常' && (bannerData.value.desc === '' || bannerData.value.desc === null)) {
+  //         isnotice = true
+  //         throw new Error('当前产业状态异常 需要填写外业巡查情况备注!')
+  //       } else {
+  //         buttonDisabled.value = true
+  //         uploadState.value = '信息保存中...'
 
-  //跳转页面
-  const back = () => {
-    isback.value = true
-    if (pagefrom.value == 1) {
-      SettingStore.setOptionSetting({ key: 'qu', val: qu.value })
+  //         const { data } = await xinXiGX(bannerData.value)
+  //         if (data.result !== 1) {
+  //           throw new Error('保存失败' + data.msg)
+  //         } else {
+  //           resMsg = '信息保存成功'
+  //           uploadState.value = '信息保存成功...'
+  //         }
+  //       }
 
-      SettingStore.setOptionSetting({ key: 'jieZhen', val: jieZhen.value })
-      SettingStore.setOptionSetting({ key: 'xiaoQu', val: xiaoQu.value })
-      SettingStore.setOptionSetting({ key: 'lastpagezoom', val: lastpagezoom.value })
-      SettingStore.setOptionSetting({ key: 'lastpagecenterX', val: lastpagecenterX.value })
-      SettingStore.setOptionSetting({ key: 'lastpagecenterY', val: lastpagecenterY.value })
+  //       let imgDatas = []
+  //       let hasUploadImg = false
 
-      router.push({
-        path: '/form/validateForm',
-        query: {
-          id: '',
-        },
-      })
-    } else {
-      SettingStore.setOptionSetting({ key: 'currentTabIndex', val: currentTabIndex })
+  //       imgList.value.forEach((imgPartList, partIndex) => {
+  //         if (imgPartList != null) {
+  //           imgPartList.forEach((img, imgIndex) => {
+  //             if (img.imgID === null || img.imgID === '') {
+  //               totalImgCount.value += 1
+  //               hasUploadImg = true
+  //             }
+  //           })
+  //         }
+  //       })
 
-      router.push({
-        path: '/form/validateForm',
-        query: {
-          id: '',
-        },
-      })
-    }
-  }
+  //       if (!hasUploadImg && type === '提交') {
+  //         uploadState.value = '提交中...'
+  //         const { data } = await buildOperation(gfid.value, '提交', '')
+  //         if (data.result !== 1) {
+  //           throw new Error('提交失败，' + data.msg)
+  //         } else {
+  //           resMsg = '提交成功'
+  //           uploadState.value = '提交成功...'
+  //         }
+  //       }
 
-  //跳转定位页面
-  const dingWeiDaKa = () => {
-    isback.value = true
+  //       if (!hasUploadImg) {
+  //         // 如果没有图片需要上传，则不需要执行图片上传逻辑
+  //       } else {
+  //         // 执行图片上传逻辑
+  //         uploadState.value = '图片上传中...'
+  //         imguping.value = true
 
-    router.push({
-      path: '/function-page/Map/BingMap',
-    })
-  }
-
-  //打开编辑页面
-  const editDetail = () => {
-    console.log(ruleForm)
-    if (!canEdit.value) {
-      //imgListPre.value = JSON.stringify(imgList.value);
-      //bannerDataPre.value = JSON.stringify(bannerData.value);
-      isEdit.value = true
-      buttonDisabled.value = false
-    }
-  }
-  //关闭编辑页面
-  const cancle = () => {
-    isEdit.value = false
-    console.log(imgListPre.value)
-    console.log(bannerDataPre.value)
-    //imgList.value = JSON.parse(imgListPre.value);
-    //bannerData.value = JSON.parse(bannerDataPre.value);
-  }
-  const dialogClose = () => {}
-
-  //提交审批确认
-  const approveConfirm = () => {
-    buildOperation(gfid.value, '审批同意', approvalComment.value)
-      .then((res) => {
-        console.log(res.data) // 或者其他正确的属性路径
-        // 在这里处理res
-        if (res.data.result != 1) {
-          msgType.value = 'error'
-          messageText.value = res.data.msg
-        }
-        initData(null)
-        //this.back();
-      })
-      .catch((error) => {
-        console.error('获取数据时出错:', error)
-        msgType.value = 'error'
-        messageText.value = error
-        ElMessage.error(messageText.value)
-      })
-  }
-  //提交审批拒绝
-  const approveRefuse = () => {
-    //console.log(this.approvalComment)
-    if (approvalComment.value == null || approvalComment.value == '') {
-      //console.log(approvalComment)
-      msgType.value = 'error'
-      messageText.value = '请填写审核意见！'
-      ElMessage.warning(messageText.value)
-    } else {
-      buildOperation(gfid.value, '审批拒绝', approvalComment.value)
-        .then((res) => {
-          console.log(res.data) // 或者其他正确的属性路径
-          // 在这里处理res
-          ////console.log("领取还是放弃还是审核还是撤回", res)
-          if (res.data.result != 1) {
-            msgType.value = 'error'
-            messageText.value = res.data.msg
-          }
-          initData(null)
-          //back();
-        })
-        .catch((error) => {
-          console.error('获取数据时出错:', error)
-          msgType.value = 'error'
-          messageText.value = error
-          ElMessage.error(messageText.value)
-        })
-      // ElMessageBox.confirm('Are you sure to close this dialog?')
-      // .then(() => {
-
-      // })
-      // .catch(() => {
-      //   // catch error
-      // })
-    }
-  }
-
-  // 方法
-  const save = async (type) => {
-    let resMsg = ''
-    let flag = false
-    let isnotice = false
-    let noticemsg = ''
-    try {
-      console.log(fileList1)
-      imgList.value.forEach((imgitem, imgindex) => {
-        if (
-          phoneTypeList.value[imgindex].title === '建筑名称标识' &&
-          (bannerData.value.xiaoquName === '' || bannerData.value.xiaoquName === null) &&
-          !(imgitem === null || imgitem.length === 0)
-        ) {
-          flag = true
-          noticemsg = '数据库中未匹配到建筑名称，请勿上传建筑名称标识图片!'
-          isnotice = true
-        }
-        if (phoneTypeList.value[imgindex].title === '公安绿牌') {
-          imgitem.forEach((item, index) => {
-            if (item.diZhi === null || item.diZhi === '') {
-              flag = true
-              noticemsg = '请填写绿牌对应的地址!'
-              isnotice = true
-            }
-          })
-        }
-      })
-
-      if (flag) {
-        throw new Error(noticemsg)
-      } else {
-        if (bannerData.value.IndustrStatus !== '正常' && (bannerData.value.desc === '' || bannerData.value.desc === null)) {
-          isnotice = true
-          throw new Error('当前产业状态异常 需要填写外业巡查情况备注!')
-        } else {
-          buttonDisabled.value = true
-          uploadState.value = '信息保存中...'
-
-          const { data } = await xinXiGX(bannerData.value)
-          if (data.result !== 1) {
-            throw new Error('保存失败' + data.msg)
-          } else {
-            resMsg = '信息保存成功'
-            uploadState.value = '信息保存成功...'
-          }
-        }
-
-        let imgDatas = []
-        let hasUploadImg = false
-
-        imgList.value.forEach((imgPartList, partIndex) => {
-          if (imgPartList != null) {
-            imgPartList.forEach((img, imgIndex) => {
-              if (img.imgID === null || img.imgID === '') {
-                totalImgCount.value += 1
-                hasUploadImg = true
-              }
-            })
-          }
-        })
-
-        if (!hasUploadImg && type === '提交') {
-          uploadState.value = '提交中...'
-          const { data } = await buildOperation(gfid.value, '提交', '')
-          if (data.result !== 1) {
-            throw new Error('提交失败，' + data.msg)
-          } else {
-            resMsg = '提交成功'
-            uploadState.value = '提交成功...'
-          }
-        }
-
-        if (!hasUploadImg) {
-          // 如果没有图片需要上传，则不需要执行图片上传逻辑
-        } else {
-          // 执行图片上传逻辑
-          uploadState.value = '图片上传中...'
-          imguping.value = true
-
-          for (const [partIndex, imgPartList] of imgList.value.entries()) {
-            if (imgPartList != null) {
-              for (const [imgIndex, img] of imgPartList.entries()) {
-                if (img.imgID === null || img.imgID === '') {
-                  const itemImg = {
-                    gfID: gfid.value,
-                    fenLei: phoneTypeList[partIndex].type,
-                    zaopIdx: img.zhaopIdx,
-                    fileName: img.fileName,
-                    diZhi: img.diZhi,
-                    desc: img.desc,
-                    base64_con: img.picURL,
-                    wlmlx: img.wlmlx,
-                    mplx: img.mplx,
-                  }
-                  //暂时写死图片上传的返回
-                  const resImg = { data: { result: 1, msg: '' } }
-                  //const resImg = await caijiTuPian(itemImg);
-                  if (resImg.data.result !== 1) throw new Error('图片上传失败，' + resImg.data.msg)
-                  successImgCount.value++
-                  uploadpercentage.value = Math.round((100 * successImgCount.value) / totalImgCount.value)
-                }
-              }
-            }
-          }
-          uploadState.value = '图片上传成功...'
-          if (successImgCount.value === totalImgCount.value && type === '提交') {
-            uploadState.value = '提交中...'
-            const resFinalSubmit = await buildOperation(bannerData.value.id, '提交', '')
-            if (resFinalSubmit.data.result !== 1) throw new Error('提交失败，' + resFinalSubmit.data.msg)
-            resMsg = '提交成功'
-            uploadState.value = '提交成功...'
-          }
-        }
-      }
-    } catch (e) {
-      ElMessage.error(e.message)
-    } finally {
-      if (resMsg !== '') {
-        ElMessage({
-          showClose: false,
-          message: resMsg,
-          type: 'success',
-          duration: 2000,
-        })
-      }
-      if (!flag) {
-        isEdit.value = false
-        initData(null) // 假设initData()方法已定义
-      }
-      buttonDisabled.value = false
-    }
-  }
+  //         for (const [partIndex, imgPartList] of imgList.value.entries()) {
+  //           if (imgPartList != null) {
+  //             for (const [imgIndex, img] of imgPartList.entries()) {
+  //               if (img.imgID === null || img.imgID === '') {
+  //                 const itemImg = {
+  //                   gfID: gfid.value,
+  //                   fenLei: phoneTypeList[partIndex].type,
+  //                   zaopIdx: img.zhaopIdx,
+  //                   fileName: img.fileName,
+  //                   diZhi: img.diZhi,
+  //                   desc: img.desc,
+  //                   base64_con: img.picURL,
+  //                   wlmlx: img.wlmlx,
+  //                   mplx: img.mplx,
+  //                 }
+  //                 //暂时写死图片上传的返回
+  //                 const resImg = { data: { result: 1, msg: '' } }
+  //                 //const resImg = await caijiTuPian(itemImg);
+  //                 if (resImg.data.result !== 1) throw new Error('图片上传失败，' + resImg.data.msg)
+  //                 successImgCount.value++
+  //                 uploadpercentage.value = Math.round((100 * successImgCount.value) / totalImgCount.value)
+  //               }
+  //             }
+  //           }
+  //         }
+  //         uploadState.value = '图片上传成功...'
+  //         if (successImgCount.value === totalImgCount.value && type === '提交') {
+  //           uploadState.value = '提交中...'
+  //           const resFinalSubmit = await buildOperation(bannerData.value.id, '提交', '')
+  //           if (resFinalSubmit.data.result !== 1) throw new Error('提交失败，' + resFinalSubmit.data.msg)
+  //           resMsg = '提交成功'
+  //           uploadState.value = '提交成功...'
+  //         }
+  //       }
+  //     }
+  //   } catch (e) {
+  //     ElMessage.error(e.message)
+  //   } finally {
+  //     if (resMsg !== '') {
+  //       ElMessage({
+  //         showClose: false,
+  //         message: resMsg,
+  //         type: 'success',
+  //         duration: 2000,
+  //       })
+  //     }
+  //     if (!flag) {
+  //       isEdit.value = false
+  //       initData(null) // 假设initData()方法已定义
+  //     }
+  //     buttonDisabled.value = false
+  //   }
+  // }
 </script>
 
 <style lang="scss" scoped>
-  .remark-input {
-    margin-top: 8px;
-    width: 100px; /* 根据需要调整宽度 */
+  .collction__navbox::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 */
   }
-  .app-container {
-    color: #606266;
-  }
-  .foot-button {
-    text-align: center;
-  }
-
-  ::v-deep(.item-form) {
-    .el-form-item__label {
-      margin-bottom: 0 !important;
-    }
-  }
-
-  .right-align-inputs .el-form-item .el-input__inner {
-    text-align: right;
-    background-color: transparent;
-  }
-
-  .right-align-inputs .el-form-item {
-    margin-bottom: 9px;
-  }
-
-  .app-container-local {
-    height: 100%;
+  .collction {
     width: 100%;
-    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-    background: white;
-    padding: 5px;
-    box-sizing: border-box;
-  }
-
-  .demo-tabs > .el-tabs__content {
-    //padding: 32px;
-    color: #6b778c;
-    font-size: 22px;
-    font-weight: 400;
-  }
-  .demo-tabs .custom-tabs-label .el-icon {
-    vertical-align: middle;
-  }
-  .demo-tabs .custom-tabs-label span {
-    vertical-align: middle;
-    margin-left: 4px;
-  }
-  .uploader-item {
-    //margin: 60px 0 60px;
-    :deep(.el-upload-list) {
-      .is-success {
-        overflow: hidden;
-        height: auto;
-        width: 192px;
-        border: 0;
-        border-radius: 0;
-        margin-right: 10px;
-
-        img,
-        .el-upload-list__item-actions {
-          height: 108px;
+    margin: 10px 20px 80px 20px;
+    :deep(.el-timeline) {
+      padding: 0 !important;
+    }
+    &__nav {
+      overflow: hidden;
+      position: relative;
+      height: 30px;
+    }
+    &__navbox {
+      width: 72%;
+      height: 30px;
+      display: flex;
+      overflow-x: scroll;
+      position: relative;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      > span {
+        min-width: 90px;
+        text-align: center;
+      }
+    }
+    &__navpostion {
+      position: absolute;
+    }
+    &__navtitle {
+      font-size: 13px;
+      padding: 5px 5px 10px 0px;
+      color: #909399;
+      width: 90%;
+    }
+    &__solid {
+      position: absolute;
+      width: 90px;
+      height: 4px;
+      display: flex;
+      transition: 0.5s;
+      align-items: flex-start;
+      justify-content: center;
+      bottom: -10px;
+      z-index: 9;
+      > span {
+        width: 30%;
+        height: 100%;
+        border-radius: 2px;
+        background: rgb(5, 121, 255);
+      }
+    }
+    &__box {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      &__image {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        &__content {
+          width: 100px;
+          height: 100px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+          overflow: hidden;
+          position: relative;
+          > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          &--close {
+            color: red;
+            position: absolute;
+            top: 2px;
+            font-weight: bold;
+            right: 2px;
+            font-size: 18px;
+          }
         }
-        .el-input {
-          .el-input__inner {
-            height: 32px;
+        &__upload {
+          width: 100px;
+          height: 100px;
+          border-radius: 5px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+          position: relative;
+          color: #fff;
+          display: flex;
+          font-size: 28px;
+          font-weight: bold;
+          align-items: center;
+          justify-content: center;
+          background: #ccc;
+          &--input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
           }
         }
       }
-      .is-ready,
-      .is-uploading {
-        display: none;
+      &__timeline {
+        padding: 20px 0;
+      }
+      &__form {
+        :deep(.el-form-item__label) {
+          font-size: 15px;
+          font-weight: bold;
+          color: #2c3e50 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+        :deep(.el-form-item--small) {
+          margin: 0 !important;
+        }
+        :deep(.el-form-item__content) {
+          margin: 10px 0;
+        }
+        :deep(.el-select) {
+          width: 100%;
+          height: 35px;
+        }
+        :deep(.select-trigger) {
+          height: 100%;
+        }
+        :deep(.el-input) {
+          height: 100%;
+          font-size: 13px !important;
+        }
+        :deep(.el-textarea__inner) {
+          font-size: 14px !important;
+          min-height: 100px !important;
+        }
+        :deep(.el-input-number) {
+          width: 100%;
+          height: 35px;
+        }
+        :deep(.el-input-number__decrease) {
+          width: 30px;
+          height: 16px;
+        }
+        :deep(.el-input-number__increase) {
+          width: 30px;
+          height: 16px;
+        }
+        &__text {
+          color: rgb(153, 153, 153);
+          font-size: 14px;
+        }
+      }
+      &__content {
+        &__title {
+          font-size: 15px;
+          font-weight: bold;
+        }
+        &__text {
+          color: rgb(153, 153, 153);
+          font-size: 14px;
+          padding: 10px 0;
+        }
       }
     }
-    :deep(.el-upload) {
-      width: 192px;
-      height: 108px;
-      line-height: 108px;
-      background: transparent;
-      border: 1px solid #dcdfe6;
-      border-radius: 0;
-      margin-bottom: 20px;
-      .el-icon-plus {
-        color: #dcdfe6;
-        font-size: 24px;
+    &__edit {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      // background: #fff;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > div {
+        width: 100%;
+        border-radius: 40px;
+        height: 40px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 600;
+        > span {
+          padding-left: 5px;
+        }
+      }
+      > div:nth-child(2) {
+        margin: 0 10px;
+      }
+      &__pass {
+        background: rgb(9, 204, 84);
+      }
+      &__btn {
+        background: rgb(5, 121, 255);
+      }
+      &__cancel {
+        background: #ecf5ff;
+        border: 1px solid rgb(5, 121, 255);
+        color: rgb(5, 121, 255) !important;
+      }
+      &__save {
+        background: rgb(5, 121, 255);
+      }
+      &__abnormal {
+        background: rgb(255, 5, 5);
       }
     }
   }
-  .container {
-    display: flex;
-    align-items: center;
-  }
-
-  .image {
-    margin-right: 20px; /* 图片和文本之间的距离 */
-  }
-  .el-card {
-    border: 0px;
-    margin-bottom: 40px;
-    .content {
-      img {
-        display: block;
+  .dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($color: #000000, $alpha: 0.3);
+    z-index: 999;
+    &__content {
+      width: 70%;
+      padding: 0 20px 0 20px;
+      background: #fff;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      :deep(.el-textarea__inner) {
+        font-size: 14px !important;
+        min-height: 100px !important;
+      }
+      :deep(.el-select) {
+        width: 100%;
+        height: 35px;
+      }
+      :deep(.select-trigger) {
+        height: 100%;
+      }
+      :deep(.el-input) {
+        height: 100%;
+        font-size: 13px !important;
+      }
+      &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        height: 50px;
+        > div:last-child {
+          border-left: 1px solid #f9f9f9;
+          color: rgb(5, 121, 255);
+        }
+        > div {
+          flex: 1;
+        }
+      }
+      &--title {
+        margin: 0;
+        line-height: 60px;
+        text-align: center;
+        font-size: 15px;
+        padding-bottom: 10px;
       }
     }
-  }
-  .image-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 </style>
