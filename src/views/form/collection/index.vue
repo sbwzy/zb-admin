@@ -255,16 +255,16 @@
           </div>
         </el-form-item>
         <el-form-item v-if="isEdit || form.caiJiXQ.SHQK != ''" label="损坏情况照片取证" prop="shqkphotos">
-          <div class="collction__box__image" v-if="(form.caiJiXQ.SHQKPHOTOS && form.caiJiXQ.SHQKPHOTOS.length) || isEdit">
-            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.SHQKPHOTOS" :key="index">
+          <div class="collction__box__image" v-if="(form.caiJiXQ.PHQKPHOTOS && form.caiJiXQ.PHQKPHOTOS.length) || isEdit">
+            <div class="collction__box__image__content" v-for="(item, index) in form.caiJiXQ.PHQKPHOTOS" :key="index">
               <el-image
                 style="width: 100px; height: 100px"
                 :initial-index="index"
-                :preview-src-list="form.caiJiXQ.SHQKPHOTOS"
+                :preview-src-list="form.caiJiXQ.PHQKPHOTOS"
                 :src="item"
                 fit="cover"
               />
-              <div class="collction__box__image__content--close" @click.stop="deleteImage('SHQKPHOTOS', index)" v-if="isEdit">
+              <div class="collction__box__image__content--close" @click.stop="deleteImage('PHQKPHOTOS', index)" v-if="isEdit">
                 <el-icon><CircleClose /></el-icon>
               </div>
             </div>
