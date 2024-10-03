@@ -23,11 +23,16 @@
 <script lang="ts" setup name="bingMap">
   import { onMounted, defineAsyncComponent, reactive, computed, ref, watch, toRefs } from 'vue'
   import bingmap from './components/bingmap.vue'
+  import { storeToRefs } from 'pinia'
   import FixedCrosshair from './components/FixedCrosshair.vue'
   import filterView from '@/components/Table/ListTable/FilterView.vue'
   import { Search } from '@element-plus/icons-vue'
   import { useRoute } from 'vue-router'
   import { buildListinfo } from '@/api/user'
+  import { useSettingStore } from '@/store/modules/setting'
+
+  const SettingStore = useSettingStore()
+  const { MPZInfo, HuInfo, ImgInfo, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } = storeToRefs(SettingStore)
   const route = useRoute()
 
   const buildId = route.params.id
@@ -53,13 +58,11 @@
   ]
   const info = ref({
     id: '1',
-    buildName: '中林街131弄5号',
-    locX: '31.1956946111755', //建筑原本建筑位置x 31.193838901816
-    locY: '121.41569532646', //建筑原本建筑位置y 121.420338909884
-    // tdtX: '31.193838901816',
-    // tdtY: '121.420338909884',
-    // qianDaoX: '31.193848902816',
-    // qianDaoY: '121.420438908884',
+    buildName: MPZInfo.value[0].ShouQuanDZ,
+    locX: MPZInfo.value[0].tdtY, //建筑原本建筑位置x 31.193838901816
+    locY: MPZInfo.value[0].tdtX, //建筑原本建筑位置y 121.420338909884
+    tdtxNew: MPZInfo.value[0].tdtyNew,
+    tdtyNew: MPZInfo.value[0].tdtxNew,
     isMorm: true,
     qiaoDaoReason: '当前gis信号差',
   })

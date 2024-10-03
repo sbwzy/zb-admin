@@ -1,6 +1,6 @@
 <template>
   <!-- 展开/收起按钮 -->
-  <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
+  <!-- <button v-if="!isExpanded" id="btndown" @click="isExpanded = true">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -15,13 +15,12 @@
     >
       <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
-  </button>
+  </button> -->
   <div class="header" :style="{ paddingTop: (isExpanded ? 8 : 0) + 'px !important' }">
-    <el-drawer v-model="drawer" :direction="direction" size="40%" style="height: auto !important" :show-close="false" :with-header="false">
+    <!-- <el-drawer v-model="drawer" :direction="direction" size="40%" style="height: auto !important" :show-close="false" :with-header="false">
       <template #default>
         <div class="filter-container">
           <el-form label-position="left" label-width="80px">
-            <!-- 动态筛选选项 -->
             <el-form-item v-for="(filter, index) in filterss" :key="index" :label="filter.label">
               <el-select
                 v-if="filter.type === 'select'"
@@ -57,27 +56,7 @@
                 :max-collapse-tags="3"
                 clearable
               />
-              <!-- <el-cascader
-					v-else-if="filter.type === 'duoxuan'"
-			        :options="filter.options"
-			        :props="propss"
-			        collapse-tags
-			        collapse-tags-tooltip
-			        :max-collapse-tags="3"
-			        clearable
-			      /> -->
-
-              <!-- 更多筛选类型可以在这里添加 -->
             </el-form-item>
-
-            <!-- div v-if="listtype == 'build'">
-							<el-space wrap>
-								<el-check-tag :checked="checked1"  title="花园住宅"
-									type="primary" @change="funcchecked1">花园住宅</el-check-tag>
-								<el-check-tag :checked="checked2" title="优历公房"
-									type="primary" @change="funcchecked2">优历公房</el-check-tag>
-							</el-space>
-						</div> -->
           </el-form>
         </div>
       </template>
@@ -85,10 +64,9 @@
         <div style="flex: auto">
           <el-button type="primary" :icon="Search" @click="parentTypeMethod(filters, '查询')">查询</el-button>
           <el-button @click="parentTypeMethod(filters, '重置')">重置</el-button>
-          <!-- <el-button v-if="filters.collectionStatus == '采集中'" @click="parentTypeMethod('转派',2)">批量转派</el-button> -->
         </div>
       </template>
-    </el-drawer>
+    </el-drawer> -->
 
     <el-form v-if="isExpanded" ref="ruleFormRef" :inline="true" :model="filters" class="demo-form-inline">
       <el-form-item v-if="listtype != 'xcrw'" label="建筑信息" prop="jzName">
@@ -101,11 +79,11 @@
           <el-input v-model="filters.rwName" placeholder="请输入任务相关信息" />
         </div>
       </el-form-item>
-      <el-form-item v-if="listtype != ':type' && listtype != 'buildmap'" prop="sift" style="float: right; margin-right: 0px">
+      <!-- <el-form-item v-if="listtype != ':type' && listtype != 'buildmap'" prop="sift" style="float: right; margin-right: 0px">
         <div class="flex gap-2 mt-4">
           <SvgIcon icon-class="listType" class-name="icon" @click="drawer = true" />
         </div>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item>
         <el-button
@@ -115,31 +93,31 @@
           @click="parentTypeMethod(filters, '模糊查询')"
           >查询</el-button
         >
-        <el-button
+        <!-- <el-button
           v-if="listtype == ':type' || listtype == 'buildmap'"
           type="primary"
           :icon="Search"
           @click="parentTypeMethod(filters, '签到打卡')"
           >签到打卡</el-button
-        >
+        > -->
         <el-button @click="parentTypeMethod(filters, '模糊重置')">重置</el-button>
 
-        <el-button
+        <!-- <el-button
           v-if="listtype == 'xcmap' || listtype == 'xzlb'"
           type="primary"
           :icon="Select"
           @click="parentTypeMethod('select', '分配已勾选')"
           >分配已勾选</el-button
-        >
-        <el-button v-if="listtype == 'build' && allSelect == true" type="primary" @click="parentTypeMethod(5, '全部提交')"
+        > -->
+        <!-- <el-button v-if="listtype == 'build' && allSelect == true" type="primary" @click="parentTypeMethod(5, '全部提交')"
           >全部提交</el-button
-        >
+        > -->
 
-        <el-button v-if="listtype == 'newxcrw'" type="primary" :icon="Select" @click="parentTypeMethod(filters, '选择所有')"
+        <!-- <el-button v-if="listtype == 'newxcrw'" type="primary" :icon="Select" @click="parentTypeMethod(filters, '选择所有')"
           >选择所有</el-button
-        >
+        > -->
         <!-- <el-button  v-if="listtype == 'xcmap' || listtype == 'xzlb' " type="primary" :icon="SemiSelect" @click="parentTypeMethod(filters)">未勾选</el-button> -->
-        <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button>
+        <!-- <el-button v-if="listtype == 'xcmap'" @click="callParentMethod1">切换已选和未选中的点</el-button> -->
       </el-form-item>
       <!-- 展开/收起按钮 -->
       <!-- <button v-if="isExpanded" id="btnup" @click="isExpanded = false">
@@ -174,7 +152,6 @@
 
   // 调用父组件中的方法
   const callParentMethod1 = () => {
-    console.log('1')
     emit('parent-method1')
   }
   const isExpanded = ref(true)

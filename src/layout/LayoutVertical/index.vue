@@ -1,7 +1,7 @@
 <template>
   <!--纵向布局-->
   <!--侧边栏-->
-  <Sidebar />
+  <!-- <Sidebar /> -->
   <div class="main-container">
     <HeaderVertical />
     <Main />
@@ -27,6 +27,7 @@
       flex: 1;
       box-sizing: border-box;
       flex-direction: column;
+      height: 100%;
     }
     &.mobile.openSidebar {
       position: fixed;

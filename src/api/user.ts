@@ -38,18 +38,39 @@ export function xgMM(data) {
 //登录 /wuyegl/webapi/login
 export const loginInfo = (p1, p2) => {
   return request.post('webapi/login', {
-    phone: p1,
-    yzm: p2,
+    userPhone: p1,
+    userPass: p2,
   })
 }
 //注册接口
 
 // 获取详情
+export const getUserInfo = () => {
+  return request.post('webapi/getUserInfo')
+}
 
 //详情查看
 export const youliCJXQGet = (id) => {
-  return request.post('webapi/youligf.youliCJXQ', {
-    gfid: id,
+  return request.post('webapi/youlizc.QueryZCXQ', {
+    youliId: id,
+  })
+}
+
+//上传照片
+export const editFujian = (params: any) => {
+  return request.post('webapi/youlizc.editFujian', params)
+}
+//删除照片
+export const editFujianDel = (id) => {
+  return request.post('webapi/youlizc.editFujianDel', {
+    fuJianId: id,
+  })
+}
+
+//提交异常
+export const editZCYC = (id) => {
+  return request.post('webapi/youlizc.editZCYC', {
+    MPZid: id,
   })
 }
 
@@ -60,23 +81,53 @@ export function collectionInfo(data) {
     data,
   })
 }
-
-//获取建筑列表
-export function buildListinfo1(data) {
+//获取小区列表
+export function buildListinfo() {
   return request({
-    url: '/webapi/youligf.youliQuery1',
+    url: '/webapi/youlizc.TongJiXiaoQu',
     method: 'post',
-    data,
+  })
+}
+//获取建筑列表
+export function buildListinfo1(data, statues, jzName) {
+  return request.post('/webapi/youlizc.QueryZCList', {
+    XiaoQuId: data,
+    ZCZT: statues,
+    SSTJ: jzName,
   })
 }
 
-//获取建筑列表
-export function buildListinfo(xcrwid, usergroup) {
-  return request.post('webapi/youligf.youliQuery', {
-    gfid: xcrwid,
-    usergroup: usergroup,
-  })
-}
+/**
+ * 查询-建筑列表
+ * 触发条件   1. 登录的返回结果。 0页 10条
+ * 2. 搜索结果列表，根据条件搜索建筑列表，并返回搜索结果。搜索条件 0  看设置多少条
+ * 3. 切换页 和 切换 每页数据   看那一页 多少条
+ * 4. 详情里面触发 上报或者报错等  也会触发 (注意有些特殊情况  比如最后一页 只有一条数据怎么操作)
+ * 5 等等
+ *
+ * @param params - 一个对象，包含了提交给后台的所有参数。
+ * @param
+ *
+ */
+// interface QueryZCListCS {
+
+//   dlStatus?: boolean; // 是否登录触发
+//   cxStatue?: boolean; // 是否搜索触发
+//   fyStatue?: boolean; //是否分页触发
+//   searchType?: string; //搜索类型  模糊还是精确
+//   qhStatues?: boolean; //是否切换类型触发
+//   qhType?: string; // 待检查还是 无异常等
+//   jzName?: string; // 模糊查询的建筑信息
+//   district?: Array<Object>; //勾选的区域小区
+//   buildingName?:string; //建筑名称
+//   page?: number; //哪页
+//   pageSize?: number; //每页多少条
+
+// }
+// //查询建筑列表
+// export function buildListinfo(params: QueryZCListCS) {
+//   return request.post('webapi/youlizc.QueryZCList', params)
+// }
 
 /**
  * 构建操作请求
@@ -171,6 +222,24 @@ export const xcrwXQ = (id) => {
   })
 }
 
+//轨迹信息提交
+interface trackInfo {
+  MPZid: string //建筑编号
+  xcrwId: string //巡查任务编号
+  tdty: number //房屋新位置经度 31.2426820469793
+  tdtx: number //房屋新位置经度 121.460209310194
+  isDK: boolean //是否打卡
+  errorStatus: number //打卡状态
+  errorReson: string //打卡失败原因
+  GuiJiSJ: string //打卡时间
+  WFDK: string //无法打卡原因
+  DDXCTime: string //到点时间
+  BeiZhu: string //备注
+}
+export function saveTrackInfo(params: any) {
+  return request.post('webapi/youlizc.editdaka', params)
+}
+
 //巡查任务详情
 interface xcrwParams {
   id: string
@@ -193,4 +262,16 @@ interface xcrwParams {
 }
 export function saveXcrw(params: xcrwParams) {
   return request.post('webapi/youligf.youlixcQuery', params)
+}
+
+export function getQueryMPZInfo() {
+  return request.post('webapi/youlizc.editFetchGongFang')
+}
+
+export function editZC(params: any) {
+  return request.post('webapi/youlizc.editZC', params)
+}
+
+export function logout() {
+  return request.post('webapi/logout')
 }

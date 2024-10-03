@@ -8,6 +8,7 @@ const functionPageRouter = [
     component: Layout,
     redirect: '/function-page/404',
     name: 'function-page',
+    hidden: true,
     meta: {
       title: '功能页面',
       icon: 'ElementPlus',
@@ -41,6 +42,7 @@ const functionPageRouter = [
         path: '/function-page/Map',
         // component: () => import('@/views/functionPage/Map/ESRIMap/index.vue'),
         name: 'Map',
+        hidden: true,
         meta: { title: '地图', icon: 'MenuIcon' },
         children: [
           // {
@@ -49,24 +51,24 @@ const functionPageRouter = [
           //   name: 'ecnuGisMap',
           //   meta: { title: 'Gis地图', keepAlive: true, icon: 'MenuIcon' },
           // },
-          {
-            path: '/function-page/Map/ESRIMap',
-            component: () => import('@/views/functionPage/Map/ESRIMap/index.vue'),
-            name: 'ESRIMap',
-            meta: { title: 'ESRI地图', keepAlive: true, icon: 'MenuIcon' },
-          },
+          // {
+          //   path: '/function-page/Map/ESRIMap',
+          //   component: () => import('@/views/functionPage/Map/ESRIMap/index.vue'),
+          //   name: 'ESRIMap',
+          //   meta: { title: 'ESRI地图', keepAlive: true, icon: 'MenuIcon' },
+          // },
           {
             path: '/function-page/Map/BingMap',
             component: () => import('@/views/functionPage/Map/BingMap/index.vue'),
-            name: 'BingMap',
+            name: '定位',
             meta: { title: '建筑定位落地图', keepAlive: true, icon: 'MenuIcon' },
           },
-          {
-            path: '/function-page/Map/AMap',
-            component: () => import('@/views/functionPage/Map/AMap/index.vue'),
-            name: 'AMap',
-            meta: { title: '高德地图', keepAlive: true, icon: 'MenuIcon' },
-          },
+          // {
+          //   path: '/function-page/Map/AMap',
+          //   component: () => import('@/views/functionPage/Map/AMap/index.vue'),
+          //   name: 'AMap',
+          //   meta: { title: '高德地图', keepAlive: true, icon: 'MenuIcon' },
+          // },
         ],
       },
       // {

@@ -38,6 +38,9 @@
   import { useTagsViewStore } from '@/store/modules/tagsView'
   import { usePermissionStore } from '@/store/modules/permission'
   import PersonalDialog from './PersonalDialog.vue'
+  import { loginInfo, logout } from '@/api/user'
+  import axios from 'axios'
+  import wx from 'weixin-js-sdk'
 
   const router = useRouter()
   const UserStore = useUserStore()
@@ -67,7 +70,10 @@
   }
 
   // 用户信息
-  const userInfo = computed(() => UserStore.userInfo)
+  const userInfo = UserStore.userInfo
+  const username = UserStore.userInfo.username
+  console.log('打印', userInfo)
+  console.log('打印username', username)
   const person = ref()
 
   const logOut = async () => {
@@ -77,13 +83,11 @@
       type: 'warning',
     })
       .then(async () => {
-        await UserStore.logout()
-        await router.push({ path: '/login' })
-        TagsViewStore.clearVisitedView()
-        PermissionStore.clearRoutes()
-        ElMessage({
-          type: 'success',
-          message: '退出登录成功！',
+        UserStore.logout1()
+        router.push('/login') // 默认跳转到 /home
+        console.log('退出的时候', UserStore.userInfo)
+        logout().then(() => {
+          wx.miniProgram.navigateTo({ url: '/pagesService/historicalBuilding/login' })
         })
       })
       .catch(() => {})

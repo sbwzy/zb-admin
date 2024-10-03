@@ -21,6 +21,7 @@
     "@better-scroll/core": "^2.4.2",
     "@types/lz-string": "^1.5.0",
     "@types/sharp": "^0.32.0",
+    "@vant/weapp": "^1.11.6",
     "@vueuse/core": "^9.1.1",
     "@wangeditor/editor": "^5.1.14",
     "@wangeditor/editor-for-vue": "^5.1.12",
@@ -35,6 +36,7 @@
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",
+    "image-compressor.js": "^1.1.4",
     "jszip": "^3.9.1",
     "leaflet": "^1.9.4",
     "leaflet-bing-layer": "^3.3.1",
@@ -69,6 +71,7 @@
     "vue3-text-clamp": "^0.1.1",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0-0",
+    "weixin-js-sdk": "^1.6.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

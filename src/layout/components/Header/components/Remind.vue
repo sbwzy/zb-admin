@@ -74,7 +74,7 @@
   const meggs = ref([
     {
       label: '第三次季度xx集团巡查已经开始,查看详情',
-      pain: '/system/task',
+      pain: '/form/task',
       id: 1,
     },
     {

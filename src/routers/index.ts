@@ -26,7 +26,7 @@ import functionPageRouter from './modules/functionPage'
 
 // 异步组件
 export const asyncRoutes = [
-  ...dataScreenRouter,
+  //...dataScreenRouter,
   // ...echartsRouter,
   // ...tableRouter,
   ...formRouter,
@@ -34,7 +34,7 @@ export const asyncRoutes = [
   ...functionPageRouter,
   // ...chatRouter,
   // ...nestedRouter,
-  ...excelRouter,
+  // ...excelRouter,
   // ...externalLink,
   //...systemRouter,
 ]
@@ -76,18 +76,30 @@ export const constantRoutes: Array<RouteRecordRaw & extendRoute> = [
     meta: { title: '登录' },
   },
   {
+    path: '/loginPre',
+    name: 'loginPre',
+    component: () => import('@/views/login/loginPre.vue'),
+    meta: { hidden: true, noKeppAlive: false },
+  },
+  {
+    path: '/showMsg',
+    name: 'showMsg',
+    component: () => import('@/views/login/showMsg.vue'),
+    meta: { hidden: true, noKeppAlive: false },
+  },
+  {
     path: '/',
     name: 'layout',
     //component 的作用是什么
     component: Layout,
     redirect: '/home',
-    meta: { title: '首页', icon: 'House' },
+    meta: { title: '建筑列表管理', icon: 'House' },
     children: [
       {
         path: '/home',
         component: () => import('@/views/home/index.vue'),
         name: 'home',
-        meta: { title: '首页', icon: 'House', affix: true, role: ['other'] },
+        meta: { title: '小区列表', icon: 'House', affix: true, role: ['other'] },
       },
     ],
   },

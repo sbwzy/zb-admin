@@ -8,6 +8,7 @@ const formRouter = [
     component: Layout,
     redirect: '/form/dept',
     name: 'form',
+    hidden: true,
     alwaysShow: true,
     meta: {
       title: '采集功能',
@@ -17,12 +18,14 @@ const formRouter = [
       {
         path: '/form/dept',
         component: () => import('@/views/form/dept/index.vue'),
+        hidden: true,
         name: 'dept',
         meta: { title: '巡查任务管理', icon: 'MenuIcon' },
       },
       {
         path: '/form/task',
         component: () => import('@/views/form/task/index.vue'),
+        hidden: true,
         name: 'task',
         meta: { title: '建筑列表管理', icon: 'MenuIcon' },
       },

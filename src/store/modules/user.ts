@@ -17,6 +17,9 @@ export const useUserStore = defineStore({
   getters: {},
   // 可以同步 也可以异步
   actions: {
+    setUserInfo(newValue: string | null) {
+      this.userInfo = newValue
+    },
     // 登录
     login(userInfo) {
       //const { username, userType } = userInfo
@@ -60,7 +63,7 @@ export const useUserStore = defineStore({
       })
     },
     // 退出
-    logout() {
+    logout1() {
       return new Promise((resolve, reject) => {
         this.token = null
         this.userInfo = {}

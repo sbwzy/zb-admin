@@ -1,6 +1,6 @@
 <template>
   <div class="m-tool-left">
-    <CollapseIcon />
+    <!-- <CollapseIcon /> -->
     <Hamburger />
   </div>
 </template>

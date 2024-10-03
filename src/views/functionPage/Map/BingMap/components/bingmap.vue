@@ -130,7 +130,7 @@
   let newCenter = ref([]) //屏幕中心位置
   let center1 = ref([]) //当前签到人所在位置
   let marker1 = ref([])
-  //let marker2 = ref([])
+  let marker2 = ref([])
   //let marker3 = ref([])
   let reason = ref('')
   //原本建筑位置 3AF960
@@ -176,6 +176,9 @@
     //if(props.buildInfo.locX == props.buildInfo.tdtX){
     //设置原建筑规划点位marker
     marker1.value = L.marker([props.buildInfo.locX, props.buildInfo.locY], { icon: dxzicon }).bindPopup('房屋定位落点')
+    if (props.buildInfo.tdtxNew != '' && props.buildInfo.tdtxNew != null) {
+      marker2.value = L.marker([props.buildInfo.tdtxNew, props.buildInfo.tdtyNew], { icon: ryqdwz }).bindPopup('人员签到位置')
+    }
     //}
     //上次打点位置信息
     //marker2.value = L.marker([props.buildInfo.tdtX, props.buildInfo.tdtY], { icon: yxzicon }).bindPopup('房屋定位落点')
@@ -212,7 +215,11 @@
     })
     let tiandiMap = {}
     //tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value, marker2.value, marker3.value]) //.addTo(map.value)
-    tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value]) //.addTo(map.value)
+    if (props.buildInfo.tdtxNew != '' && props.buildInfo.tdtxNew != null) {
+      tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value, marker2.value]) //.addTo(map.value)
+    } else {
+      tiandiMap = L.featureGroup([bingLayer, polygonGroup, marker1.value]) //.addTo(map.value)
+    }
     map.value = L.map(mapContainer.value, {
       center: [props.buildInfo.locX, props.buildInfo.locY],
       zoom: 19,

@@ -29,6 +29,9 @@
     overflow-x: hidden;
     width: 100%;
     box-sizing: border-box;
+    flex: 1;
+    flex-shrink: 0;
+    overflow-y: auto;
     .app-main-inner {
       flex: 1;
       display: flex;

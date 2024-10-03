@@ -6,8 +6,8 @@ const { body } = document
 console.log('我们打印一下这个document吧')
 console.log('这个对象是官方的吗')
 console.log(document)
-const WIDTH = 800 // refer to Bootstrap's responsive design
-const MAX_WIDTH = 1200
+const WIDTH = 1000 // refer to Bootstrap's responsive design
+const MAX_WIDTH = 1400
 
 export const useResizeHandler = () => {
   const SettingStore = useSettingStore()
