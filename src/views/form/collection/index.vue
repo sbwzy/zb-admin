@@ -167,7 +167,7 @@
                 style="width: 100px; height: 100px"
                 :initial-index="index"
                 :preview-src-list="Imgform.find((item) => item.name === 'SHQK')?.imglists.map((item) => item.url)"
-                :src="item.url"
+                :src="item.thumbnailUrl"
                 fit="cover"
               />
               <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('损坏情况', index)">
@@ -254,7 +254,7 @@
                 style="width: 100px; height: 100px"
                 :initial-index="index"
                 :preview-src-list="Imgform.find((item) => item.name === 'XSQK')?.imglists.map((item) => item.url)"
-                :src="item.url"
+                :src="item.thumbnailUrl"
                 fit="cover"
               />
               <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('修缮情况', index)">
@@ -371,7 +371,7 @@
                   style="width: 100px; height: 100px"
                   :initial-index="index"
                   :preview-src-list="Imgform.find((item) => item.name === 'FWYT')?.imglists.map((item) => item.url)"
-                  :src="item.url"
+                  :src="item.thumbnailUrl"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('房屋用途', index)">
@@ -425,7 +425,7 @@
                   style="width: 100px; height: 100px"
                   :initial-index="index"
                   :preview-src-list="Imgform.find((item) => item.name === 'PHSY')?.imglists.map((item) => item.url)"
-                  :src="item.url"
+                  :src="item.thumbnailUrl"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('破坏使用', index)">
@@ -485,7 +485,7 @@
                   style="width: 100px; height: 100px"
                   :initial-index="index"
                   :preview-src-list="Imgform.find((item) => item.name === 'DJWJ')?.imglists.map((item) => item.url)"
-                  :src="item.url"
+                  :src="item.thumbnailUrl"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('搭建违建', index)">
@@ -541,7 +541,7 @@
                   style="width: 100px; height: 100px"
                   :initial-index="index"
                   :preview-src-list="Imgform.find((item) => item.name === 'WGCH')?.imglists.map((item) => item.url)"
-                  :src="item.url"
+                  :src="item.thumbnailUrl"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('违规拆除', index)">
@@ -935,13 +935,14 @@
         Imgform.forEach((item) => {
           if (item.imglists && item.imglists.length > 0) {
             item.imglists.forEach((item1) => {
-              if (item1.base64Url && item1.base64Url.startsWith('data:image/png;base64')) {
+              if (item1.url && item1.url.startsWith('data:image/jpeg;base64')) {
                 tijiaoImgList.push({
                   ZCid: zcid,
                   ZCLeiX: item.name == 'SHQK' ? '幢' : item.name == 'XSQK' ? '幢' : '户',
                   YiChLeiX: item1.zhaopLX,
                   WenJianM: item.name,
-                  FileCon: item1.base64Url,
+                  url: item1.url,
+                  thumbnailUrl: item1.thumbnailUrl,
                 })
               }
             })
@@ -1259,7 +1260,7 @@
     // 1.图片路径转成canvas
     const tempCanvas = await imgToCanvas(imgUrl)
     // 2.canvas添加水印
-    const markText = UserStore.userInfo.username + '' + Date.now()
+    const markText = UserStore.userInfo.username
     const canvas = addWatermark(tempCanvas, markText)
     // 3.canvas转成img
     const img = convasToImg(canvas)
@@ -1271,17 +1272,17 @@
   const handleImageChange = async (event, name, urlName?: string, num?: number) => {
     const file = event.target.files[0] // 获取选中的文件
     if (file) {
-      // if (file.size > 1024 * 1024 * 10) {
-      //   ElMessage.error('图片大小不能超过10M')
-      // } else {
-      console.log('原相片大小', file)
-      let base64Url = await ySImage(file)
+      //let base64Url = await ySImage(file)
+      let base64Url = await fileToBase64(file)
+      //压缩+水印+原图
+      const comressBse64 = await compressImage(base64Url, 2000, 0.7, true)
+      //缩略图+水印
+      const comressThumbBse64 = await compressImage(comressBse64, 200, 0.7, false)
       //console.log("压缩相片类型",file1)
       // 文件流地址
       //let base64Url = await fileToBase64(file)
-      //console.log('base64Url', base64Url)
       //添加水印
-      base64Url = await run(base64Url)
+      //base64Url = await run(comressBse64)
       //console.log('base64Url2', base64Url)
       // URL.createObjectURL(file) 本地预览壁纸
 
@@ -1290,16 +1291,53 @@
       }
 
       Imgform.find((item) => item.title === name).imglists.push({
-        url: URL.createObjectURL(file),
+        url: comressBse64,
+        thumbnailUrl: comressThumbBse64,
         zhaopLX: name,
         name: file.name,
-        base64Url,
       })
       //}
 
       //console.log('预览', URL.createObjectURL(file))
     } else {
     }
+  }
+
+  const compressImage = async (base64, maxWidth, quality, withWater) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.src = base64
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        let width = img.width
+        let height = img.height
+        // 如果图片宽度大于maxWidth，则按比例缩放
+        if (width > maxWidth) {
+          height *= maxWidth / width
+          width = maxWidth
+        }
+        canvas.width = width
+        canvas.height = height
+        ctx.drawImage(img, 0, 0, width, height)
+        //ctx = canvas.getContext('2d')
+        //ctx.rotate((50 * Math.PI) / 180) // 水印旋转角度
+        ctx.font = '100px Vedana'
+        ctx.fillStyle = '#000000'
+        //ctx.textAlign = 'center'
+        //ctx.textBaseline = 'middle'
+        //let forIndex = (canvas.width / 100) | 0
+        //for (let i = -10; i < 10; i++) {
+        //for (let j = -10; j < forIndex; j++) {
+        //绘制多个文字
+        withWater && ctx.fillText(UserStore?.userInfo?.username, 100, canvas.height - 100)
+        //}
+        //}
+        // 初步设置quality为传入的参数，后续可根据需要调整
+        const newDataURL = canvas.toDataURL('image/jpeg', quality)
+        resolve(newDataURL)
+      }
+    })
   }
   //图片压缩
   function ySImage(file) {

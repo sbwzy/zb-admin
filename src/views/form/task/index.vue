@@ -191,9 +191,9 @@
                 huId: item.huId,
                 YiChLeiX: item.YiChLeiX,
                 XuHao: item.XuHao,
-                url: item.thumbUrl,
+                url: item.imgUrl,
+                thumbnailUrl: item.thumbUrl,
               }
-              console.log('存在item1吗?', item1)
               ImgInfo.forEach((item2) => {
                 if (item.YiChLeiX == item2.title) {
                   item2.imglists.push(item1)
