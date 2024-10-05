@@ -1,5 +1,8 @@
 <template>
-  <div class="collction">
+  <div
+    class="
+  "
+  >
     <!---------------------------------基础信息模块--------------------------------->
     <div class="collction__box">
       <div class="collction__box__content">
@@ -1166,7 +1169,6 @@
       text: '其他',
     },
   ])
-
   const xsqkType = ref([
     {
       value: '近三年未修缮',
@@ -1636,9 +1638,9 @@
     display: none; /* 隐藏滚动条 */
   }
   .collction {
-    height: 100vh;
-    width: 100vw;
-    overflow-y: auto;
+    // height: 100vh;
+    // width: 100vw;
+    // overflow-y: auto;
     margin: 10px 20px 80px 20px;
     :deep(.el-timeline) {
       padding: 0 !important;

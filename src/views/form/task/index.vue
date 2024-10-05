@@ -265,9 +265,9 @@
 
 <style scoped lang="scss">
   .app-container {
-    height: 100vh;
-    width: 100vw;
-    overflow-y: auto;
+    // height: 100vh;
+    // width: 100vw;
+    // overflow-y: auto;
   }
 
   .pagination {

@@ -27,7 +27,7 @@
       flex: 1;
       box-sizing: border-box;
       flex-direction: column;
-      height: 100%;
+      //height: 100%;
     }
     &.mobile.openSidebar {
       position: fixed;
