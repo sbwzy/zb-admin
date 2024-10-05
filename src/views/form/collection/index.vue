@@ -163,8 +163,8 @@
               <el-image
                 style="width: 100px; height: 100px"
                 :initial-index="index"
-                :preview-src-list="Imgform.find((item) => item.name === 'SHQK')?.imglists.map((item) => item.imgUrl)"
-                :src="item.imgUrl"
+                :preview-src-list="Imgform.find((item) => item.name === 'SHQK')?.imglists.map((item) => item.url)"
+                :src="item.url"
                 fit="cover"
               />
               <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('损坏情况', index)">
@@ -250,8 +250,8 @@
               <el-image
                 style="width: 100px; height: 100px"
                 :initial-index="index"
-                :preview-src-list="Imgform.find((item) => item.name === 'XSQK')?.imglists.map((item) => item.imgUrl)"
-                :src="item.imgUrl"
+                :preview-src-list="Imgform.find((item) => item.name === 'XSQK')?.imglists.map((item) => item.url)"
+                :src="item.url"
                 fit="cover"
               />
               <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('修缮情况', index)">
@@ -367,8 +367,8 @@
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'FWYT')?.imglists.map((item) => item.imgUrl)"
-                  :src="item.imgUrl"
+                  :preview-src-list="Imgform.find((item) => item.name === 'FWYT')?.imglists.map((item) => item.url)"
+                  :src="item.url"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('房屋用途', index)">
@@ -421,8 +421,8 @@
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'PHSY')?.imglists.map((item) => item.imgUrl)"
-                  :src="item.imgUrl"
+                  :preview-src-list="Imgform.find((item) => item.name === 'PHSY')?.imglists.map((item) => item.url)"
+                  :src="item.url"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('破坏使用', index)">
@@ -481,8 +481,8 @@
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'DJWJ')?.imglists.map((item) => item.imgUrl)"
-                  :src="item.imgUrl"
+                  :preview-src-list="Imgform.find((item) => item.name === 'DJWJ')?.imglists.map((item) => item.url)"
+                  :src="item.url"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('搭建违建', index)">
@@ -537,8 +537,8 @@
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'WGCH')?.imglists.map((item) => item.imgUrl)"
-                  :src="item.imgUrl"
+                  :preview-src-list="Imgform.find((item) => item.name === 'WGCH')?.imglists.map((item) => item.url)"
+                  :src="item.url"
                   fit="cover"
                 />
                 <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('违规拆除', index)">
@@ -728,6 +728,7 @@
     editFujianDel,
     editZC,
     editZCYC,
+    getQueryMPZInfo,
   } from '@/api/user'
   import { FormRules } from 'element-plus'
   import { useRoute, useRouter } from 'vue-router'
@@ -739,6 +740,7 @@
 
   const router = useRouter()
   const SettingStore = useSettingStore()
+  const UserStore = useUserStore()
   const percentage = ref<number>(10)
   const duration = computed(() => Math.floor(percentage.value / 10))
   // 获取数据
@@ -830,6 +832,13 @@
       res += '户上存在空置情况、'
     }
     return res
+  })
+  onMounted(() => {
+    // getQueryMPZInfo().then((res) => {
+    //   if (res.data.result <= 0) {
+    //     router.push('/login?msgType=error&msg='+res.data.msg)
+    //   }
+    // })
   })
 
   const dkName = computed(() => {
@@ -1021,7 +1030,8 @@
             }
             //判断是否超出范围 进行提醒
             if (getDistances(lat, lon, MPZform.tdtX, MPZform.tdtY) > 50) {
-              contetForm.errorReson = '您当前位置已超过打卡范围,请到达现场重新打卡！如果已经到达现场,直接打卡即可'
+              ;(contetForm.MPZid = MPZform.MPZid),
+                (contetForm.errorReson = '您当前位置已超过打卡范围,请到达现场重新打卡！如果已经到达现场,直接打卡即可')
               contetForm.errorStatus = 1
             }
             dkDialogFormVisible.value = true
@@ -1029,19 +1039,19 @@
           async function (error) {
             switch (error.code) {
               case error.PERMISSION_DENIED:
-                contetForm.errorStatus = 1
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
                 contetForm.errorReson = '用户拒绝了地理位置请求'
                 break
               case error.POSITION_UNAVAILABLE:
-                contetForm.errorStatus = 1
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
                 contetForm.errorReson = '位置信息不可用'
                 break
               case error.TIMEOUT:
-                contetForm.errorStatus = 1
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
                 contetForm.errorReson = '请求超时'
                 break
               case error.UNKNOWN_ERROR:
-                contetForm.errorStatus = 1
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
                 contetForm.errorReson = '发生未知错误'
                 break
             }
@@ -1054,7 +1064,7 @@
           },
         )
       } else {
-        contetForm.errorReson = '浏览器不支持地理位置'
+        ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorReson = '浏览器不支持地理位置')
         contetForm.errorStatus = 1
         dkDialogFormVisible.value = true
       }
@@ -1247,7 +1257,7 @@
     // 1.图片路径转成canvas
     const tempCanvas = await imgToCanvas(imgUrl)
     // 2.canvas添加水印
-    const markText = text.value
+    const markText = UserStore.userInfo.username + '' + Date.now()
     const canvas = addWatermark(tempCanvas, markText)
     // 3.canvas转成img
     const img = convasToImg(canvas)
@@ -1259,37 +1269,37 @@
   const handleImageChange = async (event, name, urlName?: string, num?: number) => {
     const file = event.target.files[0] // 获取选中的文件
     if (file) {
-      if (file.size > 1024 * 1024 * 10) {
-        ElMessage.error('图片大小不能超过10M')
-      } else {
-        console.log('原相片大小', file)
-        let base64Url = await ySImage(file)
-        //console.log("压缩相片类型",file1)
-        // 文件流地址
-        //let base64Url = await fileToBase64(file)
-        //console.log('base64Url', base64Url)
-        //添加水印
-        base64Url = await run(base64Url)
-        //console.log('base64Url2', base64Url)
-        // URL.createObjectURL(file) 本地预览壁纸
+      // if (file.size > 1024 * 1024 * 10) {
+      //   ElMessage.error('图片大小不能超过10M')
+      // } else {
+      console.log('原相片大小', file)
+      let base64Url = await ySImage(file)
+      //console.log("压缩相片类型",file1)
+      // 文件流地址
+      //let base64Url = await fileToBase64(file)
+      //console.log('base64Url', base64Url)
+      //添加水印
+      base64Url = await run(base64Url)
+      //console.log('base64Url2', base64Url)
+      // URL.createObjectURL(file) 本地预览壁纸
 
-        if (!Array.isArray(Imgform.find((item) => item.title === name)?.imglists)) {
-          Imgform.find((item) => item.title === name).imglists = []
-        }
-
-        Imgform.find((item) => item.title === name).imglists.push({
-          url: URL.createObjectURL(file),
-          zhaopLX: name,
-          name: file.name,
-          base64Url,
-        })
+      if (!Array.isArray(Imgform.find((item) => item.title === name)?.imglists)) {
+        Imgform.find((item) => item.title === name).imglists = []
       }
+
+      Imgform.find((item) => item.title === name).imglists.push({
+        url: URL.createObjectURL(file),
+        zhaopLX: name,
+        name: file.name,
+        base64Url,
+      })
+      //}
 
       //console.log('预览', URL.createObjectURL(file))
     } else {
     }
   }
-
+  //图片压缩
   function ySImage(file) {
     return new Promise((resolve, reject) => {
       new ImageCompressor(file, {
@@ -1604,150 +1614,8 @@
       path: '/function-page/Map/BingMap',
     })
   }
-  const userInfo: any = computed((): any => {
-    return useUserStore().userInfo
-  })
-  const imgList = ref([[], [], [], [], []])
-  onMounted(() => {
-    // const gfIdListLength = currentGfIdList.value.length
-    // const currentGfIdListIndex = currentGfIdList.value.findIndex((value) => value === currentGfid.value) + 1
-    // SettingStore.setGfid('12362')
-    // gfid.value = route.params.id as string
-    // screamHeight.value = window.innerHeight
-    // nvueWidth.value = window.innerWidth
-    // initData(null)
-  })
-  // const save = async (type) => {
-  //   let resMsg = ''
-  //   let flag = false
-  //   let isnotice = false
-  //   let noticemsg = ''
-  //   try {
-  //     imgList.value.forEach((imgitem, imgindex) => {
-  //       if (
-  //         phoneTypeList.value[imgindex].title === '建筑名称标识' &&
-  //         (bannerData.value.xiaoquName === '' || bannerData.value.xiaoquName === null) &&
-  //         !(imgitem === null || imgitem.length === 0)
-  //       ) {
-  //         flag = true
-  //         noticemsg = '数据库中未匹配到建筑名称，请勿上传建筑名称标识图片!'
-  //         isnotice = true
-  //       }
-  //       if (phoneTypeList.value[imgindex].title === '公安绿牌') {
-  //         imgitem.forEach((item, index) => {
-  //           if (item.diZhi === null || item.diZhi === '') {
-  //             flag = true
-  //             noticemsg = '请填写绿牌对应的地址!'
-  //             isnotice = true
-  //           }
-  //         })
-  //       }
-  //     })
 
-  //     if (flag) {
-  //       throw new Error(noticemsg)
-  //     } else {
-  //       if (bannerData.value.IndustrStatus !== '正常' && (bannerData.value.desc === '' || bannerData.value.desc === null)) {
-  //         isnotice = true
-  //         throw new Error('当前产业状态异常 需要填写外业巡查情况备注!')
-  //       } else {
-  //         buttonDisabled.value = true
-  //         uploadState.value = '信息保存中...'
-
-  //         const { data } = await xinXiGX(bannerData.value)
-  //         if (data.result !== 1) {
-  //           throw new Error('保存失败' + data.msg)
-  //         } else {
-  //           resMsg = '信息保存成功'
-  //           uploadState.value = '信息保存成功...'
-  //         }
-  //       }
-
-  //       let imgDatas = []
-  //       let hasUploadImg = false
-
-  //       imgList.value.forEach((imgPartList, partIndex) => {
-  //         if (imgPartList != null) {
-  //           imgPartList.forEach((img, imgIndex) => {
-  //             if (img.imgID === null || img.imgID === '') {
-  //               totalImgCount.value += 1
-  //               hasUploadImg = true
-  //             }
-  //           })
-  //         }
-  //       })
-
-  //       if (!hasUploadImg && type === '提交') {
-  //         uploadState.value = '提交中...'
-  //         const { data } = await buildOperation(gfid.value, '提交', '')
-  //         if (data.result !== 1) {
-  //           throw new Error('提交失败，' + data.msg)
-  //         } else {
-  //           resMsg = '提交成功'
-  //           uploadState.value = '提交成功...'
-  //         }
-  //       }
-
-  //       if (!hasUploadImg) {
-  //         // 如果没有图片需要上传，则不需要执行图片上传逻辑
-  //       } else {
-  //         // 执行图片上传逻辑
-  //         uploadState.value = '图片上传中...'
-  //         imguping.value = true
-
-  //         for (const [partIndex, imgPartList] of imgList.value.entries()) {
-  //           if (imgPartList != null) {
-  //             for (const [imgIndex, img] of imgPartList.entries()) {
-  //               if (img.imgID === null || img.imgID === '') {
-  //                 const itemImg = {
-  //                   gfID: gfid.value,
-  //                   fenLei: phoneTypeList[partIndex].type,
-  //                   zaopIdx: img.zhaopIdx,
-  //                   fileName: img.fileName,
-  //                   diZhi: img.diZhi,
-  //                   desc: img.desc,
-  //                   base64_con: img.picURL,
-  //                   wlmlx: img.wlmlx,
-  //                   mplx: img.mplx,
-  //                 }
-  //                 //暂时写死图片上传的返回
-  //                 const resImg = { data: { result: 1, msg: '' } }
-  //                 //const resImg = await caijiTuPian(itemImg);
-  //                 if (resImg.data.result !== 1) throw new Error('图片上传失败，' + resImg.data.msg)
-  //                 successImgCount.value++
-  //                 uploadpercentage.value = Math.round((100 * successImgCount.value) / totalImgCount.value)
-  //               }
-  //             }
-  //           }
-  //         }
-  //         uploadState.value = '图片上传成功...'
-  //         if (successImgCount.value === totalImgCount.value && type === '提交') {
-  //           uploadState.value = '提交中...'
-  //           const resFinalSubmit = await buildOperation(bannerData.value.id, '提交', '')
-  //           if (resFinalSubmit.data.result !== 1) throw new Error('提交失败，' + resFinalSubmit.data.msg)
-  //           resMsg = '提交成功'
-  //           uploadState.value = '提交成功...'
-  //         }
-  //       }
-  //     }
-  //   } catch (e) {
-  //     ElMessage.error(e.message)
-  //   } finally {
-  //     if (resMsg !== '') {
-  //       ElMessage({
-  //         showClose: false,
-  //         message: resMsg,
-  //         type: 'success',
-  //         duration: 2000,
-  //       })
-  //     }
-  //     if (!flag) {
-  //       isEdit.value = false
-  //       initData(null) // 假设initData()方法已定义
-  //     }
-  //     buttonDisabled.value = false
-  //   }
-  // }
+  onMounted(() => {})
 </script>
 
 <style lang="scss" scoped>
@@ -1768,7 +1636,9 @@
     display: none; /* 隐藏滚动条 */
   }
   .collction {
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
     margin: 10px 20px 80px 20px;
     :deep(.el-timeline) {
       padding: 0 !important;

@@ -27,7 +27,7 @@
   import { da } from 'element-plus/es/locale'
 
   import { buildOperation } from '@/api/user'
-  import { getYouliList, youliCJXQGet, buildListinfo1 } from '@/api/user'
+  import { getYouliList, youliCJXQGet, buildListinfo1, getQueryMPZInfo } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
   import { MoreFilled } from '@element-plus/icons-vue'
   const SettingStore = useSettingStore()
@@ -55,7 +55,13 @@
   //根据当前用户身份设置初始分段  初始这样设计
   //let initvalue = dqZCZT.value
 
-  onMounted(() => {})
+  onMounted(() => {
+    // getQueryMPZInfo().then((res) => {
+    //   if (res.data.result <= 0) {
+    //     router.push('/login?msgType=error&msg='+res.data.msg)
+    //   }
+    // })
+  })
 
   const changeValue = (val) => {
     console.log('打印', val)
@@ -185,7 +191,7 @@
                 huId: item.huId,
                 YiChLeiX: item.YiChLeiX,
                 XuHao: item.XuHao,
-                imgUrl: item.thumbUrl,
+                url: item.thumbUrl,
               }
               console.log('存在item1吗?', item1)
               ImgInfo.forEach((item2) => {
@@ -259,7 +265,9 @@
 
 <style scoped lang="scss">
   .app-container {
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
   }
 
   .pagination {

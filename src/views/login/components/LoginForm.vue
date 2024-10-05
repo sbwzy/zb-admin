@@ -114,7 +114,7 @@
           if (res.data.result === 1) {
             // 设置定时器，在指定时间后跳转
             //验证 本地的话结构是-11 表示未登录 》=0 表示 已登录
-            debugger
+
             getQueryMPZInfo().then((res) => {
               if (res.data.result >= 0) {
                 editFetch.value == true
@@ -165,7 +165,6 @@
   })
 
   onMounted(() => {
-    UserStore.logout1()
     //直接触发 跳转
     if (msgType == 'succ') {
       // 设置定时器，在指定时间后跳转

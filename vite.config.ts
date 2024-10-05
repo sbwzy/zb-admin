@@ -73,12 +73,12 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       // 代理跨域（模拟示例）
       proxy: {
         //部署直接禁用
-        '/api': {
+        '/wuyegl/youlizc/webapi': {
           target: 'https://dev.ccgis.cn', // easymock
           changeOrigin: true,
-          secure: true,
-          protocolRewrite: 'https',
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          secure: false,
+          // protocolRewrite: 'https',
+          // rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },

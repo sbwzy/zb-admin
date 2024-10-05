@@ -39,7 +39,7 @@
   import { useUserStore } from '@/store/modules/user'
   import { da } from 'element-plus/es/locale'
   import { storeToRefs } from 'pinia'
-  import { buildOperation, buildListinfo1 } from '@/api/user'
+  import { buildOperation, buildListinfo1, getQueryMPZInfo } from '@/api/user'
   import { getYouliList, youliCJXQGet } from '@/api/user'
   import { ElMessage, ElMessageBox, ElNotification, imageEmits } from 'element-plus'
   import { MoreFilled } from '@element-plus/icons-vue'
@@ -75,7 +75,13 @@
     return SettingStore.pagination
   })
 
-  onMounted(() => {})
+  onMounted(() => {
+    // getQueryMPZInfo().then((res) => {
+    //   if (res.data.result <= 0) {
+    //     router.push('/login?msgType=error&msg='+res.data.msg)
+    //   }
+    // })
+  })
 
   const handleSizeChange = (val: number) => {
     pagination.value.pageSize = val
@@ -111,7 +117,9 @@
 
 <style scoped lang="scss">
   .app-container {
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: auto;
   }
 
   .pagination {
