@@ -290,8 +290,8 @@
               :icon="getButtonIcon(item)"
               round
               class="collction__box__nav1"
-              @click="itemisShowForm(item)"
-              >{{ item.sh !== '' && item.sh !== undefined ? item.sh : item.CB }}</el-button
+              @click.stop="itemisShowForm(item)"
+              >{{ item.sh !== '' && item.sh !== undefined ? item.sh : item.CB.slice(-6) }}</el-button
             >
           </el-col>
         </el-row>
@@ -364,13 +364,19 @@
             <div class="collction__box__image">
               <div
                 class="collction__box__image__content"
-                v-for="(item, index) in Imgform.find((item) => item.name === 'FWYT')?.imglists"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'FWYT')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
                 :key="index"
               >
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'FWYT')?.imglists.map((item) => item.url)"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'FWYT')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
@@ -383,7 +389,7 @@
                 <input
                   type="file"
                   class="collction__box__image__upload--input"
-                  @change="handleImageChange($event, '房屋用途')"
+                  @change="handleImageChange($event, '房屋用途', curHuInfo)"
                   accept="image/*"
                 />
               </div>
@@ -418,13 +424,19 @@
             <div class="collction__box__image">
               <div
                 class="collction__box__image__content"
-                v-for="(item, index) in Imgform.find((item) => item.name === 'PHSY')?.imglists"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'PHSY')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
                 :key="index"
               >
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'PHSY')?.imglists.map((item) => item.url)"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'PHSY')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
@@ -437,7 +449,7 @@
                 <input
                   type="file"
                   class="collction__box__image__upload--input"
-                  @change="handleImageChange($event, '破坏使用')"
+                  @change="handleImageChange($event, '破坏使用', curHuInfo)"
                   accept="image/*"
                 />
               </div>
@@ -478,13 +490,19 @@
             <div class="collction__box__image">
               <div
                 class="collction__box__image__content"
-                v-for="(item, index) in Imgform.find((item) => item.name === 'DJWJ')?.imglists"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'DJWJ')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
                 :key="index"
               >
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'DJWJ')?.imglists.map((item) => item.url)"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'DJWJ')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
@@ -497,7 +515,7 @@
                 <input
                   type="file"
                   class="collction__box__image__upload--input"
-                  @change="handleImageChange($event, '搭建违建')"
+                  @change="handleImageChange($event, '搭建违建', curHuInfo)"
                   accept="image/*"
                 />
               </div>
@@ -534,13 +552,19 @@
             <div class="collction__box__image">
               <div
                 class="collction__box__image__content"
-                v-for="(item, index) in Imgform.find((item) => item.name === 'WGCH')?.imglists"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'WGCH')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
                 :key="index"
               >
                 <el-image
                   style="width: 100px; height: 100px"
                   :initial-index="index"
-                  :preview-src-list="Imgform.find((item) => item.name === 'WGCH')?.imglists.map((item) => item.url)"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'WGCH')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
@@ -553,7 +577,7 @@
                 <input
                   type="file"
                   class="collction__box__image__upload--input"
-                  @change="handleImageChange($event, '违规拆除')"
+                  @change="handleImageChange($event, '违规拆除', curHuInfo)"
                   accept="image/*"
                 />
               </div>
@@ -611,25 +635,29 @@
     <!---------------------------------下方按钮模块--------------------------------->
     <div class="collction__edit">
       <div class="collction__edit__btn" @click.stop="dkDialogVisibleShow">
-        <el-icon v-if="MPZform.tdtxNew == null || MPZform.tdtxNew == '' || MPZform.tdtxNew == undefined"><Promotion /></el-icon>
+        <el-icon
+          v-if="
+            (MPZform.tdtxNew == null || MPZform.tdtxNew == '' || MPZform.tdtxNew == undefined) &&
+            (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined)
+          "
+          ><Promotion
+        /></el-icon>
         <el-icon v-else><SuccessFilled /></el-icon>
         <span class="collction__edit__btn--text">{{ dkName }}</span>
       </div>
       <div
         :class="{ collction__edit__save: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
-        v-if="MPZform.tdtxNew != null && MPZform.tdtxNew != '' && MPZform.tdtxNew != undefined"
+        v-if="MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1"
         @click.stop="iseditZC(1)"
       >
         <el-icon v-if="!isLoading"><DocumentChecked /></el-icon>
         <el-icon v-else><Loading /></el-icon>
-        <span v-if="!isLoading">暂存</span>
+        <span v-if="!isLoading">保存</span>
         <span v-else>{{ loadingText }}</span>
       </div>
       <div
         v-if="
-          MPZform.tdtxNew != null &&
-          MPZform.tdtxNew != '' &&
-          MPZform.tdtxNew != undefined &&
+          (MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1) &&
           (Huform?.some((item) => item.PHSY) ||
             Huform?.some((item) => item.DJWJ == '是') ||
             Huform?.some((item) => item.WGCH == '是') ||
@@ -641,13 +669,11 @@
         @click.stop="ycDialogVisibleShow"
       >
         <el-icon><InfoFilled /></el-icon>
-        <span>异常上报</span>
+        <span>上报</span>
       </div>
       <div
         v-if="
-          MPZform.tdtxNew != null &&
-          MPZform.tdtxNew != '' &&
-          MPZform.tdtxNew != undefined &&
+          (MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1) &&
           Huform?.every((item) => item.PHSY) &&
           Huform?.every((item) => item.DJWJ == '是') &&
           Huform?.every((item) => item.WGCH == '是') &&
@@ -656,7 +682,7 @@
           Huform?.every((item) => item.FWYT == item.XFWLX)
         "
         :class="{ collction__edit__cancel: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
-        @click.stop="iseditZC(1)"
+        @click.stop="ycDialogVisibleShow"
       >
         <el-icon><Select /></el-icon>
         <span>上报</span>
@@ -776,6 +802,7 @@
   const canEdit = ref(false)
   const screamHeight = ref(0)
   const nvueWidth = ref(0)
+  const huIndex = ref(null)
   const curHuInfo = ref({})
   const canDelelt = ref(false)
   const delName = ref('')
@@ -858,6 +885,7 @@
     }
     return {}
   })
+
   const ruleFormRef = ref()
   // 处理点击事件
   function handleClick(index, event) {
@@ -906,14 +934,19 @@
   }
   // 暂存、保存、和上传接口
   const iseditZC = async (num) => {
+    //按钮禁用
     isDisabled.value = true
+    //按钮显示loading
     isLoading.value = true
+    //赋值上传建筑总信息
     let tijiaoList = {}
-    //这里进行深拷贝 否则会修改原数据
+    //这里进行深拷贝 否则会修改原数据 复制户信息
     let tijiaohuList = JSON.parse(JSON.stringify(Huform))
     tijiaohuList.forEach((item) => {
+      //对破坏情况字段 进行拼接
       item.PHSY = item.PHSY.filter((item) => item).join(',') //破坏情况
     })
+    //复制建筑总数据
     tijiaoList = {
       MPZid: MPZform.MPZid, //公房id
       gongAnLP: MPZform.gongAnLP, //新公安绿牌地址
@@ -928,9 +961,12 @@
     }
     //提交自查的接口
     await editZC(tijiaoList).then(async (res) => {
+      //如果接口通过
       if (res.data.result === 1) {
-        // loadingText.value = '图片保存中...'
+        //赋值照片上的属性zcid MPZid
         let zcid = res.data.ZCid
+        let MPZid = res.data.MPZid
+        //赋值 上传的照片信息列表
         let tijiaoImgList = []
         Imgform.forEach((item) => {
           if (item.imglists && item.imglists.length > 0) {
@@ -939,6 +975,8 @@
                 tijiaoImgList.push({
                   ZCid: zcid,
                   ZCLeiX: item.name == 'SHQK' ? '幢' : item.name == 'XSQK' ? '幢' : '户',
+                  MPZid: MPZid,
+                  Huid: item1.Huid,
                   YiChLeiX: item1.zhaopLX,
                   WenJianM: item.name,
                   url: item1.url,
@@ -948,56 +986,82 @@
             })
           }
         })
+
         //如果存在图片才进行上传图片上传
         if (tijiaoImgList.length > 0) {
-          let index = 0
+          console.log('图片数量', tijiaoImgList.length)
           let count = 0
           loadingText.value = '图片保存中...'
           tijiaoImgList.forEach(async (item) => {
             //图片上传的接口 异步接口
             await editFujian(item)
-              .then((res) => {
+              .then(async (res) => {
                 if (res.data.result == 1) {
                   count++
+                  console.log('countsucc', count)
                   ElMessage.success(res.data.msg)
+                } else {
+                  count++
+                  console.log('counterror', count)
+                  ElMessage.error(res.data.msg)
+                }
+                if (count == tijiaoImgList.length) {
+                  console.log('什么时候进入这里')
+                  //异常处理
+                  if (num == 2) {
+                    await editZCYC(MPZform.MPZid).then((res) => {
+                      ElMessage.success(res.data.msg)
+                      loadingText.value = '信息保存完成！'
+                      isDisabled.value = false
+                      isLoading.value = false
+                      setTimeout(async () => {
+                        router.push('/form/task')
+                      }, 500)
+                    })
+                  } else {
+                    //暂存按钮
+                    ElMessage.success('信息保存保存')
+                    loadingText.value = '信息保存完成！'
+                    isDisabled.value = false
+                    isLoading.value = false
+                    setTimeout(async () => {
+                      router.push('/form/task')
+                    }, 500)
+                  }
+                } else {
+                  //如果图片数量不对
+                  console.log('图片数量不对')
                 }
               })
               .catch((error) => {
                 // 处理错误逻辑
               })
           })
-          //如果图片处理完毕，进行最后异常接口调用
-          if (count == tijiaoImgList.length) {
-            if (num == 2) {
-              await editZCYC(MPZform.MPZid).then((res) => {
-                ElMessage.success(res.data.msg)
-              })
-            }
-          }
         } else {
+          //如果不存在照片的情况 直接进行异常提交接口
           //最后在进行异常提交
           if (num == 2) {
-            editZCYC(MPZform.MPZid).then((res) => {})
+            await editZCYC(MPZform.MPZid).then((res) => {
+              loadingText.value = '信息保存完成！'
+              isDisabled.value = false
+              isLoading.value = false
+              setTimeout(async () => {
+                router.push('/form/task')
+              }, 500)
+            })
+          } else {
+            //暂存图片上传完后的操作
           }
         }
-
-        loadingText.value = '信息保存完成！'
-        isDisabled.value = false
-        isLoading.value = false
-        setTimeout(async () => {
-          router.push('/form/task')
-        }, 500)
       } else {
+        //接口失败时 显示当前接口错误
         ElMessage.error(res.data.msg)
+        //取消提交按钮的禁用效果
         isDisabled.value = false
         isLoading.value = false
-      }
-      if (num == 2) {
-        ycDialogFormVisible.value = false
       }
     })
   }
-
   // 判断距离建筑距离
   const getDistances = (lat1, lng1, lat2, lng2) => {
     let EARTH_RADIUS = 6378.137 // 地球半径
@@ -1010,11 +1074,13 @@
     s = Math.round(s * 10000) / 10000 // 输出为公里
     return s * 1000
   }
-
   // 打卡模块逻辑
   const dkDialogVisibleShow = () => {
     // 如果 不存在打卡记录时
-    if (MPZform.tdtxNew == null || MPZform.tdtxNew == undefined || MPZform.tdtxNew == '') {
+    if (
+      (MPZform.tdtxNew == null || MPZform.tdtxNew == undefined || MPZform.tdtxNew == '') &&
+      (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined)
+    ) {
       //调用定位模块
       if ('geolocation' in navigator) {
         //如果存在位置元素
@@ -1080,12 +1146,14 @@
         if (res.data.result == 1) {
           ElMessage({
             showClose: true,
-            message: '打卡成功:',
+            message: '打卡成功:' + res.data.msg,
             type: 'success',
           })
           dkDialogFormVisible.value = false
           MPZform.tdtxNew = contetForm.tdtx
           MPZform.tdtyNew = contetForm.tdty
+          MPZform.DaKaJG = contetForm.errorStatus
+          MPZform.DaKaBz = contetForm.errorReson
         } else {
           dkDialogFormVisible.value = false
           ElMessage({
@@ -1105,21 +1173,6 @@
   const getButtonIcon = (item) => {
     const Icon = item.isShowForm ? 'CirclePlusFilled' : 'Edit'
     return Icon
-  }
-  // true 同意 false 驳回
-  const apply = ref(true)
-  // 审核内容
-  const approvalComment = ref('')
-  //提交审批
-  const approveConfirm = async () => {
-    if (!approvalComment.value && !apply.value) return ElMessage.warning('请填写审核意见！')
-    await buildOperation(gfid.value, apply ? '审批同意' : '审批拒绝', approvalComment.value)
-    centerDialogVisible.value = false
-    //initData(null)
-  }
-  const centerDialogVisibleOpen = (value: boolean) => {
-    apply.value = value
-    centerDialogVisible.value = true
   }
 
   // removalType
@@ -1184,18 +1237,6 @@
       text: '近三年完成过修缮',
     },
   ])
-  // 上传文件函数
-  const handleFileChange = (event, item) => {
-    const file = event.target.files[0] // 获取选中的文件
-    if (file) {
-      console.log('文件地址', file)
-      item.imglists.push({
-        imgUrl: URL.createObjectURL(file),
-      })
-      console.log('预览', URL.createObjectURL(file))
-    } else {
-    }
-  }
   const text = ref() //可以根据需要更改不同的文字
   /**
    * canvas添加水印
@@ -1269,7 +1310,8 @@
   }
 
   // 上传文件函数
-  const handleImageChange = async (event, name, urlName?: string, num?: number) => {
+  const handleImageChange = async (event, name, HuInfo?: Object) => {
+    console.log('当前户', HuInfo)
     const file = event.target.files[0] // 获取选中的文件
     if (file) {
       //let base64Url = await ySImage(file)
@@ -1292,6 +1334,7 @@
 
       Imgform.find((item) => item.title === name).imglists.push({
         url: comressBse64,
+        Huid: HuInfo && HuInfo !== undefined ? HuInfo.Huid : null,
         thumbnailUrl: comressThumbBse64,
         zhaopLX: name,
         name: file.name,
@@ -1302,7 +1345,7 @@
     } else {
     }
   }
-
+  //压缩+水印
   const compressImage = async (base64, maxWidth, quality, withWater) => {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -1450,9 +1493,6 @@
   }
   //控制户信息的展示
   const itemisShowForm = (item) => {
-    //先开1 1 true false - true 当前 1 true false - true
-    //后开2 2 true false - true 当前 2 true false - true
-    //先切换到1 本来应该打开1 的页面  但是实际是两个都关闭了(原因是切换 其他户时状态没有修改成功)
     console.log(item.isShowForm)
     item.isShowForm = !item.isShowForm
     //切换显示状态
@@ -1463,95 +1503,11 @@
     })
     //赋值当前数据
     curHuInfo.value = item
+    console.log('当前户信息', curHuInfo.value)
   }
 
   // 标识下标
   const phoneTypeIndex = ref(0)
-  const phoneTypeList = ref<Tab[]>([
-    {
-      title: '建筑名称标识',
-      name: 'jianZhumcbs',
-      icon: 'Picture',
-      imglists: [
-        {
-          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-          name: 'Deer',
-        },
-        {
-          imgUrl: ' https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-          name: 'Horse',
-        },
-        // 更多图片...
-      ],
-      tooltip: '指建筑物具体名称，如xx小区、xx学校等<br/>，若无标志，拍摄建筑物大门即可',
-      isShowToolTip: true,
-      // 其他属性...
-    },
-    {
-      title: '公安绿牌',
-      name: 'gongAnLP',
-      icon: 'Picture',
-      imglists: [
-        {
-          imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-          name: 'Mountain Lion',
-        },
-        // 更多图片...
-      ],
-      tooltip: '',
-      isShowToolTip: false,
-      // 其他属性...
-    },
-    {
-      title: '外立面',
-      name: 'waiLiM',
-      icon: 'Picture',
-      imglists: [
-        {
-          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-          name: 'Deer',
-        },
-        {
-          imgUrl: 'https://ccgis.cn/wuyegl/webapi/youligf.picThumb?imgID=9394829591CC',
-          name: 'Horse',
-        },
-        {
-          imgUrl: 'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-          name: 'Mountain Lion',
-        },
-        // 更多图片...
-      ],
-      tooltip: '',
-      isShowToolTip: false,
-
-      // 其他属性...
-    },
-    {
-      title: '铭牌',
-      name: 'mingPai',
-      icon: 'Picture',
-      imglists: [
-        { imgUrl: 'https://example.com/image1.jpg' },
-        // 更多图片...
-      ],
-      tooltip: '',
-      isShowToolTip: false,
-      // 其他属性...
-    },
-    {
-      title: '产业状态',
-      name: 'chanYeZT',
-      icon: 'Picture',
-      imglists: [
-        { imgUrl: 'https://example.com/image1.jpg' },
-        // 更多图片...
-      ],
-      tooltip: '',
-      isShowToolTip: false,
-      // 其他属性...
-    },
-    // 更多标签页数据...
-  ])
 
   //监测 是否数据有问题
   watchEffect(() => {
@@ -1863,7 +1819,7 @@
     }
     &__edit {
       position: fixed;
-      bottom: 0;
+      bottom: -20px;
       left: 0;
       right: 0;
       // background: #fff;
