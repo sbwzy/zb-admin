@@ -59,8 +59,8 @@
   const info = ref({
     id: '1',
     buildName: MPZInfo.value[0].ShouQuanDZ,
-    locX: MPZInfo.value[0].tdtY, //建筑原本建筑位置x 31.193838901816
-    locY: MPZInfo.value[0].tdtX, //建筑原本建筑位置y 121.420338909884
+    locX: MPZInfo.value[0].tdty, //建筑原本建筑位置x 31.193838901816
+    locY: MPZInfo.value[0].tdtx, //建筑原本建筑位置y 121.420338909884
     tdtxNew: MPZInfo.value[0].tdtyNew,
     tdtyNew: MPZInfo.value[0].tdtxNew,
     isMorm: true,

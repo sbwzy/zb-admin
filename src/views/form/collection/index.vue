@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="
-  "
-  >
+  <div class="collction">
     <!---------------------------------基础信息模块--------------------------------->
     <div class="collction__box">
       <div class="collction__box__content">
@@ -170,7 +167,7 @@
                 :src="item.thumbnailUrl"
                 fit="cover"
               />
-              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('损坏情况', index)">
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('损坏情况', index, false)">
                 <el-icon><CircleClose /></el-icon>
               </div>
             </div>
@@ -257,7 +254,7 @@
                 :src="item.thumbnailUrl"
                 fit="cover"
               />
-              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('修缮情况', index)">
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('修缮情况', index, false)">
                 <el-icon><CircleClose /></el-icon>
               </div>
             </div>
@@ -291,7 +288,7 @@
               round
               class="collction__box__nav1"
               @click.stop="itemisShowForm(item)"
-              >{{ item.sh !== '' && item.sh !== undefined ? item.sh : item.CB.slice(-6) }}</el-button
+              >{{ item.SH !== '' && item.SH !== undefined ? item.SH : item.CB.slice(-6) }}</el-button
             >
           </el-col>
         </el-row>
@@ -380,7 +377,11 @@
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
-                <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('房屋用途', index)">
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('房屋用途', index, true, curHuInfo)"
+                >
                   <el-icon><CircleClose /></el-icon>
                 </div>
               </div>
@@ -440,7 +441,11 @@
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
-                <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('破坏使用', index)">
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('破坏使用', index, true, curHuInfo)"
+                >
                   <el-icon><CircleClose /></el-icon>
                 </div>
               </div>
@@ -506,7 +511,11 @@
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
-                <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('搭建违建', index)">
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('搭建违建', index, true, curHuInfo)"
+                >
                   <el-icon><CircleClose /></el-icon>
                 </div>
               </div>
@@ -568,7 +577,11 @@
                   :src="item.thumbnailUrl"
                   fit="cover"
                 />
-                <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('违规拆除', index)">
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('违规拆除', index, true, curHuInfo)"
+                >
                   <el-icon><CircleClose /></el-icon>
                 </div>
               </div>
@@ -656,43 +669,19 @@
         <span v-else>{{ loadingText }}</span>
       </div>
       <div
-        v-if="
-          (MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1) &&
-          (Huform?.some((item) => item.PHSY) ||
-            Huform?.some((item) => item.DJWJ == '是') ||
-            Huform?.some((item) => item.WGCH == '是') ||
-            MPZform.SHQK ||
-            MPZform.ZSQK != MPZform.ZSFH ||
-            Huform?.some((item) => item.FWYT != item.XFWLX))
-        "
-        class="collction__edit__abnormal"
+        :class="{ collction__edit__abnormal: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
+        v-if="MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1"
         @click.stop="ycDialogVisibleShow"
       >
         <el-icon><InfoFilled /></el-icon>
-        <span>上报</span>
-      </div>
-      <div
-        v-if="
-          (MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1) &&
-          Huform?.every((item) => item.PHSY) &&
-          Huform?.every((item) => item.DJWJ == '是') &&
-          Huform?.every((item) => item.WGCH == '是') &&
-          MPZform.SHQK &&
-          MPZform.ZSQK == MPZform.ZSFH &&
-          Huform?.every((item) => item.FWYT == item.XFWLX)
-        "
-        :class="{ collction__edit__cancel: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
-        @click.stop="ycDialogVisibleShow"
-      >
-        <el-icon><Select /></el-icon>
         <span>上报</span>
       </div>
     </div>
     <!------------------------------ 异常信息上报弹窗------------------------------->
     <div class="dialog" v-if="ycDialogFormVisible">
       <div class="dialog__content">
-        <h3 class="dialog__content--title">异常信息上报</h3>
-        <el-alert :title="errorReason" type="warning" effect="dark" />
+        <h3 class="dialog__content--title">上报</h3>
+        <el-alert :title="errorReason" type="warning" />
         <div class="dialog__content__footer">
           <div @click.stop="ycDialogFormVisible = false">取消</div>
           <div @click.stop="iseditZC(2)">确定</div>
@@ -749,6 +738,7 @@
   import { useUserStore } from '@/store/modules/user'
   import {
     youliCJXQGet,
+    buildListinfo1,
     getLocationInfo,
     buildOperation,
     xinXiGX,
@@ -765,15 +755,19 @@
   import { ElMessage, ElMessageBox, ElButton, ElIcon } from 'element-plus'
   import { Check, Delete, Edit, Message, Search, Star, CirclePlusFilled } from '@element-plus/icons-vue'
   import { h } from 'vue'
+  import { useTagsViewStore } from '@/store/modules/tagsView'
   import ImageCompressor from 'image-compressor.js'
 
   const router = useRouter()
+  const TagsViewStore = useTagsViewStore()
+  const visitedViews = computed(() => TagsViewStore.visitedViews)
   const SettingStore = useSettingStore()
   const UserStore = useUserStore()
   const percentage = ref<number>(10)
   const duration = computed(() => Math.floor(percentage.value / 10))
   // 获取数据
-  const { MPZInfo, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } = storeToRefs(SettingStore)
+  const { MPZInfo, dqZCZT, xcrwXQId, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } =
+    storeToRefs(SettingStore)
   // 引入接口
   const route = useRoute()
   // 获取路由参数
@@ -807,6 +801,8 @@
   const canDelelt = ref(false)
   const delName = ref('')
   const delIndex = ref(null)
+  const delHu = ref(false)
+  const delImgId = ref(null)
   interface Tab {
     title: string
     icon: string
@@ -834,35 +830,58 @@
 
   const Imgform = ImgInfo.value
   const errDKMessage = '是否确定打卡,打卡后将无法重新打卡'
-
+  //异常原因表单
   const errorReason = computed(() => {
-    let res = '当前建筑存在以下异常情况:'
+    let YCQK = 0
+    let res = '当前建筑异常情况如下:'
+
+    //幢上的损坏情况异常
     if (MPZform.SHQK && MPZform.SHQK.length > 0) {
       res += '房屋' + MPZform.SHQK.join(',') + '、'
+      YCQK = 1
     }
+    //幢上的征收情况异常
     if (MPZform.ZSFH != MPZform.ZSQK && MPZform.ZSQK && MPZform.ZSQK != '') {
       res += '征收异样、'
+      YCQK = 1
     }
+    //幢上的修缮情况异常
     if (MPZform.XSQK == '修缮中' && MPZform.SGXK == '否') {
       res += '无施工许可修缮、'
+      YCQK = 1
     }
-    if (Huform?.every((item) => item.PHSY)) {
+    //户上的房屋用途异常 FWYT
+    if (Huform?.some((item) => item.FWYT !== item.DQFWYT)) {
+      res += '户上存在房屋用途异常、'
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.PHSY && item.PHSY.length > 0)) {
       res += '户上存在破坏情况、'
+      YCQK = 1
     }
-    if (Huform?.every((item) => item.DJWJ == '是')) {
+    if (Huform?.some((item) => item.DJWJ == '是')) {
       res += '户上存在搭建违建 、'
+      YCQK = 1
     }
-    if (Huform?.every((item) => item.WGCH == '是')) {
+    if (Huform?.some((item) => item.WGCH == '是')) {
       res += '户上存在违规拆除、'
+      YCQK = 1
     }
-    if (Huform?.every((item) => item.ZZQK == '是')) {
+    if (Huform?.some((item) => item.ZZQK == '是')) {
       res += '户上存在转租情况、'
+      YCQK = 1
     }
-    if (Huform?.every((item) => item.KZQK == '是')) {
+    if (Huform?.some((item) => item.KZQK == '是')) {
       res += '户上存在空置情况、'
+      YCQK = 1
     }
-    return res
+    if (YCQK === 1) {
+      return res
+    } else {
+      return '当前建筑不存在异常！'
+    }
   })
+
   onMounted(() => {
     // getQueryMPZInfo().then((res) => {
     //   if (res.data.result <= 0) {
@@ -877,14 +896,14 @@
   const deleteImgmsg = '该照片已经保存到服务器,谨慎删除该照片！'
 
   // 验证 需要红色标识填写
-  const rules = computed((): FormRules => {
-    if (isEdit.value) {
-      return {
-        //galpdz: [{ required: true, message: '请输入公安绿牌地址', trigger: 'blur' }],
-      }
-    }
-    return {}
-  })
+  // const rules = computed((): FormRules => {
+  //   if (isEdit.value) {
+  //     return {
+  //       //galpdz: [{ required: true, message: '请输入公安绿牌地址', trigger: 'blur' }],
+  //     }
+  //   }
+  //   return {}
+  // })
 
   const ruleFormRef = ref()
   // 处理点击事件
@@ -946,6 +965,34 @@
       //对破坏情况字段 进行拼接
       item.PHSY = item.PHSY.filter((item) => item).join(',') //破坏情况
     })
+    let YCQK = 0
+    if (MPZform.SHQK && MPZform.SHQK.length > 0) {
+      YCQK = 1
+    }
+    if (MPZform.ZSFH != MPZform.ZSQK && MPZform.ZSQK && MPZform.ZSQK != '') {
+      YCQK = 1
+    }
+    if (MPZform.XSQK == '修缮中' && MPZform.SGXK == '否') {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.FWYT !== item.DQFWYT)) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.PHSY.length > 0)) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.DJWJ == '是')) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.WGCH == '是')) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.ZZQK == '是')) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.KZQK == '是')) {
+      YCQK = 1
+    }
     //复制建筑总数据
     tijiaoList = {
       MPZid: MPZform.MPZid, //公房id
@@ -958,6 +1005,7 @@
       SGXK: MPZform.SGXK, //施工许可
       XSQKSM: MPZform.XSQKSM, //修缮情况说明
       Hu: tijiaohuList, //户信息
+      SFYC: YCQK == 1 ? '是' : '否',
     }
     //提交自查的接口
     await editZC(tijiaoList).then(async (res) => {
@@ -1003,20 +1051,29 @@
                 } else {
                   count++
                   console.log('counterror', count)
-                  ElMessage.error(res.data.msg)
+                  //ElMessage.error(res.data.msg)
                 }
                 if (count == tijiaoImgList.length) {
                   console.log('什么时候进入这里')
                   //异常处理
                   if (num == 2) {
-                    await editZCYC(MPZform.MPZid).then((res) => {
-                      ElMessage.success(res.data.msg)
+                    await editZCYC(MPZform.MPZid).then(async (res) => {
+                      //ElMessage.success(res.data.msg)
                       loadingText.value = '信息保存完成！'
                       isDisabled.value = false
                       isLoading.value = false
-                      setTimeout(async () => {
-                        router.push('/form/task')
-                      }, 500)
+
+                      await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+                        if (res.data.result === 1) {
+                          let jzList = []
+                          res.data.MPZInfo.data.forEach((item) => {
+                            jzList.push(item)
+                          })
+                          SettingStore.setJzList(jzList)
+                          TagsViewStore.toLastView(route.path)
+                          TagsViewStore.delView(route.path)
+                        }
+                      })
                     })
                   } else {
                     //暂存按钮
@@ -1024,9 +1081,17 @@
                     loadingText.value = '信息保存完成！'
                     isDisabled.value = false
                     isLoading.value = false
-                    setTimeout(async () => {
-                      router.push('/form/task')
-                    }, 500)
+                    await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+                      if (res.data.result === 1) {
+                        let jzList = []
+                        res.data.MPZInfo.data.forEach((item) => {
+                          jzList.push(item)
+                        })
+                        SettingStore.setJzList(jzList)
+                        TagsViewStore.toLastView(route.path)
+                        TagsViewStore.delView(route.path)
+                      }
+                    })
                   }
                 } else {
                   //如果图片数量不对
@@ -1041,16 +1106,42 @@
           //如果不存在照片的情况 直接进行异常提交接口
           //最后在进行异常提交
           if (num == 2) {
-            await editZCYC(MPZform.MPZid).then((res) => {
+            await editZCYC(MPZform.MPZid).then(async (res) => {
+              ElMessage.success('信息保存保存')
               loadingText.value = '信息保存完成！'
               isDisabled.value = false
               isLoading.value = false
-              setTimeout(async () => {
-                router.push('/form/task')
-              }, 500)
+              await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+                if (res.data.result === 1) {
+                  let jzList = []
+                  res.data.MPZInfo.data.forEach((item) => {
+                    jzList.push(item)
+                  })
+                  SettingStore.setJzList(jzList)
+                  TagsViewStore.toLastView(route.path)
+                  TagsViewStore.delView(route.path)
+                }
+              })
             })
           } else {
             //暂存图片上传完后的操作
+            ElMessage.success('信息保存保存')
+            loadingText.value = '信息保存完成！'
+            isDisabled.value = false
+            isLoading.value = false
+            console.log('xcrwXQId', xcrwXQId)
+            console.log('dqZCZT', dqZCZT)
+            await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+              if (res.data.result === 1) {
+                let jzList = []
+                res.data.MPZInfo.data.forEach((item) => {
+                  jzList.push(item)
+                })
+                SettingStore.setJzList(jzList)
+                TagsViewStore.toLastView(route.path)
+                TagsViewStore.delView(route.path)
+              }
+            })
           }
         }
       } else {
@@ -1086,8 +1177,8 @@
         //如果存在位置元素
         navigator.geolocation.getCurrentPosition(
           async function (position) {
-            var lat = position.coords.latitude
-            var lon = position.coords.longitude
+            var lat = position.coords.latitude.toFixed(6)
+            var lon = position.coords.longitude.toFixed(6)
             var accuracy = position.coords.accuracy
 
             // 生成一条打卡记录
@@ -1138,6 +1229,13 @@
         contetForm.errorStatus = 1
         dkDialogFormVisible.value = true
       }
+    } else if (MPZform.DaKaJG == 1 || MPZform.DaKaJG == 0) {
+      //重复提交打卡操作
+      ElMessage({
+        showClose: true,
+        message: '您已进行过打卡操作，请勿重复提交',
+        type: 'warning',
+      })
     }
   }
   const dkTJ = () => {
@@ -1426,43 +1524,72 @@
     })
   }
 
-  //删除照片
-  const deleteImage = (name: string, index: number, num?: number) => {
-    console.log('删除照片', name, index)
-    const foundItem = Imgform.find((item) => item.title === name)
+  //删除照片 需要修改相关逻辑
+  const deleteImage = (name: string, index: number, Hu: boolean, HuInfo?: Object) => {
+    console.log('删除照片', name, index, HuInfo)
+    //初步筛选 出 是哪个异常照片
+    const foundItem = Imgform.find((item) => item.title === name).imglists
     console.log(foundItem)
-    console.log(foundItem.imglists[index])
-    console.log(foundItem.imglists[index].hasOwnProperty('imgId'))
-    if (foundItem && foundItem.imglists && foundItem.imglists[index] && foundItem.imglists[index].hasOwnProperty('imgId')) {
-      console.log(foundItem.imglists[index].imgId)
-      console.log('打开弹窗')
-      delName.value = name
-      delIndex.value = index
-      centerDialogVisible.value = true
+
+    if (HuInfo && Hu) {
+      console.log('户照片')
+      //找到当前展示户的照片进行操作
+      const foundHuItem = foundItem.filter((item) => item.Huid === HuInfo.Huid)
+      console.log('foundHuItem', foundHuItem)
+      if (foundHuItem && foundHuItem[index] && foundHuItem[index].hasOwnProperty('imgId')) {
+        console.log(foundHuItem[index].imgId)
+        console.log('打开弹窗')
+        delName.value = name
+        delIndex.value = index
+        delHu.value = Hu
+        delImgId.value = foundHuItem[index].imgId
+        centerDialogVisible.value = true
+      } else {
+        console.log('imgId 不存在 直接删除')
+        foundItem.splice(index, 1)
+      }
     } else {
-      console.log('imgId 不存在')
-      foundItem.imglists.splice(index, 1)
+      console.log('幢照片')
+      //如果存在imgId 就删除
+      if (foundItem && foundItem[index] && foundItem[index].hasOwnProperty('imgId')) {
+        console.log(foundItem[index].imgId)
+        console.log('打开弹窗')
+        delName.value = name
+        delIndex.value = index
+        delHu.value = Hu
+        delImgId.value = foundItem[index].imgId
+        centerDialogVisible.value = true
+      } else {
+        console.log('imgId 不存在 直接删除')
+        foundItem.splice(index, 1)
+      }
     }
   }
+  //删除照片
   const deleteImg = async () => {
     canDelelt.value = true
-    const foundItem = Imgform.find((item) => item.title === delName.value)
-    console.log(foundItem.imglists[delIndex.value].imgId)
+    //初步筛选 出 是哪个异常照片
+    const foundItem = Imgform.find((item) => item.title === delName.value).imglists
     const timer = setInterval(() => {
       percentage.value += 10
       if (percentage.value > 90) {
         clearInterval(timer)
       }
-    }, 500) // 每秒增加10%，100次后进度条达到100%
-    await editFujianDel(foundItem.imglists[delIndex.value].imgId).then((res) => {
+    }, 500) // 每秒增加10%，10次后进度条达到100%
+
+    await editFujianDel(delImgId.value).then((res) => {
       centerDialogVisible.value = false
       if (res.data.result === 1) {
         percentage.value = 100
-        foundItem.imglists.splice(delIndex.value, 1)
+        const index = foundItem.findIndex((item) => item.imgId === delImgId.value)
+        if (index !== -1) {
+          foundItem.splice(index, 1)
+        }
         canDelelt.value = false
         percentage.value = 10
         delName.value = ''
         delIndex.value = null
+        delHu.value = false
         ElMessage.success('照片删除成功')
       } else {
         percentage.value = 100
@@ -1470,27 +1597,14 @@
         percentage.value = 10
         delName.value = ''
         delIndex.value = null
+        delHu.value = false
         ElMessage.error(res.data.msg)
       }
     })
 
     // foundItem.imglists.splice(index, 1)
   }
-  /**
-   * @description: 编辑状态切换
-   * @param {boolean} val
-   * @return {*}
-   */
-  const isEditChange = (val: boolean) => {
-    if (val == true) {
-      isShowForm.value = true
-      //展开 是 0
-      ImgInfo.value.forEach((item) => {
-        item.isShowForm = 0
-      })
-    }
-    isEdit.value = val
-  }
+
   //控制户信息的展示
   const itemisShowForm = (item) => {
     console.log(item.isShowForm)
@@ -1537,11 +1651,6 @@
     if ((MPZform.ZSFH && !parent.value.some((item) => item.value === MPZform.ZSFH)) || MPZform.ZSFH === undefined || MPZform.ZSFH === '') {
       MPZform.ZSFH = null
     }
-
-    //户 - 当前房屋类型 - 单选
-    // if ((MPZform.ZSZT && !parent.value.some((item) => item.value === MPZform.ZSZT)) || MPZform.ZSZT === undefined || MPZform.ZSZT === '') {
-    //   MPZform.ZSZT = null
-    // }
 
     //户 - 破坏情况 -多选
     //如果当前存在户并打开户的情况

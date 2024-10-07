@@ -55,13 +55,7 @@
   //根据当前用户身份设置初始分段  初始这样设计
   //let initvalue = dqZCZT.value
 
-  onMounted(() => {
-    // getQueryMPZInfo().then((res) => {
-    //   if (res.data.result <= 0) {
-    //     router.push('/login?msgType=error&msg='+res.data.msg)
-    //   }
-    // })
-  })
+  onMounted(() => {})
 
   const changeValue = (val) => {
     console.log('打印', val)
@@ -77,6 +71,8 @@
         SettingStore.setJzList(jzList)
         //dataList = jzList
         SettingStore.setXcrwId(0)
+      } else {
+        ElMessage.error(res.data.msg)
       }
       //router.go(0);
     })
@@ -98,6 +94,8 @@
           })
           SettingStore.setJzList(jzList)
           SettingStore.setXcrwId(0)
+        } else {
+          ElMessage.error(res.data.msg)
         }
       })
     } else if (e2 == '详情') {
@@ -188,11 +186,11 @@
                 imgId: item.imgId,
                 ZCid: item.ZCid,
                 ZCLeiX: item.ZCLeiX,
-                huId: item.huId,
+                Huid: item.Huid,
                 YiChLeiX: item.YiChLeiX,
                 XuHao: item.XuHao,
                 url: item.imgUrl,
-                thumbnailUrl: item.thumbUrl,
+                thumbnailUrl: item.thumbnailUrl,
               }
               ImgInfo.forEach((item2) => {
                 if (item.YiChLeiX == item2.title) {
@@ -251,6 +249,8 @@
           setTimeout(async () => {
             router.push('/form/collection')
           }, 500)
+        } else {
+          ElMessage.error(res.data.msg)
         }
       })
     } else if (e2 == '重置' || e2 == '模糊重置') {

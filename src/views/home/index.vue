@@ -109,6 +109,8 @@
           setTimeout(async () => {
             router.push('/form/task')
           }, 200)
+        } else {
+          ElMessage.error(res.data.msg)
         }
       })
     }

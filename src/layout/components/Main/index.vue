@@ -34,7 +34,7 @@
     overflow-y: auto;
     .app-main-inner {
       flex: 1;
-      display: flex;
+      //display: flex;
       overflow-x: hidden;
       width: 100%;
       box-sizing: border-box;
