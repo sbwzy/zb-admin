@@ -50,44 +50,8 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useRouter, useRoute } from 'vue-router'
   const router = useRouter()
-  // 切换方法，提供给父组件调用
-  const customeMethod1 = () => {
-    console.log('3')
-    // 切换已选和未选中的点
-    console.log('paths.value.length')
-    console.log(pointsList)
-    isChoosed = !isChoosed
-
-    drawItems.value.clearLayers()
-    paths.value = []
-    pointsList = props.points
-    pointsList.forEach((item) => {
-      if (isChoosed && item[2] == true) {
-        var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
-        paths.value.push(marker1)
-      }
-      if (!isChoosed && item[2] != true) {
-        var marker1 = L.marker(item, { icon: yxzicon, opacity: 1 })
-        paths.value.push(marker1)
-      }
-    })
-    drawItems.value = L.featureGroup(paths.value)
-
-    map.value.addLayer(drawItems.value)
-  }
-
-  // 暴露方法给父组件
-  defineExpose({
-    customeMethod1,
-  })
 
   let props = defineProps({
-    points: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
     buildInfo: {
       type: Object,
       default() {
@@ -152,24 +116,6 @@
     iconSize: [13, 13],
     html: `<div style="width: 13px; height: 13px; background-color: #FF3333; border-radius: 100%"></div>`,
   })
-
-  // var greenIcon = new L.Icon({
-  //   iconUrl: '../../../../../src/assets/image/loc.png',
-  //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  //   iconSize: [30, 36],
-  //   iconAnchor: [18, 20],
-  //   popupAnchor: [1, -34],
-  //   shadowSize: [41, 41],
-  // })
-
-  // var greenIcon1 = new L.Icon({
-  //   iconUrl: '../../../../../src/assets/image/job_icon2.png',
-  //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  //   iconSize: [30, 36],
-  //   iconAnchor: [18, 20],
-  //   popupAnchor: [1, -34],
-  //   shadowSize: [41, 41],
-  // })
 
   const initMap = () => {
     //建筑原规划点位信息 //原规划点位与签到位置的判断
@@ -351,11 +297,6 @@
       map.value = null
       //map.value.off('move')
     }
-  })
-  //监测到值已经变动了 但是数据没有被刷新
-  watch(props.points, (newValue, oldValue) => {
-    console.log(newValue)
-    console.log(oldValue)
   })
 </script>
 

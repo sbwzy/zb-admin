@@ -2,22 +2,12 @@
   <async-bingmap
     ref="bingmapRef"
     v-model:build-info="info"
-    :points="pointslist"
-    :entry-build-id="buildId"
-    :entry-type="entryType"
     :parent-type-method1="bingmapMethod"
     @update:build-infotdtx="updatebuildinfo"
     @update:build-infoqiandaox="updatebuildinfo1"
     @update:build-inforeason="updatebuildinfo2"
+    :key="dataKey"
   />
-  <!-- <div class="overlay">
-    <filterView
-      :filterss="dynamicFilters"
-      :listtype="entryType"
-      :parent-type-method="filterMethod"
-      @parent-method1="bingmapMethod1"
-    ></filterView>
-  </div> -->
 </template>
 
 <script lang="ts" setup name="bingMap">
@@ -34,29 +24,17 @@
   const SettingStore = useSettingStore()
   const { MPZInfo, HuInfo, ImgInfo, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } = storeToRefs(SettingStore)
   const route = useRoute()
-
+  const dataKey = ref(0)
+  const isFirstLoad = ref(true)
   const buildId = route.params.id
   const entryType = route.params.type
   //const { params } = toRefs(route) :entryBuildId="buildId" :entryType="entryType"
 
   const bingmapRef = ref<InstanceType<typeof bingmap>>()
   const asyncBingmap = defineAsyncComponent(() => import('./components/bingmap.vue'))
-  //将bingmap中的方法提供给FilterView调用
-  const bingmapMethod1 = () => {
-    console.log('2')
-    console.log(bingmapRef)
-    // 调用bingmap组件的方法1
-    bingmapRef.value?.customeMethod1()
-  }
   const listType = 'xcmap'
   let menuDIV = false
-  const pointslist1 = [
-    [31.26119881827799, 121.4253616333008],
-    [31.22745508030936, 121.4517974853515],
-    [31.26530592827279, 121.4593505859375],
-    [31.2814392726145, 121.4473342895508],
-  ]
-  const info = ref({
+  let info = ref({
     id: '1',
     buildName: MPZInfo.value[0].ShouQuanDZ,
     locX: MPZInfo.value[0].tdty, //建筑原本建筑位置x 31.193838901816
@@ -67,16 +45,6 @@
     qiaoDaoReason: '当前gis信号差',
   })
 
-  const pointslist = ref(pointslist1)
-
-  const pointslist2 = [
-    [31.27119881827799, 121.4253616333008],
-    [31.27455080309365, 121.4517974853515],
-    [31.27305928272795, 121.4593505859375],
-    [31.27439272614506, 121.4473342895508],
-    [31.27219881827323, 121.4253616333008],
-  ]
-  //const xcrwList = params.value.list
   //console.log("地图",xcrwList)
   const onSubmit = () => {
     menuDIV = !menuDIV
@@ -99,30 +67,25 @@
     console.log('打印', el)
   }
 
-  const bingmapMethod = (el) => {
-    console.log('打印点位', el)
-    if (el == 1) {
-      pointslist.value = pointslist2
-    } else {
-      pointslist.value = pointslist1
-    }
-    //let datalist = ref([])
-    console.log(pointslist.value)
-    // buildListinfo(el).then((res) => {
-    // 	console.log('打印结果', res)
-    // 	let data = res.data.caiJiList1.data;
-    // 	console.log(data)
-    // 	console.log(typeof data)
-    // 	//data.foreach()
-    // 	let dataa = ref([])
-    // 	data.forEach((item) => {
-    // 		dataa.value.push([item.tdtY,item.tdtx])
-    // 	})
-    // 	pointslist.value = dataa.value
+  const bingmapMethod = (el) => {}
+  onMounted(() => {
+    console.log('打印缓存')
+    // if (isFirstLoad.value) {
+    //   console.log('打印缓存')
+    //   dataKey.value++
+    //   SettingStore.setReload()
 
-    // })
-    // console.log(pointslist.value)
-  }
+    //   // 加载完成后，设置为false，防止下一次加载时再次执行
+    //   isFirstLoad.value = false
+    // }
+  })
+  watch(
+    info,
+    () => {
+      dataKey.value++
+    },
+    { deep: true },
+  )
 </script>
 <style>
   .overlay {

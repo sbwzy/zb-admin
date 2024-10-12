@@ -5,6 +5,7 @@
     <!-- <Remind class="item-children" /> -->
     <!-- <ScreenFull class="item-children" /> -->
     <!-- <Setting class="item-children" /> -->
+    <!-- 上海市优历公房采集系统 -->
     <Avatar />
   </div>
 </template>

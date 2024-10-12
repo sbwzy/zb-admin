@@ -96,6 +96,8 @@
 
     if (e2 == '详情') {
       SettingStore.setXcrwXQId(e1.XQID)
+      SettingStore.setDqZCZT('待检查')
+      SettingStore.search.jzName = ''
       buildListinfo1(e1.XQID, '待检查', '').then((res) => {
         if (res.data.result === 1) {
           let jzList = []
@@ -110,7 +112,12 @@
             router.push('/form/task')
           }, 200)
         } else {
-          ElMessage.error(res.data.msg)
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
         }
       })
     }
@@ -134,7 +141,8 @@
     /* 右对齐，保证水平居中 */
     width: 100%;
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
+    opacity: 0.6;
     /* 固定在底部 */
     display: flex;
     justify-content: center;

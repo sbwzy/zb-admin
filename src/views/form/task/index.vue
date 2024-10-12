@@ -72,7 +72,12 @@
         //dataList = jzList
         SettingStore.setXcrwId(0)
       } else {
-        ElMessage.error(res.data.msg)
+        ElMessage({
+          showClose: true,
+          message: res.data.msg,
+          type: 'error',
+          duration: 0,
+        })
       }
       //router.go(0);
     })
@@ -95,7 +100,12 @@
           SettingStore.setJzList(jzList)
           SettingStore.setXcrwId(0)
         } else {
-          ElMessage.error(res.data.msg)
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
         }
       })
     } else if (e2 == '详情') {
@@ -137,7 +147,18 @@
           }
           SettingStore.setHuInfo(huInfo)
           //赋值建筑异常照片数据
+          //10月11 新增 铭牌 和公安绿牌 拍摄图片
           let ImgInfo = [
+            {
+              name: 'MPZ',
+              title: '铭牌',
+              imglists: [],
+            },
+            {
+              name: 'GPL',
+              title: '公安绿牌',
+              imglists: [],
+            },
             {
               name: 'PHSY',
               title: '破坏使用',
@@ -250,13 +271,33 @@
             router.push('/form/collection')
           }, 500)
         } else {
-          ElMessage.error(res.data.msg)
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
         }
       })
     } else if (e2 == '重置' || e2 == '模糊重置') {
       // 将响应式对象置空
-      Object.keys(search).forEach((key) => {
-        search[key] = ''
+      search.value.jzName = ''
+      await buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, '').then((res) => {
+        if (res.data.result === 1) {
+          let jzList = []
+          res.data.MPZInfo.data.forEach((item) => {
+            jzList.push(item)
+          })
+          SettingStore.setJzList(jzList)
+          SettingStore.setXcrwId(0)
+        } else {
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
+        }
       })
     } else {
     }
@@ -280,6 +321,7 @@
     width: 100%;
     position: fixed;
     bottom: 0px;
+    opacity: 0.6;
     /* 固定在底部 */
     display: flex;
     justify-content: center;

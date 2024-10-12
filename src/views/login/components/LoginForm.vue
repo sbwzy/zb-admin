@@ -1,7 +1,7 @@
 <template>
   <div class="login-title">
     <!-- <img class="icon" src="@/assets/image/logo1.png" alt="logo" /> -->
-    <h2 class="title">优历直管公房数据采集平台</h2>
+    <h2 class="title">优历直管公房巡查</h2>
   </div>
   <el-form v-if="msgType == '' || msgType == undefined || msgType == null" ref="ruleFormRef" :model="ruleForm" :rules="rules">
     <el-form-item label="" prop="username">
@@ -70,6 +70,8 @@
   import { loginInfo, buildListinfo1, xcrwXQ, getQueryMPZInfo, buildListinfo, getUserInfo } from '@/api/user'
   import dayjs from 'dayjs' // 引入dayjs库用于日期处理
   import { writeXLSX } from 'xlsx'
+  import { ElMessage, ElMessageBox, ElButton, ElIcon } from 'element-plus'
+
   import wx from 'weixin-js-sdk'
 
   const router = useRouter()
@@ -140,13 +142,33 @@
                         setTimeout(async () => {
                           router.push('/')
                         }, 2000)
+                      } else {
+                        ElMessage({
+                          showClose: true,
+                          message: res.data.msg,
+                          type: 'error',
+                          duration: 0,
+                        })
                       }
+                    })
+                  } else {
+                    ElMessage({
+                      showClose: true,
+                      message: res.data.msg,
+                      type: 'error',
+                      duration: 0,
                     })
                   }
                 })
               } else {
                 editFetch.value == false
                 errormsg.value = res.data.msg
+                ElMessage({
+                  showClose: true,
+                  message: res.data.msg,
+                  type: 'error',
+                  duration: 0,
+                })
               }
             })
           }
@@ -188,14 +210,33 @@
                   } else {
                     router.push('/home') // 默认跳转到 /home
                   }
+                } else {
+                  ElMessage({
+                    showClose: true,
+                    message: res.data.msg,
+                    type: 'error',
+                    duration: 0,
+                  })
                 }
+              })
+            } else {
+              ElMessage({
+                showClose: true,
+                message: res.data.msg,
+                type: 'error',
+                duration: 0,
               })
             }
           })
         } else {
           editFetch.value = false
           errormsg.value = res.data.msg
-          //
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
         }
       })
     }

@@ -5,7 +5,7 @@
       <div class="collction__box__content">
         <div class="collction__box__content__title">
           <span>房屋落点</span>
-          <el-icon :size="20" style="float: right">
+          <el-icon v-if="MPZform.tdtx && MPZform.tdtx != NULL" :size="20" style="float: right">
             <Location @click="dingWeiDaKa()" color="#00BFFF" />
           </el-icon>
         </div>
@@ -125,11 +125,39 @@
             <span>{{ MPZform.ZSQK }}</span>
           </div>
         </el-form-item>
+        <!------------------------------------公安绿牌------------------------------>
         <el-form-item label="当前公安绿牌地址" prop="galpdz">
           <el-input :disabled="ycmsg1" v-model="MPZform.gongAnLP" type="textarea" placeholder="请输入新公安绿牌地址" />
-          <!-- <div class="collction__box__form__text" v-else>
-            <span :style="MPZform.ShouQuanDZ != MPZform.gongAnLP ? 'color:red' : ''">{{ MPZform.gongAnLP }}</span>
-          </div> -->
+        </el-form-item>
+        <el-form-item label="现场公安绿牌照片" prop="shqkphotos">
+          <div class="collction__box__image">
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'GPL')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'GPL')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('公安绿牌', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '公安绿牌')"
+                accept="image/*"
+              />
+            </div>
+          </div>
         </el-form-item>
         <!------------------------------------损坏情况------------------------------>
         <el-form-item label="损坏情况" prop="shqk">
@@ -747,6 +775,7 @@
     editFujianDel,
     editZC,
     editZCYC,
+    buildListinfo,
     getQueryMPZInfo,
   } from '@/api/user'
   import { FormRules } from 'element-plus'
@@ -766,7 +795,7 @@
   const percentage = ref<number>(10)
   const duration = computed(() => Math.floor(percentage.value / 10))
   // 获取数据
-  const { MPZInfo, dqZCZT, xcrwXQId, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } =
+  const { MPZInfo, dqZCZT, xcrwXQId, search, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } =
     storeToRefs(SettingStore)
   // 引入接口
   const route = useRoute()
@@ -830,6 +859,67 @@
 
   const Imgform = ImgInfo.value
   const errDKMessage = '是否确定打卡,打卡后将无法重新打卡'
+  //选项列表值
+  const parent = ref([
+    {
+      value: '是',
+      text: '是',
+    },
+    {
+      value: '否',
+      text: '否',
+    },
+  ])
+  const wgcjqklx = ref([
+    {
+      value: '部分被违规拆除',
+      text: '部分被违规拆除',
+    },
+    {
+      value: '整体被违规拆除',
+      text: '整体被违规拆除',
+    },
+  ])
+  const shqklx = ref([
+    {
+      value: '外墙开裂',
+      text: '外墙开裂',
+    },
+    {
+      value: '门窗腐朽变形',
+      text: '门窗腐朽变形',
+    },
+    {
+      value: '墙体倾斜',
+      text: '墙体倾斜',
+    },
+    {
+      value: '外墙渗水',
+      text: '外墙渗水',
+    },
+    {
+      value: '屋面不平整',
+      text: '屋面不平整',
+    },
+    {
+      value: '其他',
+      text: '其他',
+    },
+  ])
+  const xsqkType = ref([
+    {
+      value: '近三年未修缮',
+      text: '近三年未修缮',
+    },
+    {
+      value: '修缮中',
+      text: '修缮中',
+    },
+    {
+      value: '近三年完成过修缮',
+      text: '近三年完成过修缮',
+    },
+  ])
   //异常原因表单
   const errorReason = computed(() => {
     let YCQK = 0
@@ -895,16 +985,6 @@
   })
   const deleteImgmsg = '该照片已经保存到服务器,谨慎删除该照片！'
 
-  // 验证 需要红色标识填写
-  // const rules = computed((): FormRules => {
-  //   if (isEdit.value) {
-  //     return {
-  //       //galpdz: [{ required: true, message: '请输入公安绿牌地址', trigger: 'blur' }],
-  //     }
-  //   }
-  //   return {}
-  // })
-
   const ruleFormRef = ref()
   // 处理点击事件
   function handleClick(index, event) {
@@ -926,19 +1006,6 @@
     tdty: 0, //房屋新位置纬度
     errorStatus: 0,
     errorReson: '', //打卡异常信息
-  })
-  let contetForm1 = reactive({
-    //建筑信息
-    MPZid: '0', //建筑编号
-    tdtx: 0, //房屋新位置经度
-    tdty: 0, //房屋新位置纬度
-    GuiJiSJ: '', //打卡时间
-    isDK: MPZform.isDK,
-    errorStatus: 0,
-    errorReson: '异常信息包括:存在两处破坏情况(外墙开裂、漏水)!',
-    WFDK: '', //无法打卡原因
-    DDXCTime: '', //到达时间
-    BeiZhu: '', //备注
   })
   // 是否显示弹窗
   const ycDialogFormVisible = ref(false)
@@ -1008,62 +1075,134 @@
       SFYC: YCQK == 1 ? '是' : '否',
     }
     //提交自查的接口
-    await editZC(tijiaoList).then(async (res) => {
-      //如果接口通过
-      if (res.data.result === 1) {
-        //赋值照片上的属性zcid MPZid
-        let zcid = res.data.ZCid
-        let MPZid = res.data.MPZid
-        //赋值 上传的照片信息列表
-        let tijiaoImgList = []
-        Imgform.forEach((item) => {
-          if (item.imglists && item.imglists.length > 0) {
-            item.imglists.forEach((item1) => {
-              if (item1.url && item1.url.startsWith('data:image/jpeg;base64')) {
-                tijiaoImgList.push({
-                  ZCid: zcid,
-                  ZCLeiX: item.name == 'SHQK' ? '幢' : item.name == 'XSQK' ? '幢' : '户',
-                  MPZid: MPZid,
-                  Huid: item1.Huid,
-                  YiChLeiX: item1.zhaopLX,
-                  WenJianM: item.name,
-                  url: item1.url,
-                  thumbnailUrl: item1.thumbnailUrl,
-                })
-              }
-            })
-          }
-        })
-
-        //如果存在图片才进行上传图片上传
-        if (tijiaoImgList.length > 0) {
-          console.log('图片数量', tijiaoImgList.length)
-          let count = 0
-          loadingText.value = '图片保存中...'
-          tijiaoImgList.forEach(async (item) => {
-            //图片上传的接口 异步接口
-            await editFujian(item)
-              .then(async (res) => {
-                if (res.data.result == 1) {
-                  count++
-                  console.log('countsucc', count)
-                  ElMessage.success(res.data.msg)
-                } else {
-                  count++
-                  console.log('counterror', count)
-                  //ElMessage.error(res.data.msg)
+    await editZC(tijiaoList)
+      .then(async (res) => {
+        //如果接口通过
+        if (res.data.result === 1) {
+          //赋值照片上的属性zcid MPZid
+          let zcid = res.data.ZCid
+          let MPZid = res.data.MPZid
+          //赋值 上传的照片信息列表
+          let tijiaoImgList = []
+          Imgform.forEach((item) => {
+            if (item.imglists && item.imglists.length > 0) {
+              item.imglists.forEach((item1) => {
+                if (item1.url && item1.url.startsWith('data:image/jpeg;base64')) {
+                  tijiaoImgList.push({
+                    ZCid: zcid,
+                    ZCLeiX: item.name == 'SHQK' ? '幢' : item.name == 'XSQK' ? '幢' : '户',
+                    MPZid: MPZid,
+                    Huid: item1.Huid,
+                    YiChLeiX: item1.zhaopLX,
+                    WenJianM: item.name,
+                    url: item1.url,
+                    thumbnailUrl: item1.thumbnailUrl,
+                  })
                 }
-                if (count == tijiaoImgList.length) {
-                  console.log('什么时候进入这里')
-                  //异常处理
-                  if (num == 2) {
-                    await editZCYC(MPZform.MPZid).then(async (res) => {
-                      //ElMessage.success(res.data.msg)
+              })
+            }
+          })
+
+          //如果存在图片才进行上传图片上传
+          if (tijiaoImgList.length > 0) {
+            console.log('图片数量', tijiaoImgList.length)
+            let count = 0
+            loadingText.value = '图片保存中...'
+            tijiaoImgList.forEach(async (item) => {
+              //图片上传的接口 异步接口
+              await editFujian(item)
+                .then(async (res) => {
+                  if (res.data.result == 1) {
+                    count++
+                    console.log('countsucc', count)
+                    //ElMessage.success(res.data.msg)
+                  } else {
+                    count++
+                    console.log('counterror', count)
+                    ElMessage({
+                      showClose: true,
+                      message: res.data.msg,
+                      type: 'error',
+                      duration: 0,
+                    })
+                    //ElMessage.error(res.data.msg)
+                  }
+                  if (count == tijiaoImgList.length) {
+                    console.log('什么时候进入这里')
+                    //异常处理
+                    if (num == 2) {
+                      await editZCYC(MPZform.MPZid).then(async (res) => {
+                        if (res.data.result != 1) {
+                          isDisabled.value = false
+                          isLoading.value = false
+                          ElMessage({
+                            showClose: true,
+                            message: res.data.msg,
+                            type: 'error',
+                            duration: 0,
+                          })
+                        } else {
+                          //ElMessage.success(res.data.msg)
+                          loadingText.value = '信息保存完成！'
+                          isDisabled.value = false
+                          isLoading.value = false
+                          console.log('打印search', search.value)
+                          console.log('打印search', search.value.jzName)
+                          await buildListinfo().then((res) => {
+                            if (res.data.result === 1) {
+                              SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                              SettingStore.setXiaoQumsg(res.data.notemsg)
+                            } else {
+                              ElMessage({
+                                showClose: true,
+                                message: res.data.msg,
+                                type: 'error',
+                                duration: 0,
+                              })
+                            }
+                          })
+                          await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
+                            if (res.data.result === 1) {
+                              let jzList = []
+                              res.data.MPZInfo.data.forEach((item) => {
+                                jzList.push(item)
+                              })
+                              SettingStore.setJzList(jzList)
+                              TagsViewStore.toLastView(route.path)
+                              TagsViewStore.delView(route.path)
+                            } else {
+                              ElMessage({
+                                showClose: true,
+                                message: res.data.msg,
+                                type: 'error',
+                                duration: 0,
+                              })
+                            }
+                          })
+                        }
+                      })
+                    } else {
+                      //暂存按钮
+                      ElMessage.success('信息保存保存')
                       loadingText.value = '信息保存完成！'
                       isDisabled.value = false
                       isLoading.value = false
-
-                      await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+                      console.log('打印search', search.value)
+                      console.log('打印search', search.value.jzName)
+                      await buildListinfo().then((res) => {
+                        if (res.data.result === 1) {
+                          SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                          SettingStore.setXiaoQumsg(res.data.notemsg)
+                        } else {
+                          ElMessage({
+                            showClose: true,
+                            message: res.data.msg,
+                            type: 'error',
+                            duration: 0,
+                          })
+                        }
+                      })
+                      await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
                         if (res.data.result === 1) {
                           let jzList = []
                           res.data.MPZInfo.data.forEach((item) => {
@@ -1072,46 +1211,99 @@
                           SettingStore.setJzList(jzList)
                           TagsViewStore.toLastView(route.path)
                           TagsViewStore.delView(route.path)
+                        } else {
+                          ElMessage({
+                            showClose: true,
+                            message: res.data.msg,
+                            type: 'error',
+                            duration: 0,
+                          })
                         }
                       })
-                    })
+                    }
                   } else {
-                    //暂存按钮
-                    ElMessage.success('信息保存保存')
-                    loadingText.value = '信息保存完成！'
-                    isDisabled.value = false
-                    isLoading.value = false
-                    await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
-                      if (res.data.result === 1) {
-                        let jzList = []
-                        res.data.MPZInfo.data.forEach((item) => {
-                          jzList.push(item)
-                        })
-                        SettingStore.setJzList(jzList)
-                        TagsViewStore.toLastView(route.path)
-                        TagsViewStore.delView(route.path)
-                      }
-                    })
+                    //如果图片数量不对
+                    console.log('图片数量不对')
                   }
+                })
+                .catch((error) => {
+                  // 处理错误逻辑
+                })
+            })
+          } else {
+            //如果不存在照片的情况 直接进行异常提交接口
+            //最后在进行异常提交
+            if (num == 2) {
+              await editZCYC(MPZform.MPZid).then(async (res) => {
+                if (res.data.result != 1) {
+                  isDisabled.value = false
+                  isLoading.value = false
+                  ElMessage({
+                    showClose: true,
+                    message: res.data.msg,
+                    type: 'error',
+                    duration: 0,
+                  })
                 } else {
-                  //如果图片数量不对
-                  console.log('图片数量不对')
+                  ElMessage.success('信息保存保存')
+                  loadingText.value = '信息保存完成！'
+                  isDisabled.value = false
+                  isLoading.value = false
+                  await buildListinfo().then((res) => {
+                    if (res.data.result === 1) {
+                      SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                      SettingStore.setXiaoQumsg(res.data.notemsg)
+                    } else {
+                      ElMessage({
+                        showClose: true,
+                        message: res.data.msg,
+                        type: 'error',
+                        duration: 0,
+                      })
+                    }
+                  })
+                  await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
+                    if (res.data.result === 1) {
+                      let jzList = []
+                      res.data.MPZInfo.data.forEach((item) => {
+                        jzList.push(item)
+                      })
+                      SettingStore.setJzList(jzList)
+                      TagsViewStore.toLastView(route.path)
+                      TagsViewStore.delView(route.path)
+                    } else {
+                      ElMessage({
+                        showClose: true,
+                        message: res.data.msg,
+                        type: 'error',
+                        duration: 0,
+                      })
+                    }
+                  })
                 }
               })
-              .catch((error) => {
-                // 处理错误逻辑
-              })
-          })
-        } else {
-          //如果不存在照片的情况 直接进行异常提交接口
-          //最后在进行异常提交
-          if (num == 2) {
-            await editZCYC(MPZform.MPZid).then(async (res) => {
+            } else {
+              //暂存图片上传完后的操作
               ElMessage.success('信息保存保存')
               loadingText.value = '信息保存完成！'
               isDisabled.value = false
               isLoading.value = false
-              await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
+              console.log('xcrwXQId', xcrwXQId)
+              console.log('dqZCZT', dqZCZT)
+              await buildListinfo().then((res) => {
+                if (res.data.result === 1) {
+                  SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                  SettingStore.setXiaoQumsg(res.data.notemsg)
+                } else {
+                  ElMessage({
+                    showClose: true,
+                    message: res.data.msg,
+                    type: 'error',
+                    duration: 0,
+                  })
+                }
+              })
+              await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
                 if (res.data.result === 1) {
                   let jzList = []
                   res.data.MPZInfo.data.forEach((item) => {
@@ -1120,38 +1312,42 @@
                   SettingStore.setJzList(jzList)
                   TagsViewStore.toLastView(route.path)
                   TagsViewStore.delView(route.path)
+                } else {
+                  ElMessage({
+                    showClose: true,
+                    message: res.data.msg,
+                    type: 'error',
+                    duration: 0,
+                  })
                 }
               })
-            })
-          } else {
-            //暂存图片上传完后的操作
-            ElMessage.success('信息保存保存')
-            loadingText.value = '信息保存完成！'
-            isDisabled.value = false
-            isLoading.value = false
-            console.log('xcrwXQId', xcrwXQId)
-            console.log('dqZCZT', dqZCZT)
-            await buildListinfo1(xcrwXQId.value, dqZCZT.value, '').then((res) => {
-              if (res.data.result === 1) {
-                let jzList = []
-                res.data.MPZInfo.data.forEach((item) => {
-                  jzList.push(item)
-                })
-                SettingStore.setJzList(jzList)
-                TagsViewStore.toLastView(route.path)
-                TagsViewStore.delView(route.path)
-              }
-            })
+            }
           }
+        } else {
+          //接口失败时 显示当前接口错误
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
+          //取消提交按钮的禁用效果
+          isDisabled.value = false
+          isLoading.value = false
         }
-      } else {
+      })
+      .catch((error) => {
         //接口失败时 显示当前接口错误
-        ElMessage.error(res.data.msg)
+        ElMessage({
+          showClose: true,
+          message: error,
+          type: 'error',
+          duration: 0,
+        })
         //取消提交按钮的禁用效果
         isDisabled.value = false
         isLoading.value = false
-      }
-    })
+      })
   }
   // 判断距离建筑距离
   const getDistances = (lat1, lng1, lat2, lng2) => {
@@ -1272,69 +1468,6 @@
     const Icon = item.isShowForm ? 'CirclePlusFilled' : 'Edit'
     return Icon
   }
-
-  // removalType
-  //选项列表值
-  const parent = ref([
-    {
-      value: '是',
-      text: '是',
-    },
-    {
-      value: '否',
-      text: '否',
-    },
-  ])
-  const wgcjqklx = ref([
-    {
-      value: '部分被违规拆除',
-      text: '部分被违规拆除',
-    },
-    {
-      value: '整体被违规拆除',
-      text: '整体被违规拆除',
-    },
-  ])
-  const shqklx = ref([
-    {
-      value: '外墙开裂',
-      text: '外墙开裂',
-    },
-    {
-      value: '门窗腐朽变形',
-      text: '门窗腐朽变形',
-    },
-    {
-      value: '墙体倾斜',
-      text: '墙体倾斜',
-    },
-    {
-      value: '外墙渗水',
-      text: '外墙渗水',
-    },
-    {
-      value: '屋面不平整',
-      text: '屋面不平整',
-    },
-    {
-      value: '其他',
-      text: '其他',
-    },
-  ])
-  const xsqkType = ref([
-    {
-      value: '近三年未修缮',
-      text: '近三年未修缮',
-    },
-    {
-      value: '修缮中',
-      text: '修缮中',
-    },
-    {
-      value: '近三年完成过修缮',
-      text: '近三年完成过修缮',
-    },
-  ])
   const text = ref() //可以根据需要更改不同的文字
   /**
    * canvas添加水印
@@ -1453,6 +1586,7 @@
         const ctx = canvas.getContext('2d')
         let width = img.width
         let height = img.height
+        console.log('打印照片', width, height)
         // 如果图片宽度大于maxWidth，则按比例缩放
         if (width > maxWidth) {
           height *= maxWidth / width
@@ -1528,14 +1662,19 @@
   const deleteImage = (name: string, index: number, Hu: boolean, HuInfo?: Object) => {
     console.log('删除照片', name, index, HuInfo)
     //初步筛选 出 是哪个异常照片
-    const foundItem = Imgform.find((item) => item.title === name).imglists
+    let foundItem = Imgform.find((item) => item.title === name).imglists
     console.log(foundItem)
 
     if (HuInfo && Hu) {
       console.log('户照片')
       //找到当前展示户的照片进行操作
+      //foundHuItem 是 当前异常类型的照片数组
+      //找到其中所有图片的Huid与当前HuInfo.Huid相等的数组
+      //也就是当前户的某个异常显示的照片数组
       const foundHuItem = foundItem.filter((item) => item.Huid === HuInfo.Huid)
       console.log('foundHuItem', foundHuItem)
+      console.log('foundHuItem', foundHuItem)
+      //这里的index 是当前页面真实有效的index可以使用
       if (foundHuItem && foundHuItem[index] && foundHuItem[index].hasOwnProperty('imgId')) {
         console.log(foundHuItem[index].imgId)
         console.log('打开弹窗')
@@ -1546,11 +1685,17 @@
         centerDialogVisible.value = true
       } else {
         console.log('imgId 不存在 直接删除')
-        foundItem.splice(index, 1)
+        let delImgthumbnailUrl = foundHuItem[index].thumbnailUrl
+        const indexToDelete = foundItem.findIndex((item) => item.thumbnailUrl == delImgthumbnailUrl)
+        console.log(indexToDelete)
+        if (indexToDelete !== -1) {
+          Imgform.find((item) => item.title === name).imglists.splice(indexToDelete, 1)
+        }
       }
     } else {
       console.log('幢照片')
       //如果存在imgId 就删除
+      //这里表示当前幢上的异常照片 不需要进行判断 只需要判断是否有imgId即可
       if (foundItem && foundItem[index] && foundItem[index].hasOwnProperty('imgId')) {
         console.log(foundItem[index].imgId)
         console.log('打开弹窗')

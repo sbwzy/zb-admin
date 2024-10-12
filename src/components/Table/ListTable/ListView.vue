@@ -117,7 +117,7 @@
         <div class="titleV">创建人:</div>
         <div class="detailV">{{ item.cjr }}</div>
       </div>
-      <div class="titleV1" style="display: flex" @click="parentTypeMethod(item, '详情')" v-html="item.notemsg"> </div>
+      <div class="titleV1" v-if="item.notemsg !== null" @click="parentTypeMethod(item, '详情')" v-html="item.notemsg"> </div>
     </div>
   </div>
 </template>
@@ -215,10 +215,9 @@
     font-size: 15px;
     height: 26px;
     line-height: 26px;
-    width: 30%;
+    width: 35%;
   }
   .titleV1 {
-    color: red;
     font-size: 13px;
     height: 26px;
     line-height: 26px;

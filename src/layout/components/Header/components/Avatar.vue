@@ -85,7 +85,6 @@
       .then(async () => {
         UserStore.logout1()
         router.push('/login') // 默认跳转到 /home
-        console.log('退出的时候', UserStore.userInfo)
         logout().then(() => {
           wx.miniProgram.navigateTo({ url: '/pagesService/historicalBuilding/login' })
         })

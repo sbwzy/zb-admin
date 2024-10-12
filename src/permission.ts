@@ -16,7 +16,7 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start()
   // 设置标题
   if (typeof to.meta.title === 'string') {
-    document.title = to.meta.title || '优历公房采集系统'
+    document.title = to.meta.title || '优历直管公房巡查'
   }
   //console.log("111",to)
 
