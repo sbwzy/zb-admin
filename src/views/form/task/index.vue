@@ -62,25 +62,35 @@
     //去掉 赋值 看看
     //SettingStore.setDqZCZT(val)
     console.log(xcId.value)
-    buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, '').then((res) => {
-      if (res.data.result === 1) {
-        let jzList = []
-        res.data.MPZInfo.data.forEach((item) => {
-          jzList.push(item)
-        })
-        SettingStore.setJzList(jzList)
-        //dataList = jzList
-        SettingStore.setXcrwId(0)
-      } else {
+    buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, '')
+      .then((res) => {
+        if (res.data.result === 1) {
+          let jzList = []
+          res.data.MPZInfo.data.forEach((item) => {
+            jzList.push(item)
+          })
+          SettingStore.setJzList(jzList)
+          //dataList = jzList
+          SettingStore.setXcrwId(0)
+        } else {
+          ElMessage({
+            showClose: true,
+            message: res.data.msg,
+            type: 'error',
+            duration: 0,
+          })
+        }
+        //router.go(0);
+      })
+      .catch((error) => {
+        //接口失败时 显示当前接口错误
         ElMessage({
           showClose: true,
-          message: res.data.msg,
+          message: error,
           type: 'error',
           duration: 0,
         })
-      }
-      //router.go(0);
-    })
+      })
   }
   //子组件方法 根据条件触发事件
   const filterMethod = async (e1, e2) => {
@@ -91,214 +101,285 @@
       //将搜索类型赋值到条件里面 searchType
       e1.searchType = e2
       //查询 后搜索列表的接口
-      await buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, e1.jzName).then((res) => {
-        if (res.data.result === 1) {
-          let jzList = []
-          res.data.MPZInfo.data.forEach((item) => {
-            jzList.push(item)
-          })
-          SettingStore.setJzList(jzList)
-          SettingStore.setXcrwId(0)
-        } else {
+      await buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, e1.jzName)
+        .then((res) => {
+          if (res.data.result === 1) {
+            let jzList = []
+            res.data.MPZInfo.data.forEach((item) => {
+              jzList.push(item)
+            })
+            SettingStore.setJzList(jzList)
+            SettingStore.setXcrwId(0)
+          } else {
+            ElMessage({
+              showClose: true,
+              message: res.data.msg,
+              type: 'error',
+              duration: 0,
+            })
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: res.data.msg,
+            message: error,
             type: 'error',
             duration: 0,
           })
-        }
-      })
+        })
     } else if (e2 == '详情') {
       SettingStore.setXcrwId(e1.youliId)
       //进入详情页面
-      await youliCJXQGet(e1.youliId).then((res) => {
-        if (res.data.result == 1) {
-          //SettingStore.setMPZInfo(res.data.MPZInfo.data)
-          let MPZInfo = res.data.MPZInfo.data
-          let ycmsg = res.data.ycmsg == '' ? false : true
-          SettingStore.setnotemsg(res.data.notemsg)
-          SettingStore.setycmsg(ycmsg)
-          if (MPZInfo.length > 0) {
-            MPZInfo.forEach((item) => {
-              // 24920
-              // if (item && item.isDK === undefined) {
-              //   item.isDK = false
-              // }
-              // 判断字符串是否为空或仅为空白
-              if (!item.SHQK || item.SHQK.trim() === '') {
-                item.SHQK = []
-              } else {
-                item.SHQK = item.SHQK.split(',')
-              }
-            })
-          }
-          console.log(MPZInfo)
-          SettingStore.setMPZInfo(MPZInfo)
-          let huInfo = res.data.HuInfo.data
-          if (huInfo.length > 0) {
-            huInfo.forEach((item) => {
-              item.isShowForm = false // 默认设置为 false 或者根据需要设置其他值
-              if (!item.PHSY || item.PHSY.trim() === '') {
-                item.PHSY = []
-              } else {
-                item.PHSY = item.PHSY.split(',')
-              }
-            })
-          }
-          SettingStore.setHuInfo(huInfo)
-          //赋值建筑异常照片数据
-          //10月11 新增 铭牌 和公安绿牌 拍摄图片
-          let ImgInfo = [
-            {
-              name: 'MPZ',
-              title: '铭牌',
-              imglists: [],
-            },
-            {
-              name: 'GPL',
-              title: '公安绿牌',
-              imglists: [],
-            },
-            {
-              name: 'PHSY',
-              title: '破坏使用',
-              imglists: [],
-            },
-            {
-              name: 'DJWJ',
-              title: '搭建违建',
-              imglists: [],
-            },
-            {
-              name: 'WGCH',
-              title: '违规拆除',
-              imglists: [],
-            },
-            {
-              name: 'SHQK',
-              title: '损坏情况',
-              imglists: [],
-            },
-            {
-              name: 'XSQK',
-              title: '修缮情况',
-              imglists: [],
-            },
-            {
-              name: 'FWYT',
-              title: '房屋用途',
-              imglists: [],
-            },
-          ]
-          console.log(res.data.ImgInfo)
-          //let ImageInfo1 = res.data.ImgInfo.data
-          if (
-            res &&
-            res.data &&
-            res.data.ImgInfo &&
-            res.data.ImgInfo.data &&
-            Array.isArray(res.data.ImgInfo.data) &&
-            res.data.ImgInfo.data.length > 0
-          ) {
-            let ImageInfo1 = res.data.ImgInfo.data
+      await youliCJXQGet(e1.youliId)
+        .then((res) => {
+          if (res.data.result == 1) {
+            //SettingStore.setMPZInfo(res.data.MPZInfo.data)
+            let MPZInfo = res.data.MPZInfo.data
+            let ycmsg = res.data.ycmsg == '' ? false : true
+            SettingStore.setnotemsg(res.data.notemsg)
+            SettingStore.setycmsg(ycmsg)
+            if (MPZInfo.length > 0) {
+              MPZInfo.forEach((item) => {
+                // 24920
+                // if (item && item.isDK === undefined) {
+                //   item.isDK = false
+                // }
+                // 判断字符串是否为空或仅为空白
+                if (!item.ZSHQK || item.ZSHQK.trim() === '') {
+                  item.ZSHQK = []
+                } else {
+                  item.ZSHQK = item.ZSHQK.split(',')
+                }
+
+                if (!item.ZPHSY || item.ZPHSY.trim() === '') {
+                  item.ZPHSY = []
+                } else {
+                  item.ZPHSY = item.ZPHSY.split(',')
+                }
+              })
+            }
+            console.log(MPZInfo)
+            SettingStore.setMPZInfo(MPZInfo)
+            let huInfo = res.data.HuInfo.data
+            if (huInfo.length > 0) {
+              huInfo.forEach((item) => {
+                item.isShowForm = false // 默认设置为 false 或者根据需要设置其他值
+                if (!item.SHQK || item.SHQK.trim() === '') {
+                  item.SHQK = []
+                } else {
+                  item.SHQK = item.SHQK.split(',')
+                }
+
+                if (!item.PHSY || item.PHSY.trim() === '') {
+                  item.PHSY = []
+                } else {
+                  item.PHSY = item.PHSY.split(',')
+                }
+              })
+            }
+            SettingStore.setHuInfo(huInfo)
+            //赋值建筑异常照片数据
+            //10月11 新增 铭牌 和公安绿牌 拍摄图片
+            let ImgInfo = [
+              {
+                name: 'MPZ',
+                title: '铭牌',
+                imglists: [],
+              },
+              {
+                name: 'GPL',
+                title: '公安绿牌',
+                imglists: [],
+              },
+              {
+                name: 'ZSFH',
+                title: '征收情况',
+                imglists: [],
+              },
+              {
+                name: 'ZPHSY',
+                title: '幢破坏使用',
+                imglists: [],
+              },
+              {
+                name: 'PHSY',
+                title: '破坏使用',
+                imglists: [],
+              },
+              {
+                name: 'ZDJWJ',
+                title: '幢搭建违建',
+                imglists: [],
+              },
+              {
+                name: 'DJWJ',
+                title: '搭建违建',
+                imglists: [],
+              },
+              {
+                name: 'ZWGCH',
+                title: '幢违规拆除',
+                imglists: [],
+              },
+              {
+                name: 'WGCH',
+                title: '违规拆除',
+                imglists: [],
+              },
+              {
+                name: 'ZSHQK',
+                title: '幢损坏情况',
+                imglists: [],
+              },
+              {
+                name: 'SHQK',
+                title: '损坏情况',
+                imglists: [],
+              },
+              {
+                name: 'XSQK',
+                title: '修缮情况',
+                imglists: [],
+              },
+              {
+                name: 'ZZQK',
+                title: '转租情况',
+                imglists: [],
+              },
+              {
+                name: 'FWYT',
+                title: '房屋用途',
+                imglists: [],
+              },
+            ]
+            console.log(res.data.ImgInfo)
+            if (
+              res &&
+              res.data &&
+              res.data.ImgInfo &&
+              res.data.ImgInfo.data &&
+              Array.isArray(res.data.ImgInfo.data) &&
+              res.data.ImgInfo.data.length > 0
+            ) {
+              let ImageInfo1 = res.data.ImgInfo.data
+              //遍历结果 把图片数据放入对应的数组里
+              ImageInfo1.forEach((item) => {
+                let item1 = {
+                  imgId: item.imgId,
+                  ZCid: item.ZCid,
+                  ZCLeiX: item.ZCLeiX,
+                  Huid: item.Huid,
+                  YiChLeiX: item.YiChLeiX,
+                  XuHao: item.XuHao,
+                  url: item.imgUrl,
+                  thumbnailUrl: item.thumbnailUrl,
+                }
+                ImgInfo.forEach((item2) => {
+                  if (item.YiChLeiX == item2.title) {
+                    item2.imglists.push(item1)
+                  }
+                })
+              })
+            }
+            console.log('imgInfo', ImgInfo)
+            SettingStore.setImgInfo(ImgInfo)
+
+            //赋值建筑巡查照片数据
+            let BImgInfo = [
+              {
+                name: 'jianZhumcbs',
+                title: '建筑名称标识',
+                imglists: [],
+              },
+              {
+                name: 'gongAnLP',
+                title: '公安绿牌',
+                imglists: [],
+              },
+              {
+                name: 'waiLiM',
+                title: '外立面',
+                imglists: [],
+              },
+              {
+                name: 'mingPai',
+                title: '铭牌',
+                imglists: [],
+              },
+              {
+                name: 'chanYeZT',
+                title: '产业状态',
+                imglists: [],
+              },
+            ]
             //遍历结果 把图片数据放入对应的数组里
-            ImageInfo1.forEach((item) => {
+            res.data.ZhaoP?.data.forEach((item) => {
               let item1 = {
-                imgId: item.imgId,
-                ZCid: item.ZCid,
-                ZCLeiX: item.ZCLeiX,
-                Huid: item.Huid,
-                YiChLeiX: item.YiChLeiX,
-                XuHao: item.XuHao,
-                url: item.imgUrl,
-                thumbnailUrl: item.thumbnailUrl,
+                imgUrl: item.thumbURL,
+                zhaopIdx: item.zhaopIdx,
+                imgID: item.imgID,
               }
-              ImgInfo.forEach((item2) => {
-                if (item.YiChLeiX == item2.title) {
+              // 遍历BImgInfo
+              BImgInfo.forEach((item2) => {
+                if (item2.title == item.zhaopLX) {
                   item2.imglists.push(item1)
                 }
               })
             })
-          }
-          console.log('imgInfo', ImgInfo)
-          SettingStore.setImgInfo(ImgInfo)
+            SettingStore.setBImgInfo(BImgInfo)
 
-          //赋值建筑巡查照片数据
-          let BImgInfo = [
-            {
-              name: 'jianZhumcbs',
-              title: '建筑名称标识',
-              imglists: [],
-            },
-            {
-              name: 'gongAnLP',
-              title: '公安绿牌',
-              imglists: [],
-            },
-            {
-              name: 'waiLiM',
-              title: '外立面',
-              imglists: [],
-            },
-            {
-              name: 'mingPai',
-              title: '铭牌',
-              imglists: [],
-            },
-            {
-              name: 'chanYeZT',
-              title: '产业状态',
-              imglists: [],
-            },
-          ]
-          //遍历结果 把图片数据放入对应的数组里
-          res.data.ZhaoP?.data.forEach((item) => {
-            let item1 = {
-              imgUrl: item.thumbURL,
-              zhaopIdx: item.zhaopIdx,
-              imgID: item.imgID,
-            }
-            // 遍历BImgInfo
-            BImgInfo.forEach((item2) => {
-              if (item2.title == item.zhaopLX) {
-                item2.imglists.push(item1)
-              }
+            setTimeout(async () => {
+              router.push('/form/collection')
+            }, 500)
+          } else {
+            ElMessage({
+              showClose: true,
+              message: res.data.msg,
+              type: 'error',
+              duration: 0,
             })
-          })
-          SettingStore.setBImgInfo(BImgInfo)
-
-          setTimeout(async () => {
-            router.push('/form/collection')
-          }, 500)
-        } else {
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: res.data.msg,
+            message: error,
             type: 'error',
             duration: 0,
           })
-        }
-      })
+        })
     } else if (e2 == '重置' || e2 == '模糊重置') {
       // 将响应式对象置空
       search.value.jzName = ''
-      await buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, '').then((res) => {
-        if (res.data.result === 1) {
-          let jzList = []
-          res.data.MPZInfo.data.forEach((item) => {
-            jzList.push(item)
-          })
-          SettingStore.setJzList(jzList)
-          SettingStore.setXcrwId(0)
-        } else {
+      await buildListinfo1(SettingStore.xcrwXQId, dqZCZT.value, '')
+        .then((res) => {
+          if (res.data.result === 1) {
+            let jzList = []
+            res.data.MPZInfo.data.forEach((item) => {
+              jzList.push(item)
+            })
+            SettingStore.setJzList(jzList)
+            SettingStore.setXcrwId(0)
+          } else {
+            ElMessage({
+              showClose: true,
+              message: res.data.msg,
+              type: 'error',
+              duration: 0,
+            })
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: res.data.msg,
+            message: error,
             type: 'error',
             duration: 0,
           })
-        }
-      })
+        })
     } else {
     }
   }

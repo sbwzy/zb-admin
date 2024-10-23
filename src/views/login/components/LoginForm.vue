@@ -112,46 +112,79 @@
       if (valid) {
         loading.value = true
 
-        loginInfo(ruleForm.username, ruleForm.password).then((res) => {
-          if (res.data.result === 1) {
-            // 设置定时器，在指定时间后跳转
-            //验证 本地的话结构是-11 表示未登录 》=0 表示 已登录
+        loginInfo(ruleForm.username, ruleForm.password)
+          .then((res) => {
+            if (res.data.result === 1) {
+              // 设置定时器，在指定时间后跳转
+              //验证 本地的话结构是-11 表示未登录 》=0 表示 已登录
 
-            getQueryMPZInfo().then((res) => {
-              if (res.data.result >= 0) {
-                editFetch.value == true
-                getUserInfo().then((res) => {
-                  if (res.data.result === 1) {
-                    let userInfo = {
-                      username: res.data.userInfo.userName,
-                      userType: 'admin',
-                    }
-                    UserStore.login(userInfo)
-                    //UserStore.setUserInfo(res.data.userInfo)
-                    buildListinfo().then((res) => {
-                      if (res.data.result === 1) {
-                        ElNotification({
-                          title: getTimeStateStr(),
-                          message: '欢迎登录 公房巡查平台',
-                          type: 'success',
-                          duration: 3000,
-                        })
-                        loading.value = true
-                        SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                        SettingStore.setXiaoQumsg(res.data.notemsg)
-                        setTimeout(async () => {
-                          router.push('/')
-                        }, 2000)
-                      } else {
+              getQueryMPZInfo()
+                .then((res) => {
+                  if (res.data.result >= 0) {
+                    editFetch.value == true
+                    getUserInfo()
+                      .then((res) => {
+                        if (res.data.result === 1) {
+                          let userInfo = {
+                            username: res.data.userInfo.userName,
+                            userType: 'admin',
+                          }
+                          UserStore.login(userInfo)
+                          //UserStore.setUserInfo(res.data.userInfo)
+                          buildListinfo()
+                            .then((res) => {
+                              if (res.data.result === 1) {
+                                ElNotification({
+                                  title: getTimeStateStr(),
+                                  message: '欢迎登录 公房巡查平台',
+                                  type: 'success',
+                                  duration: 3000,
+                                })
+                                loading.value = true
+                                SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                                SettingStore.setXiaoQumsg(res.data.notemsg)
+                                setTimeout(async () => {
+                                  router.push('/')
+                                }, 2000)
+                              } else {
+                                ElMessage({
+                                  showClose: true,
+                                  message: res.data.msg,
+                                  type: 'error',
+                                  duration: 0,
+                                })
+                              }
+                            })
+                            .catch((error) => {
+                              //接口失败时 显示当前接口错误
+                              ElMessage({
+                                showClose: true,
+                                message: error,
+                                type: 'error',
+                                duration: 0,
+                              })
+                            })
+                        } else {
+                          ElMessage({
+                            showClose: true,
+                            message: res.data.msg,
+                            type: 'error',
+                            duration: 0,
+                          })
+                        }
+                      })
+                      .catch((error) => {
+                        //接口失败时 显示当前接口错误
                         ElMessage({
                           showClose: true,
-                          message: res.data.msg,
+                          message: error,
                           type: 'error',
                           duration: 0,
                         })
-                      }
-                    })
+                      })
                   } else {
+                    editFetch.value == false
+                    errormsg.value = res.data.msg
                     ElMessage({
                       showClose: true,
                       message: res.data.msg,
@@ -160,19 +193,26 @@
                     })
                   }
                 })
-              } else {
-                editFetch.value == false
-                errormsg.value = res.data.msg
-                ElMessage({
-                  showClose: true,
-                  message: res.data.msg,
-                  type: 'error',
-                  duration: 0,
+                .catch((error) => {
+                  //接口失败时 显示当前接口错误
+                  ElMessage({
+                    showClose: true,
+                    message: error,
+                    type: 'error',
+                    duration: 0,
+                  })
                 })
-              }
+            }
+          })
+          .catch((error) => {
+            //接口失败时 显示当前接口错误
+            ElMessage({
+              showClose: true,
+              message: error,
+              type: 'error',
+              duration: 0,
             })
-          }
-        })
+          })
       }
     })
   }
@@ -190,26 +230,47 @@
     //直接触发 跳转
     if (msgType == 'succ') {
       // 设置定时器，在指定时间后跳转
-      getQueryMPZInfo().then((res) => {
-        if (res.data.result >= 0) {
-          editFetch.value = true
-          getUserInfo().then((res) => {
-            if (res.data.result === 1) {
-              let userInfo = {
-                username: res.data.userInfo.userName,
-                userType: 'admin',
-              }
-              UserStore.login(userInfo)
-              buildListinfo().then((res) => {
+      getQueryMPZInfo()
+        .then((res) => {
+          if (res.data.result >= 0) {
+            editFetch.value = true
+            getUserInfo()
+              .then((res) => {
                 if (res.data.result === 1) {
-                  SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                  SettingStore.setXiaoQumsg(res.data.notemsg)
-                  if (route.query.redirect) {
-                    const redirectPath = route.query.redirect
-                    router.push(redirectPath)
-                  } else {
-                    router.push('/home') // 默认跳转到 /home
+                  let userInfo = {
+                    username: res.data.userInfo.userName,
+                    userType: 'admin',
                   }
+                  UserStore.login(userInfo)
+                  buildListinfo()
+                    .then((res) => {
+                      if (res.data.result === 1) {
+                        SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                        SettingStore.setXiaoQumsg(res.data.notemsg)
+                        if (route.query.redirect) {
+                          const redirectPath = route.query.redirect
+                          router.push(redirectPath)
+                        } else {
+                          router.push('/home') // 默认跳转到 /home
+                        }
+                      } else {
+                        ElMessage({
+                          showClose: true,
+                          message: res.data.msg,
+                          type: 'error',
+                          duration: 0,
+                        })
+                      }
+                    })
+                    .catch((error) => {
+                      //接口失败时 显示当前接口错误
+                      ElMessage({
+                        showClose: true,
+                        message: error,
+                        type: 'error',
+                        duration: 0,
+                      })
+                    })
                 } else {
                   ElMessage({
                     showClose: true,
@@ -219,26 +280,35 @@
                   })
                 }
               })
-            } else {
-              ElMessage({
-                showClose: true,
-                message: res.data.msg,
-                type: 'error',
-                duration: 0,
+              .catch((error) => {
+                //接口失败时 显示当前接口错误
+                ElMessage({
+                  showClose: true,
+                  message: error,
+                  type: 'error',
+                  duration: 0,
+                })
               })
-            }
-          })
-        } else {
-          editFetch.value = false
-          errormsg.value = res.data.msg
+          } else {
+            editFetch.value = false
+            errormsg.value = res.data.msg
+            ElMessage({
+              showClose: true,
+              message: res.data.msg,
+              type: 'error',
+              duration: 0,
+            })
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: res.data.msg,
+            message: error,
             type: 'error',
             duration: 0,
           })
-        }
-      })
+        })
     }
   })
 </script>

@@ -98,28 +98,38 @@
       SettingStore.setXcrwXQId(e1.XQID)
       SettingStore.setDqZCZT('待检查')
       SettingStore.search.jzName = ''
-      buildListinfo1(e1.XQID, '待检查', '').then((res) => {
-        if (res.data.result === 1) {
-          let jzList = []
-          res.data.MPZInfo.data.forEach((item) => {
-            jzList.push(item)
-          })
-          SettingStore.setJzList(jzList)
-          SettingStore.setXcrwId(0)
-          //router.push({ path: '/xc/xcInfo', query: { xcId: e1.id } })
-          //延迟跳转
-          setTimeout(async () => {
-            router.push('/form/task')
-          }, 200)
-        } else {
+      buildListinfo1(e1.XQID, '待检查', '')
+        .then((res) => {
+          if (res.data.result === 1) {
+            let jzList = []
+            res.data.MPZInfo.data.forEach((item) => {
+              jzList.push(item)
+            })
+            SettingStore.setJzList(jzList)
+            SettingStore.setXcrwId(0)
+            //router.push({ path: '/xc/xcInfo', query: { xcId: e1.id } })
+            //延迟跳转
+            setTimeout(async () => {
+              router.push('/form/task')
+            }, 200)
+          } else {
+            ElMessage({
+              showClose: true,
+              message: res.data.msg,
+              type: 'error',
+              duration: 0,
+            })
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: res.data.msg,
+            message: error,
             type: 'error',
             duration: 0,
           })
-        }
-      })
+        })
     }
   }
 </script>

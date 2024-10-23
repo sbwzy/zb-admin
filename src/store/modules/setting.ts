@@ -82,22 +82,94 @@ export const useSettingStore = defineStore({
     },
 
     dqZCZT: ref('待检查'),
-    FWYT: ref([
+    fwyt: ref([
       {
         value: '居住用房',
         text: '居住用房',
       },
       {
-        value: '非居生产用房',
-        text: '非居生产用房',
+        value: '超市（便利店)',
+        text: '超市（便利店)',
       },
       {
-        value: '非居办公用房',
-        text: '非居办公用房',
+        value: '专业市场',
+        text: '专业市场',
       },
       {
-        value: '非居营业用房',
-        text: '非居营业用房',
+        value: '餐饮',
+        text: '餐饮',
+      },
+      {
+        value: '旅馆',
+        text: '旅馆',
+      },
+      {
+        value: '办公楼',
+        text: '办公楼',
+      },
+      {
+        value: '工厂',
+        text: '工厂',
+      },
+      {
+        value: '站场码头',
+        text: '站场码头',
+      },
+      {
+        value: '仓库堆栈',
+        text: '仓库堆栈',
+      },
+      {
+        value: '学校',
+        text: '学校',
+      },
+      {
+        value: '文化馆',
+        text: '文化馆',
+      },
+      {
+        value: '体育场',
+        text: '体育场',
+      },
+      {
+        value: '影剧院',
+        text: '影剧院',
+      },
+      {
+        value: '影剧院',
+        text: '影剧院',
+      },
+      {
+        value: '医院',
+        text: '医院',
+      },
+      {
+        value: '农业建筑',
+        text: '农业建筑',
+      },
+      {
+        value: '医院',
+        text: '医院',
+      },
+      {
+        value: '农业建筑',
+        text: '农业建筑',
+      },
+      {
+        value: '公共设施用房',
+        text: '公共设施用房',
+      },
+      {
+        value: '寺庙教堂',
+        text: '寺庙教堂',
+      },
+      {
+        value: '宗祠山庄',
+        text: '宗祠山庄',
+      },
+      {
+        value: '其他',
+        text: '其他',
       },
     ]),
     fWLXList: ref([

@@ -85,7 +85,7 @@
         <div class="detailV">{{ item.xcsjS }} - {{ item.xcsjE }}</div>
       </div>
       <div v-if="listtype == 'build'" style="display: flex" @click="parentTypeMethod(item, '详情')">
-        <div class="titleV">房屋类型:</div>
+        <div class="titleV">房屋用途:</div>
         <div class="detailV" style="color: #1890ff; margin-top: 2px; line-height: 22px; align-self: center">
           {{ listtype == 'build' ? item.FWYT : item.type }}
           <span style="color: #333333; margin-left: 2px"></span>

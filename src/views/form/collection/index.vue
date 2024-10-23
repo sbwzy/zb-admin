@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <!---------------------------------图片模块------------------------------------->
+    <!---------------------------------图片模块-无变动------------------------------------>
     <div class="collction__box">
       <div class="collction__box__content">
         <div class="collction__nav">
@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-    <!--------------------------------幢异常调查模块--------------------------------->
+    <!--------------------------------幢异常调查模块--新增多个字段------------------------------->
     <div class="collction__box collction__box__form">
       <div class="collction__box__nav">
         <span style="color: #00bfff" class="collction__box__content__title">幢异常调查信息</span>
@@ -105,7 +105,6 @@
         :model="MPZform"
         style="max-width: 600px"
         label-width="auto"
-        :rules="rules"
         :disabled="ycmsg1"
         status-icon
         v-if="isShowForm"
@@ -125,11 +124,11 @@
             <span>{{ MPZform.ZSQK }}</span>
           </div>
         </el-form-item>
-        <!------------------------------------公安绿牌------------------------------>
+        <!------------------------------------公安绿牌-------GALP---------gongAnLP-------------->
         <el-form-item label="当前公安绿牌地址" prop="galpdz">
-          <el-input :disabled="ycmsg1" v-model="MPZform.gongAnLP" type="textarea" placeholder="请输入新公安绿牌地址" />
+          <el-input :disabled="ycmsg1" v-model="MPZform.GALP" type="textarea" placeholder="请输入新公安绿牌地址" />
         </el-form-item>
-        <el-form-item label="现场公安绿牌照片" prop="shqkphotos">
+        <el-form-item label="现场公安绿牌照片" prop="galpphotos">
           <div class="collction__box__image">
             <div
               class="collction__box__image__content"
@@ -159,43 +158,25 @@
             </div>
           </div>
         </el-form-item>
-        <!------------------------------------损坏情况------------------------------>
-        <el-form-item label="损坏情况" prop="shqk">
-          <el-select v-model="MPZform.SHQK" :disabled="ycmsg1" multiple placeholder="损坏情况类型">
-            <el-option v-for="item in shqklx" :key="item.value" :label="item.text" :value="item.value" />
-          </el-select>
-          <!-- <div class="collction__box__form__text" v-else>
-            <span :style="MPZform.SHQK.length != 0 ? 'color:red' : ''">{{ MPZform.SHQK }} </span>
-          </div> -->
+        <!------------------------------------铭牌内容----------------MPNRNew-------------->
+        <el-form-item label="当前铭牌内容" prop="mpnr">
+          <el-input :disabled="ycmsg1" v-model="MPZform.MPNRNew" type="textarea" placeholder="请输入当前铭牌内容" />
         </el-form-item>
-        <el-form-item label="损坏情况说明" prop="shqksm">
-          <el-input v-model="MPZform.SHSM" :disabled="ycmsg1" type="textarea" placeholder="现场损坏情况说明" />
-          <!-- <div class="collction__box__form__text" v-else>
-            <span style="color: red">{{ MPZform.SHSM }}</span>
-          </div> -->
-        </el-form-item>
-        <el-form-item label="损坏情况照片取证" prop="shqkphotos">
+        <el-form-item label="现场铭牌照片" prop="mpphotos">
           <div class="collction__box__image">
-            <!-- <div
-            class="collction__box__image"
-            v-if="
-              (Imgform.find((item) => item.name === 'SHQK')?.imglists && Imgform.find((item) => item.name === 'SHQK')?.imglists.length) ||
-              isEdit
-            "
-          > -->
             <div
               class="collction__box__image__content"
-              v-for="(item, index) in Imgform.find((item) => item.name === 'SHQK')?.imglists"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'MPZ')?.imglists"
               :key="index"
             >
               <el-image
                 style="width: 100px; height: 100px"
                 :initial-index="index"
-                :preview-src-list="Imgform.find((item) => item.name === 'SHQK')?.imglists.map((item) => item.url)"
+                :preview-src-list="Imgform.find((item) => item.name === 'MPZ')?.imglists.map((item) => item.url)"
                 :src="item.thumbnailUrl"
                 fit="cover"
               />
-              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('损坏情况', index, false)">
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('铭牌', index, false)">
                 <el-icon><CircleClose /></el-icon>
               </div>
             </div>
@@ -205,7 +186,106 @@
                 type="file"
                 :disabled="ycmsg1"
                 class="collction__box__image__upload--input"
-                @change="handleImageChange($event, '损坏情况')"
+                @change="handleImageChange($event, '铭牌')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </el-form-item>
+        <!------------------------------------损坏情况------------------------------>
+        <el-form-item label="损坏情况" prop="shqk">
+          <el-select v-model="MPZform.ZSHQK" :disabled="ycmsg1" multiple placeholder="损坏情况类型">
+            <el-option v-for="item in shqklx" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <!-- <div class="collction__box__form__text" v-else>
+            <span :style="MPZform.SHQK.length != 0 ? 'color:red' : ''">{{ MPZform.SHQK }} </span>
+          </div> -->
+        </el-form-item>
+        <el-form-item label="损坏情况说明" prop="shqksm">
+          <el-input v-model="MPZform.ZSHSM" :disabled="ycmsg1" type="textarea" placeholder="现场损坏情况说明" />
+          <!-- <div class="collction__box__form__text" v-else>
+            <span style="color: red">{{ MPZform.SHSM }}</span>
+          </div> -->
+        </el-form-item>
+        <el-form-item label="损坏情况照片取证" prop="shqkphotos">
+          <div class="collction__box__image">
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'ZSHQK')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'ZSHQK')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('幢损坏情况', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '幢损坏情况')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </el-form-item>
+        <el-progress
+          v-if="canDelelt"
+          :percentage="percentage"
+          :stroke-width="15"
+          status="success"
+          striped
+          striped-flow
+          :duration="duration"
+        />
+        <!----------------------------------公共部位--破坏情况------------------------------>
+        <el-form-item label="破坏情况类型" prop="phsy">
+          <el-select v-model="MPZform.ZPHSY" placeholder="破坏情况类型" multiple style="width: 100%">
+            <el-option v-for="item in pHSYList" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <!-- <div class="collction__box__form__text" v-else>
+              <span :style="curHuInfo.PHSY ? 'color:red' : ''">{{ curHuInfo.PHSY }}</span>
+            </div> -->
+        </el-form-item>
+        <el-form-item label="破坏情况说明" prop="phqksm">
+          <el-input v-model="MPZform.ZPHQK" type="textarea" placeholder="请输入现场破坏情况" />
+          <!-- <div class="collction__box__form__text" v-else>
+              <span style="color: red">{{ curHuInfo.PHQK }}</span>
+            </div> -->
+        </el-form-item>
+        <el-form-item label="破坏情况照片取证" prop="phsyphotos">
+          <div class="collction__box__image">
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'ZPHSY')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'ZPHSY')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('幢破坏使用', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '幢破坏使用')"
                 accept="image/*"
               />
             </div>
@@ -223,7 +303,114 @@
           striped-flow
           :duration="duration"
         />
-        <!---------------------------------征收复核--------------------------------->
+        <!----------------------------------公共部位--搭建违建-------ZDJWJ-----ZDJWJSL-------ZDJWJSM----------->
+        <el-form-item label="是否搭建违建" prop="phsy">
+          <el-select v-model="MPZform.ZDJWJ" placeholder="是否搭建违建" style="width: 100%">
+            <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="搭建违建数量" prop="jcdjwj">
+          <el-input-number v-model="MPZform.ZDJWJSL" placeholder="请输入搭建违建的数量" :min="1" :max="999" controls-position="right" />
+        </el-form-item>
+        <el-form-item label="搭建违建说明" prop="djwjsm">
+          <el-input v-model="MPZform.ZDJWJSM" type="textarea" placeholder="请输入现场搭建违建情况" />
+        </el-form-item>
+        <el-form-item label="搭建违建照片取证" prop="djwjphotos">
+          <div class="collction__box__image">
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'ZDJWJ')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'ZDJWJ')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('幢搭建违建', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '幢搭建违建')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </el-form-item>
+        <el-progress
+          v-if="canDelelt"
+          :percentage="percentage"
+          :stroke-width="15"
+          status="success"
+          striped
+          striped-flow
+          :duration="duration"
+        />
+        <!------------------------------公共部位-----违规拆除------ZWGCH----ZWGCHLX-----ZWGCHSM---------------->
+        <el-form-item label="是否违规拆除" prop="wgch">
+          <el-select v-model="MPZform.ZWGCH" placeholder="是否存在违规拆除情况">
+            <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+          <!-- <div class="collction__box__form__text" v-else>
+              <span :style="curHuInfo.WGCH == '是' ? 'color:red' : ''">{{ curHuInfo.WGCH }} </span>
+            </div> -->
+        </el-form-item>
+        <el-form-item label="违规拆除情况" prop="wgchlx">
+          <el-select v-model="MPZform.ZWGCHLX" placeholder="违规拆除类型">
+            <el-option v-for="item in wgcjqklx" :key="item.value" :label="item.text" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="违建拆除说明" prop="wgchsm">
+          <el-input v-model="MPZform.ZWGCHSM" type="textarea" placeholder="请输入现场违建拆除情况" />
+        </el-form-item>
+        <el-form-item label="违建拆除照片取证" prop="djwjphotos">
+          <div class="collction__box__image">
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'ZWGCH')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'ZWGCH')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('幢违规拆除', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '幢违规拆除')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+        </el-form-item>
+        <el-progress
+          v-if="canDelelt"
+          :percentage="percentage"
+          :stroke-width="15"
+          status="success"
+          striped
+          striped-flow
+          :duration="duration"
+        />
+        <!---------------------------------征收复核--------------ZSPHOTOS------------------->
         <el-form-item label="征收现状" prop="zsfh">
           <el-select v-model="MPZform.ZSFH" :disabled="ycmsg1" placeholder="当前是否纳入征收">
             <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
@@ -238,6 +425,46 @@
             <span style="color: red">{{ MPZform.ZSFHSM }}</span>
           </div> -->
         </el-form-item>
+        <el-form-item label="征收照片取证" prop="ZSPHOTOS">
+          <div class="collction__box__image">
+            <!-- <div
+            class="collction__box__image"
+            v-if="
+              (Imgform.find((item) => item.name === 'SHQK')?.imglists && Imgform.find((item) => item.name === 'SHQK')?.imglists.length) ||
+              isEdit
+            "
+          > -->
+            <div
+              class="collction__box__image__content"
+              v-for="(item, index) in Imgform.find((item) => item.name === 'ZSFH')?.imglists"
+              :key="index"
+            >
+              <el-image
+                style="width: 100px; height: 100px"
+                :initial-index="index"
+                :preview-src-list="Imgform.find((item) => item.name === 'ZSFH')?.imglists.map((item) => item.url)"
+                :src="item.thumbnailUrl"
+                fit="cover"
+              />
+              <div class="collction__box__image__content--close" v-if="!ycmsg1" @click.stop="deleteImage('征收情况', index, false)">
+                <el-icon><CircleClose /></el-icon>
+              </div>
+            </div>
+            <div class="collction__box__image__upload">
+              <el-icon><Plus /></el-icon>
+              <input
+                type="file"
+                :disabled="ycmsg1"
+                class="collction__box__image__upload--input"
+                @change="handleImageChange($event, '征收情况')"
+                accept="image/*"
+              />
+            </div>
+          </div>
+          <!-- <div class="collction__box__form__text" v-else>
+            <span>暂无</span>
+          </div> -->
+        </el-form-item>
         <!---------------------------------修缮情况--------------------------------->
         <el-form-item label="修缮情况" prop="xsqk">
           <el-select v-model="MPZform.XSQK" :disabled="ycmsg1" placeholder="修缮情况">
@@ -247,7 +474,7 @@
             <span :style="MPZform.XSQK == '修缮中' ? 'color:red' : ''">{{ MPZform.XSQK }} </span>
           </div> -->
         </el-form-item>
-        <el-form-item v-if="MPZform.XSQK == '修缮中'" label="是否有施工许可" prop="xsqk">
+        <el-form-item v-if="MPZform.XSQK == '修缮中'" label="是否有施工许可" prop="xsqksgxk">
           <el-select v-model="MPZform.SGXK" :disabled="ycmsg1" placeholder="是否有施工许可">
             <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
           </el-select>
@@ -255,11 +482,11 @@
             <span :style="MPZform.XSQK == '修缮中' ? 'color:red' : ''">{{ MPZform.XSQK }} </span>
           </div> -->
         </el-form-item>
+        <el-form-item v-if="MPZform.XSQK == '修缮中'" label="报建编号" prop="xsqkbjbh">
+          <el-input v-model="MPZform.BJBH" :disabled="ycmsg1" type="textarea" placeholder="请输入报建编号" />
+        </el-form-item>
         <el-form-item label="修缮情况说明" prop="xsqksm">
           <el-input v-model="MPZform.XSQKSM" :disabled="ycmsg1" type="textarea" placeholder="现场修缮情况说明" />
-          <!-- <div class="collction__box__form__text" v-else>
-            <span style="color: red">{{ MPZform.XSQKSM }}</span>
-          </div> -->
         </el-form-item>
         <el-form-item label="修缮情况照片" prop="xsqkphotos">
           <div class="collction__box__image">
@@ -316,7 +543,7 @@
               round
               class="collction__box__nav1"
               @click.stop="itemisShowForm(item)"
-              >{{ item.SH !== '' && item.SH !== undefined ? item.SH : item.CB.slice(-6) }}</el-button
+              >{{ item.SH !== '' && item.SH !== ' ' && item.SH !== undefined ? item.SH : item.CB.slice(-6) }}</el-button
             >
           </el-col>
         </el-row>
@@ -338,7 +565,6 @@
           :model="curHuInfo"
           style="max-width: 600px"
           label-width="auto"
-          :rules="rules"
           status-icon
           :disabled="ycmsg1"
           v-if="curHuInfo ? curHuInfo.isShowForm : false"
@@ -359,20 +585,20 @@
               <span>{{ curHuInfo.SH }}</span>
             </div>
           </el-form-item>
-          <el-form-item label="户编号" prop="dyhid">
+          <el-form-item label="产编" prop="dyhid">
             <div class="collction__box__form__text">
-              <span>{{ curHuInfo.Huid }}</span>
+              <span>{{ curHuInfo.CB }}</span>
             </div>
           </el-form-item>
           <!---------------------------------------房屋用途---------------------------------------------->
-          <el-form-item label="房屋用途" prop="fwyt">
+          <el-form-item label="房屋业态" prop="fwyt">
             <div class="collction__box__form__text">
               <span>{{ curHuInfo.FWYT }}</span>
             </div>
           </el-form-item>
-          <el-form-item label="当前房屋用途" prop="xfwyt">
+          <el-form-item label="房屋业态现状" prop="xfwyt">
             <el-select v-model="curHuInfo.DQFWYT" placeholder="选择房屋用途" style="width: 100%">
-              <el-option v-for="item in FWYT" :key="item.value" :label="item.text" :value="item.value" />
+              <el-option v-for="item in fwyt" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
             <!-- <div class="collction__box__form__text" v-else>
               <span :style="curHuInfo.FWYT != curHuInfo.DQFWYT ? 'color:red' : ''">{{ curHuInfo.DQFWYT }}</span>
@@ -426,6 +652,54 @@
             <!-- <div class="collction__box__form__text" v-else>
               <span>暂无</span>
             </div> -->
+          </el-form-item>
+          <!-------------------------- 户损坏情况---------------------------------------->
+          <el-form-item label="损坏情况" prop="phsy">
+            <el-select v-model="curHuInfo.SHQK" placeholder="损坏情况类型" multiple style="width: 100%">
+              <el-option v-for="item in shqklx" :key="item.value" :label="item.text" :value="item.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="损坏情况说明" prop="phqksm">
+            <el-input v-model="curHuInfo.SHSM" type="textarea" placeholder="请输入现场破坏情况" />
+          </el-form-item>
+          <el-form-item label="损坏情况照片取证" prop="phqkphotos">
+            <div class="collction__box__image">
+              <div
+                class="collction__box__image__content"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'SHQK')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
+                :key="index"
+              >
+                <el-image
+                  style="width: 100px; height: 100px"
+                  :initial-index="index"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'SHQK')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
+                  :src="item.thumbnailUrl"
+                  fit="cover"
+                />
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('损坏情况', index, true, curHuInfo)"
+                >
+                  <el-icon><CircleClose /></el-icon>
+                </div>
+              </div>
+              <div class="collction__box__image__upload" v-if="!ycmsg1">
+                <el-icon><Plus /></el-icon>
+                <input
+                  type="file"
+                  class="collction__box__image__upload--input"
+                  @change="handleImageChange($event, '损坏情况', curHuInfo)"
+                  accept="image/*"
+                />
+              </div>
+            </div>
           </el-form-item>
           <!--------------------------破坏情况---------------------------------------->
           <el-form-item label="破坏情况类型" prop="phsy">
@@ -629,12 +903,56 @@
             <el-select v-model="curHuInfo.ZZQK" placeholder="是否转租" style="width: 100%">
               <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
-            <!-- <div class="collction__box__form__text" v-else>
-              <span>{{ curHuInfo.ZZQK }}</span>
-            </div> -->
+          </el-form-item>
+          <el-form-item v-if="curHuInfo.ZZQK == '是'" label="转租单位" prop="zzdw">
+            <el-input :disabled="ycmsg1" v-model="curHuInfo.ZZDW" type="textarea" placeholder="请输入当前转租单位" />
+          </el-form-item>
+          <el-form-item v-if="curHuInfo.ZZQK == '同上月'" label="转租单位" prop="zzdw">
+            <div class="collction__box__form__text">
+              <span>{{ curHuInfo.ZZDW }}</span>
+            </div>
           </el-form-item>
           <el-form-item label="转租情况说明" prop="zzsm">
             <el-input v-model="curHuInfo.ZZSM" type="textarea" placeholder="请输入现场转租情况" />
+          </el-form-item>
+          <el-form-item v-if="curHuInfo.ZZQK == '是'" label="转租情况照片" prop="zzsm">
+            <div class="collction__box__image">
+              <div
+                class="collction__box__image__content"
+                v-for="(item, index) in Imgform.find((item) => item.name === 'ZZQK')?.imglists?.filter(
+                  (item) => item.Huid === curHuInfo.Huid,
+                )"
+                :key="index"
+              >
+                <el-image
+                  style="width: 100px; height: 100px"
+                  :initial-index="index"
+                  :preview-src-list="
+                    Imgform.find((item) => item.name === 'ZZQK')
+                      ?.imglists.filter((item) => item.Huid === curHuInfo.Huid)
+                      .map((item) => item.url)
+                  "
+                  :src="item.thumbnailUrl"
+                  fit="cover"
+                />
+                <div
+                  class="collction__box__image__content--close"
+                  v-if="!ycmsg1"
+                  @click.stop="deleteImage('转租情况', index, true, curHuInfo)"
+                >
+                  <el-icon><CircleClose /></el-icon>
+                </div>
+              </div>
+              <div class="collction__box__image__upload" v-if="!ycmsg1">
+                <el-icon><Plus /></el-icon>
+                <input
+                  type="file"
+                  class="collction__box__image__upload--input"
+                  @change="handleImageChange($event, '转租情况', curHuInfo)"
+                  accept="image/*"
+                />
+              </div>
+            </div>
           </el-form-item>
           <el-form-item label="是否空置" prop="kzqk">
             <el-select v-model="curHuInfo.KZQK" placeholder="是否空置" style="width: 100%">
@@ -675,7 +993,7 @@
     </div> -->
     <!---------------------------------下方按钮模块--------------------------------->
     <div class="collction__edit">
-      <div class="collction__edit__btn" @click.stop="dkDialogVisibleShow">
+      <!-- <div class="collction__edit__btn" @click.stop="dkDialogVisibleShow">
         <el-icon
           v-if="
             (MPZform.tdtxNew == null || MPZform.tdtxNew == '' || MPZform.tdtxNew == undefined) &&
@@ -685,12 +1003,8 @@
         /></el-icon>
         <el-icon v-else><SuccessFilled /></el-icon>
         <span class="collction__edit__btn--text">{{ dkName }}</span>
-      </div>
-      <div
-        :class="{ collction__edit__save: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
-        v-if="MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1"
-        @click.stop="iseditZC(1)"
-      >
+      </div> -->
+      <div :class="{ collction__edit__save: true, disabled: isDisabled && ycmsg1, loading: isLoading }" @click.stop="iseditZC(1)">
         <el-icon v-if="!isLoading"><DocumentChecked /></el-icon>
         <el-icon v-else><Loading /></el-icon>
         <span v-if="!isLoading">保存</span>
@@ -698,11 +1012,12 @@
       </div>
       <div
         :class="{ collction__edit__abnormal: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
-        v-if="MPZform.DaKaJG == 0 || MPZform.DaKaJG == 1"
         @click.stop="ycDialogVisibleShow"
       >
-        <el-icon><InfoFilled /></el-icon>
-        <span>上报</span>
+        <el-icon v-if="!isLoading"><InfoFilled /></el-icon>
+        <el-icon v-else><Loading /></el-icon>
+        <span v-if="!isLoading">上报</span>
+        <span v-else>{{ loadingText }}</span>
       </div>
     </div>
     <!------------------------------ 异常信息上报弹窗------------------------------->
@@ -795,7 +1110,7 @@
   const percentage = ref<number>(10)
   const duration = computed(() => Math.floor(percentage.value / 10))
   // 获取数据
-  const { MPZInfo, dqZCZT, xcrwXQId, search, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, FWYT, pHSYList } =
+  const { MPZInfo, dqZCZT, xcrwXQId, search, HuInfo, ycmsg, ImgInfo, notemsg, BImgInfo, gfIdList, gfid, fWLXList, fwyt, pHSYList } =
     storeToRefs(SettingStore)
   // 引入接口
   const route = useRoute()
@@ -942,7 +1257,7 @@
     }
     //户上的房屋用途异常 FWYT
     if (Huform?.some((item) => item.FWYT !== item.DQFWYT)) {
-      res += '户上存在房屋用途异常、'
+      res += '户上存在房屋业态异常、'
       YCQK = 1
     }
     if (Huform?.some((item) => item.PHSY && item.PHSY.length > 0)) {
@@ -999,14 +1314,14 @@
       })
     }
   }
-  // 提交反馈数据
-  let contetForm = reactive({
-    MPZid: '0', //建筑编号
-    tdtx: 0, //房屋新位置经度
-    tdty: 0, //房屋新位置纬度
-    errorStatus: 0,
-    errorReson: '', //打卡异常信息
-  })
+  // // 提交反馈数据
+  // let contetForm = reactive({
+  //   MPZid: '0', //建筑编号
+  //   tdtx: 0, //房屋新位置经度
+  //   tdty: 0, //房屋新位置纬度
+  //   errorStatus: -1,
+  //   errorReson: '', //打卡异常信息
+  // })
   // 是否显示弹窗
   const ycDialogFormVisible = ref(false)
   const dkDialogFormVisible = ref(false)
@@ -1019,18 +1334,147 @@
     ycDialogFormVisible.value = true
   }
   // 暂存、保存、和上传接口
+  // 先进行打卡操作  不需要建筑原先位置信息 如果没有信号  基本就没有网络
   const iseditZC = async (num) => {
     //按钮禁用
     isDisabled.value = true
     //按钮显示loading
     isLoading.value = true
+
+    let contetForm = reactive({
+      MPZid: '0', //建筑编号
+      tdtx: 0, //房屋新位置经度
+      tdty: 0, //房屋新位置纬度
+      errorStatus: -1,
+      errorReson: '', //打卡异常信息
+    })
+
+    if (MPZform.DaKaJG != null && MPZform.DaKaJG != '' && MPZform.DaKaJG != undefined) {
+    } else {
+      //调用定位模块
+      if ('geolocation' in navigator) {
+        //如果存在位置元素
+        navigator.geolocation.getCurrentPosition(
+          async function (position) {
+            var lat = position.coords.latitude.toFixed(6)
+            var lon = position.coords.longitude.toFixed(6)
+
+            // 生成一条打卡记录
+            contetForm = {
+              MPZid: MPZform.MPZid,
+              tdty: lon,
+              tdtx: lat,
+              errorReson: '',
+              errorStatus: 0,
+            }
+          },
+          async function (error) {
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+                contetForm.errorReson = '用户拒绝了地理位置请求'
+                break
+              case error.POSITION_UNAVAILABLE:
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+                contetForm.errorReson = '位置信息不可用'
+                break
+              case error.TIMEOUT:
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+                contetForm.errorReson = '请求超时'
+                break
+              case error.UNKNOWN_ERROR:
+                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+                contetForm.errorReson = '发生未知错误'
+                break
+            }
+            //dkDialogFormVisible.value = true
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 1000,
+            maximumAge: 0,
+          },
+        )
+      } else {
+        ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorReson = '浏览器不支持地理位置')
+        contetForm.errorStatus = 1
+        //dkDialogFormVisible.value = true
+      }
+    }
+    if (contetForm.errorStatus != -1) {
+      await saveTrackInfo(contetForm)
+        .then((res) => {
+          if (res.data.result == 1) {
+            // ElMessage({
+            //   showClose: true,
+            //   message: '打卡成功:' + res.data.msg,
+            //   type: 'success',
+            // })
+            // dkDialogFormVisible.value = false
+            MPZform.tdtxNew = contetForm.tdtx
+            MPZform.tdtyNew = contetForm.tdty
+            MPZform.DaKaJG = contetForm.errorStatus
+            MPZform.DaKaBz = contetForm.errorReson
+          } else {
+            // dkDialogFormVisible.value = false
+            // ElMessage({
+            //   showClose: true,
+            //   message: '打卡失败,失败原因:' + res.data.msg,
+            //   type: 'error',
+            // })
+          }
+        })
+        .catch((error) => {
+          //接口失败时 显示当前接口错误
+          ElMessage({
+            showClose: true,
+            message: error,
+            type: 'error',
+            duration: 0,
+          })
+        })
+    }
     //赋值上传建筑总信息
     let tijiaoList = {}
     //这里进行深拷贝 否则会修改原数据 复制户信息
     let tijiaohuList = JSON.parse(JSON.stringify(Huform))
     tijiaohuList.forEach((item) => {
-      //对破坏情况字段 进行拼接
-      item.PHSY = item.PHSY.filter((item) => item).join(',') //破坏情况
+      //对破坏情况字段 进行拼接  1023
+      item.PHSY = item.PHSY.filter((item) => item).join(',') //户破坏情况
+      item.SHQK = item.SHQK.filter((item) => item).join(',') //户损坏情况
+      if (item.FWYT == '非居住生产' && (item.DQFWYT == '工厂' || item.DQFWYT == '农业建筑' || item.DQFWYT == '公共设施用房')) {
+        item.FWYTYC = false
+      } else if (
+        item.FWYT == '非居住营业' &&
+        (item.DQFWYT == '超市(便利店)' ||
+          item.DQFWYT == '商店' ||
+          item.DQFWYT == '专业市场' ||
+          item.DQFWYT == '餐饮' ||
+          item.DQFWYT == '旅馆' ||
+          item.DQFWYT == '站场码头' ||
+          item.DQFWYT == '仓库堆栈' ||
+          item.DQFWYT == '文化馆' ||
+          item.DQFWYT == '体育场' ||
+          item.DQFWYT == '影剧院' ||
+          item.DQFWYT == '福利院')
+      ) {
+        item.FWYTYC = false
+      } else if (
+        item.FWYT == '非居住营业' &&
+        (item.DQFWYT == '办公楼' ||
+          item.DQFWYT == '医院' ||
+          item.DQFWYT == '学校' ||
+          item.DQFWYT == '寺庙教堂' ||
+          item.DQFWYT == '宗祠山庄' ||
+          item.DQFWYT == '其他')
+      ) {
+        item.FWYTYC = false
+      } else if (item.FWYT == '居住' && item.DQFWYT == '居住用房') {
+        item.FWYTYC = false
+      } else {
+        item.FWYTYC = true
+      }
+      //item.FWYTYC = item.FWYT == '非居住生产' && (item.DQFWYT == '工厂' || item.DQFWYT == '农业建筑' || item.DQFWYT == '公共设施用房')? //1023
     })
     let YCQK = 0
     if (MPZform.SHQK && MPZform.SHQK.length > 0) {
@@ -1063,8 +1507,9 @@
     //复制建筑总数据
     tijiaoList = {
       MPZid: MPZform.MPZid, //公房id
-      gongAnLP: MPZform.gongAnLP, //新公安绿牌地址
-      SHQK: MPZform.SHQK.filter((item) => item).join(','), //损坏情况
+      GALP: MPZform.GALP, //新公安绿牌地址
+      ZSHQK: MPZform.ZSHQK.filter((item) => item).join(','), //损坏情况
+      ZPHSY: MPZform.ZPHSY.filter((item) => item).join(','), //破坏情况
       SHSM: MPZform.SHSM, //损坏说明
       ZSFH: MPZform.ZSFH, //征收复核
       ZSFHSM: MPZform.ZSFHSM, //征收复核说明
@@ -1090,7 +1535,24 @@
                 if (item1.url && item1.url.startsWith('data:image/jpeg;base64')) {
                   tijiaoImgList.push({
                     ZCid: zcid,
-                    ZCLeiX: item.name == 'SHQK' ? '幢' : item.name == 'XSQK' ? '幢' : '户',
+                    ZCLeiX:
+                      item.name == 'MPZ'
+                        ? '幢' //
+                        : item.name == 'GPL'
+                        ? '幢'
+                        : item.name == 'ZSFH'
+                        ? '幢'
+                        : item.name == 'ZPHSY'
+                        ? '幢'
+                        : item.name == 'ZDJWJ'
+                        ? '幢'
+                        : item.name == 'ZWGCH'
+                        ? '幢'
+                        : item.name == 'ZSHQK'
+                        ? '幢'
+                        : item.name == 'XSQK'
+                        ? '幢'
+                        : '户', //1023 待修改
                     MPZid: MPZid,
                     Huid: item1.Huid,
                     YiChLeiX: item1.zhaopLX,
@@ -1131,56 +1593,86 @@
                     console.log('什么时候进入这里')
                     //异常处理
                     if (num == 2) {
-                      await editZCYC(MPZform.MPZid).then(async (res) => {
-                        if (res.data.result != 1) {
-                          isDisabled.value = false
-                          isLoading.value = false
+                      await editZCYC(MPZform.MPZid)
+                        .then(async (res) => {
+                          if (res.data.result != 1) {
+                            isDisabled.value = false
+                            isLoading.value = false
+                            ElMessage({
+                              showClose: true,
+                              message: res.data.msg,
+                              type: 'error',
+                              duration: 0,
+                            })
+                          } else {
+                            //ElMessage.success(res.data.msg)
+                            loadingText.value = '信息保存完成！'
+                            isDisabled.value = false
+                            isLoading.value = false
+                            console.log('打印search', search.value)
+                            console.log('打印search', search.value.jzName)
+                            await buildListinfo()
+                              .then((res) => {
+                                if (res.data.result === 1) {
+                                  SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                                  SettingStore.setXiaoQumsg(res.data.notemsg)
+                                } else {
+                                  ElMessage({
+                                    showClose: true,
+                                    message: res.data.msg,
+                                    type: 'error',
+                                    duration: 0,
+                                  })
+                                }
+                              })
+                              .catch((error) => {
+                                //接口失败时 显示当前接口错误
+                                ElMessage({
+                                  showClose: true,
+                                  message: error,
+                                  type: 'error',
+                                  duration: 0,
+                                })
+                              })
+                            await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName)
+                              .then((res) => {
+                                if (res.data.result === 1) {
+                                  let jzList = []
+                                  res.data.MPZInfo.data.forEach((item) => {
+                                    jzList.push(item)
+                                  })
+                                  SettingStore.setJzList(jzList)
+                                  TagsViewStore.toLastView(route.path)
+                                  TagsViewStore.delView(route.path)
+                                } else {
+                                  ElMessage({
+                                    showClose: true,
+                                    message: res.data.msg,
+                                    type: 'error',
+                                    duration: 0,
+                                  })
+                                }
+                              })
+                              .catch((error) => {
+                                //接口失败时 显示当前接口错误
+                                ElMessage({
+                                  showClose: true,
+                                  message: error,
+                                  type: 'error',
+                                  duration: 0,
+                                })
+                              })
+                          }
+                        })
+                        .catch((error) => {
+                          //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
-                            message: res.data.msg,
+                            message: error,
                             type: 'error',
                             duration: 0,
                           })
-                        } else {
-                          //ElMessage.success(res.data.msg)
-                          loadingText.value = '信息保存完成！'
-                          isDisabled.value = false
-                          isLoading.value = false
-                          console.log('打印search', search.value)
-                          console.log('打印search', search.value.jzName)
-                          await buildListinfo().then((res) => {
-                            if (res.data.result === 1) {
-                              SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                              SettingStore.setXiaoQumsg(res.data.notemsg)
-                            } else {
-                              ElMessage({
-                                showClose: true,
-                                message: res.data.msg,
-                                type: 'error',
-                                duration: 0,
-                              })
-                            }
-                          })
-                          await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
-                            if (res.data.result === 1) {
-                              let jzList = []
-                              res.data.MPZInfo.data.forEach((item) => {
-                                jzList.push(item)
-                              })
-                              SettingStore.setJzList(jzList)
-                              TagsViewStore.toLastView(route.path)
-                              TagsViewStore.delView(route.path)
-                            } else {
-                              ElMessage({
-                                showClose: true,
-                                message: res.data.msg,
-                                type: 'error',
-                                duration: 0,
-                              })
-                            }
-                          })
-                        }
-                      })
+                        })
                     } else {
                       //暂存按钮
                       ElMessage.success('信息保存保存')
@@ -1189,37 +1681,57 @@
                       isLoading.value = false
                       console.log('打印search', search.value)
                       console.log('打印search', search.value.jzName)
-                      await buildListinfo().then((res) => {
-                        if (res.data.result === 1) {
-                          SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                          SettingStore.setXiaoQumsg(res.data.notemsg)
-                        } else {
+                      await buildListinfo()
+                        .then((res) => {
+                          if (res.data.result === 1) {
+                            SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                            SettingStore.setXiaoQumsg(res.data.notemsg)
+                          } else {
+                            ElMessage({
+                              showClose: true,
+                              message: res.data.msg,
+                              type: 'error',
+                              duration: 0,
+                            })
+                          }
+                        })
+                        .catch((error) => {
+                          //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
-                            message: res.data.msg,
+                            message: error,
                             type: 'error',
                             duration: 0,
                           })
-                        }
-                      })
-                      await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
-                        if (res.data.result === 1) {
-                          let jzList = []
-                          res.data.MPZInfo.data.forEach((item) => {
-                            jzList.push(item)
-                          })
-                          SettingStore.setJzList(jzList)
-                          TagsViewStore.toLastView(route.path)
-                          TagsViewStore.delView(route.path)
-                        } else {
+                        })
+                      await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName)
+                        .then((res) => {
+                          if (res.data.result === 1) {
+                            let jzList = []
+                            res.data.MPZInfo.data.forEach((item) => {
+                              jzList.push(item)
+                            })
+                            SettingStore.setJzList(jzList)
+                            TagsViewStore.toLastView(route.path)
+                            TagsViewStore.delView(route.path)
+                          } else {
+                            ElMessage({
+                              showClose: true,
+                              message: res.data.msg,
+                              type: 'error',
+                              duration: 0,
+                            })
+                          }
+                        })
+                        .catch((error) => {
+                          //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
-                            message: res.data.msg,
+                            message: error,
                             type: 'error',
                             duration: 0,
                           })
-                        }
-                      })
+                        })
                     }
                   } else {
                     //如果图片数量不对
@@ -1227,61 +1739,77 @@
                   }
                 })
                 .catch((error) => {
-                  // 处理错误逻辑
+                  //接口失败时 显示当前接口错误
+                  ElMessage({
+                    showClose: true,
+                    message: error,
+                    type: 'error',
+                    duration: 0,
+                  })
                 })
             })
           } else {
             //如果不存在照片的情况 直接进行异常提交接口
             //最后在进行异常提交
             if (num == 2) {
-              await editZCYC(MPZform.MPZid).then(async (res) => {
-                if (res.data.result != 1) {
-                  isDisabled.value = false
-                  isLoading.value = false
+              await editZCYC(MPZform.MPZid)
+                .then(async (res) => {
+                  if (res.data.result != 1) {
+                    isDisabled.value = false
+                    isLoading.value = false
+                    ElMessage({
+                      showClose: true,
+                      message: res.data.msg,
+                      type: 'error',
+                      duration: 0,
+                    })
+                  } else {
+                    ElMessage.success('信息保存保存')
+                    loadingText.value = '信息保存完成！'
+                    isDisabled.value = false
+                    isLoading.value = false
+                    await buildListinfo().then((res) => {
+                      if (res.data.result === 1) {
+                        SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                        SettingStore.setXiaoQumsg(res.data.notemsg)
+                      } else {
+                        ElMessage({
+                          showClose: true,
+                          message: res.data.msg,
+                          type: 'error',
+                          duration: 0,
+                        })
+                      }
+                    })
+                    await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
+                      if (res.data.result === 1) {
+                        let jzList = []
+                        res.data.MPZInfo.data.forEach((item) => {
+                          jzList.push(item)
+                        })
+                        SettingStore.setJzList(jzList)
+                        TagsViewStore.toLastView(route.path)
+                        TagsViewStore.delView(route.path)
+                      } else {
+                        ElMessage({
+                          showClose: true,
+                          message: res.data.msg,
+                          type: 'error',
+                          duration: 0,
+                        })
+                      }
+                    })
+                  }
+                })
+                .catch((error) => {
+                  //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
-                    message: res.data.msg,
+                    message: error,
                     type: 'error',
                     duration: 0,
                   })
-                } else {
-                  ElMessage.success('信息保存保存')
-                  loadingText.value = '信息保存完成！'
-                  isDisabled.value = false
-                  isLoading.value = false
-                  await buildListinfo().then((res) => {
-                    if (res.data.result === 1) {
-                      SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                      SettingStore.setXiaoQumsg(res.data.notemsg)
-                    } else {
-                      ElMessage({
-                        showClose: true,
-                        message: res.data.msg,
-                        type: 'error',
-                        duration: 0,
-                      })
-                    }
-                  })
-                  await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
-                    if (res.data.result === 1) {
-                      let jzList = []
-                      res.data.MPZInfo.data.forEach((item) => {
-                        jzList.push(item)
-                      })
-                      SettingStore.setJzList(jzList)
-                      TagsViewStore.toLastView(route.path)
-                      TagsViewStore.delView(route.path)
-                    } else {
-                      ElMessage({
-                        showClose: true,
-                        message: res.data.msg,
-                        type: 'error',
-                        duration: 0,
-                      })
-                    }
-                  })
-                }
-              })
+                })
             } else {
               //暂存图片上传完后的操作
               ElMessage.success('信息保存保存')
@@ -1290,37 +1818,57 @@
               isLoading.value = false
               console.log('xcrwXQId', xcrwXQId)
               console.log('dqZCZT', dqZCZT)
-              await buildListinfo().then((res) => {
-                if (res.data.result === 1) {
-                  SettingStore.setXiaoQuInfo(res.data.TongJi.data)
-                  SettingStore.setXiaoQumsg(res.data.notemsg)
-                } else {
+              await buildListinfo()
+                .then((res) => {
+                  if (res.data.result === 1) {
+                    SettingStore.setXiaoQuInfo(res.data.TongJi.data)
+                    SettingStore.setXiaoQumsg(res.data.notemsg)
+                  } else {
+                    ElMessage({
+                      showClose: true,
+                      message: res.data.msg,
+                      type: 'error',
+                      duration: 0,
+                    })
+                  }
+                })
+                .catch((error) => {
+                  //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
-                    message: res.data.msg,
+                    message: error,
                     type: 'error',
                     duration: 0,
                   })
-                }
-              })
-              await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName).then((res) => {
-                if (res.data.result === 1) {
-                  let jzList = []
-                  res.data.MPZInfo.data.forEach((item) => {
-                    jzList.push(item)
-                  })
-                  SettingStore.setJzList(jzList)
-                  TagsViewStore.toLastView(route.path)
-                  TagsViewStore.delView(route.path)
-                } else {
+                })
+              await buildListinfo1(xcrwXQId.value, dqZCZT.value, search.value.jzName)
+                .then((res) => {
+                  if (res.data.result === 1) {
+                    let jzList = []
+                    res.data.MPZInfo.data.forEach((item) => {
+                      jzList.push(item)
+                    })
+                    SettingStore.setJzList(jzList)
+                    TagsViewStore.toLastView(route.path)
+                    TagsViewStore.delView(route.path)
+                  } else {
+                    ElMessage({
+                      showClose: true,
+                      message: res.data.msg,
+                      type: 'error',
+                      duration: 0,
+                    })
+                  }
+                })
+                .catch((error) => {
+                  //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
-                    message: res.data.msg,
+                    message: error,
                     type: 'error',
                     duration: 0,
                   })
-                }
-              })
+                })
             }
           }
         } else {
@@ -1361,79 +1909,79 @@
     s = Math.round(s * 10000) / 10000 // 输出为公里
     return s * 1000
   }
-  // 打卡模块逻辑
-  const dkDialogVisibleShow = () => {
-    // 如果 不存在打卡记录时
-    if (
-      (MPZform.tdtxNew == null || MPZform.tdtxNew == undefined || MPZform.tdtxNew == '') &&
-      (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined)
-    ) {
-      //调用定位模块
-      if ('geolocation' in navigator) {
-        //如果存在位置元素
-        navigator.geolocation.getCurrentPosition(
-          async function (position) {
-            var lat = position.coords.latitude.toFixed(6)
-            var lon = position.coords.longitude.toFixed(6)
-            var accuracy = position.coords.accuracy
+  // // 打卡模块逻辑
+  // const dkDialogVisibleShow = () => {
+  //   // 如果 不存在打卡记录时
+  //   if (
+  //     (MPZform.tdtxNew == null || MPZform.tdtxNew == undefined || MPZform.tdtxNew == '') &&
+  //     (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined)
+  //   ) {
+  //     //调用定位模块
+  //     if ('geolocation' in navigator) {
+  //       //如果存在位置元素
+  //       navigator.geolocation.getCurrentPosition(
+  //         async function (position) {
+  //           var lat = position.coords.latitude.toFixed(6)
+  //           var lon = position.coords.longitude.toFixed(6)
+  //           var accuracy = position.coords.accuracy
 
-            // 生成一条打卡记录
-            contetForm = {
-              MPZid: MPZform.MPZid,
-              tdty: lon,
-              tdtx: lat,
-              errorReson: '',
-              errorStatus: 0,
-            }
-            //判断是否超出范围 进行提醒
-            if (getDistances(lat, lon, MPZform.tdtX, MPZform.tdtY) > 50) {
-              ;(contetForm.MPZid = MPZform.MPZid),
-                (contetForm.errorReson = '您当前位置已超过打卡范围,请到达现场重新打卡！如果已经到达现场,直接打卡即可')
-              contetForm.errorStatus = 1
-            }
-            dkDialogFormVisible.value = true
-          },
-          async function (error) {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '用户拒绝了地理位置请求'
-                break
-              case error.POSITION_UNAVAILABLE:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '位置信息不可用'
-                break
-              case error.TIMEOUT:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '请求超时'
-                break
-              case error.UNKNOWN_ERROR:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '发生未知错误'
-                break
-            }
-            dkDialogFormVisible.value = true
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 1000,
-            maximumAge: 0,
-          },
-        )
-      } else {
-        ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorReson = '浏览器不支持地理位置')
-        contetForm.errorStatus = 1
-        dkDialogFormVisible.value = true
-      }
-    } else if (MPZform.DaKaJG == 1 || MPZform.DaKaJG == 0) {
-      //重复提交打卡操作
-      ElMessage({
-        showClose: true,
-        message: '您已进行过打卡操作，请勿重复提交',
-        type: 'warning',
-      })
-    }
-  }
+  //           // 生成一条打卡记录
+  //           contetForm = {
+  //             MPZid: MPZform.MPZid,
+  //             tdty: lon,
+  //             tdtx: lat,
+  //             errorReson: '',
+  //             errorStatus: 0,
+  //           }
+  //           //判断是否超出范围 进行提醒
+  //           if (getDistances(lat, lon, MPZform.tdtX, MPZform.tdtY) > 50) {
+  //             ;(contetForm.MPZid = MPZform.MPZid),
+  //               (contetForm.errorReson = '您当前位置已超过打卡范围,请到达现场重新打卡！如果已经到达现场,直接打卡即可')
+  //             contetForm.errorStatus = 1
+  //           }
+  //           dkDialogFormVisible.value = true
+  //         },
+  //         async function (error) {
+  //           switch (error.code) {
+  //             case error.PERMISSION_DENIED:
+  //               ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+  //               contetForm.errorReson = '用户拒绝了地理位置请求'
+  //               break
+  //             case error.POSITION_UNAVAILABLE:
+  //               ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+  //               contetForm.errorReson = '位置信息不可用'
+  //               break
+  //             case error.TIMEOUT:
+  //               ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+  //               contetForm.errorReson = '请求超时'
+  //               break
+  //             case error.UNKNOWN_ERROR:
+  //               ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
+  //               contetForm.errorReson = '发生未知错误'
+  //               break
+  //           }
+  //           dkDialogFormVisible.value = true
+  //         },
+  //         {
+  //           enableHighAccuracy: true,
+  //           timeout: 1000,
+  //           maximumAge: 0,
+  //         },
+  //       )
+  //     } else {
+  //       ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorReson = '浏览器不支持地理位置')
+  //       contetForm.errorStatus = 1
+  //       dkDialogFormVisible.value = true
+  //     }
+  //   } else if (MPZform.DaKaJG == 1 || MPZform.DaKaJG == 0) {
+  //     //重复提交打卡操作
+  //     ElMessage({
+  //       showClose: true,
+  //       message: '您已进行过打卡操作，请勿重复提交',
+  //       type: 'warning',
+  //     })
+  //   }
+  // }
   const dkTJ = () => {
     saveTrackInfo(contetForm)
       .then((res) => {
@@ -1457,7 +2005,15 @@
           })
         }
       })
-      .catch((err) => {})
+      .catch((error) => {
+        //接口失败时 显示当前接口错误
+        ElMessage({
+          showClose: true,
+          message: error,
+          type: 'error',
+          duration: 0,
+        })
+      })
   }
   //修改按钮颜色
   const getButtonType = (item) => {
@@ -1597,7 +2153,7 @@
         ctx.drawImage(img, 0, 0, width, height)
         //ctx = canvas.getContext('2d')
         //ctx.rotate((50 * Math.PI) / 180) // 水印旋转角度
-        ctx.font = '100px Vedana'
+        ctx.font = width > 500 ? '100px Vedana' : '20px Vedana'
         ctx.fillStyle = '#000000'
         //ctx.textAlign = 'center'
         //ctx.textBaseline = 'middle'
@@ -1605,7 +2161,8 @@
         //for (let i = -10; i < 10; i++) {
         //for (let j = -10; j < forIndex; j++) {
         //绘制多个文字
-        withWater && ctx.fillText(UserStore?.userInfo?.username, 100, canvas.height - 100)
+        withWater &&
+          ctx.fillText(UserStore?.userInfo?.username, width > 500 ? 100 : 20, width > 500 ? canvas.height - 100 : canvas.height - 20)
         //}
         //}
         // 初步设置quality为传入的参数，后续可根据需要调整
@@ -1722,30 +2279,40 @@
       }
     }, 500) // 每秒增加10%，10次后进度条达到100%
 
-    await editFujianDel(delImgId.value).then((res) => {
-      centerDialogVisible.value = false
-      if (res.data.result === 1) {
-        percentage.value = 100
-        const index = foundItem.findIndex((item) => item.imgId === delImgId.value)
-        if (index !== -1) {
-          foundItem.splice(index, 1)
+    await editFujianDel(delImgId.value)
+      .then((res) => {
+        centerDialogVisible.value = false
+        if (res.data.result === 1) {
+          percentage.value = 100
+          const index = foundItem.findIndex((item) => item.imgId === delImgId.value)
+          if (index !== -1) {
+            foundItem.splice(index, 1)
+          }
+          canDelelt.value = false
+          percentage.value = 10
+          delName.value = ''
+          delIndex.value = null
+          delHu.value = false
+          ElMessage.success('照片删除成功')
+        } else {
+          percentage.value = 100
+          canDelelt.value = false
+          percentage.value = 10
+          delName.value = ''
+          delIndex.value = null
+          delHu.value = false
+          ElMessage.error(res.data.msg)
         }
-        canDelelt.value = false
-        percentage.value = 10
-        delName.value = ''
-        delIndex.value = null
-        delHu.value = false
-        ElMessage.success('照片删除成功')
-      } else {
-        percentage.value = 100
-        canDelelt.value = false
-        percentage.value = 10
-        delName.value = ''
-        delIndex.value = null
-        delHu.value = false
-        ElMessage.error(res.data.msg)
-      }
-    })
+      })
+      .catch((error) => {
+        //接口失败时 显示当前接口错误
+        ElMessage({
+          showClose: true,
+          message: error,
+          type: 'error',
+          duration: 0,
+        })
+      })
 
     // foundItem.imglists.splice(index, 1)
   }
@@ -1771,14 +2338,25 @@
   //监测 是否数据有问题
   watchEffect(() => {
     //幢 - 损坏情况 - 多选情况
-    const validValues = MPZform.SHQK.filter((value) => shqklx.value.some((item) => item.value === value))
+    const validValues = MPZform.ZSHQK.filter((value) => shqklx.value.some((item) => item.value === value))
 
-    if (validValues.length !== MPZform.SHQK.length) {
-      MPZform.SHQK = validValues
+    if (validValues.length !== MPZform.ZSHQK.length) {
+      MPZform.ZSHQK = validValues
     }
 
-    if (MPZform.SHQK === undefined || MPZform.SHQK === '') {
-      MPZform.SHQK = null
+    if (MPZform.ZSHQK === undefined || MPZform.ZSHQK === '') {
+      MPZform.ZSHQK = null
+    }
+
+    //幢 - 破坏情况 - 多选情况
+    const validValues1 = MPZform.ZPHSY.filter((value) => pHSYList.value.some((item) => item.value === value))
+
+    if (validValues1.length !== MPZform.ZPHSY.length) {
+      MPZform.ZPHSY = validValues
+    }
+
+    if (MPZform.ZPHSY === undefined || MPZform.ZPHSY === '') {
+      MPZform.ZPHSY = null
     }
     //幢 - 修缮情况 - 单选
     if (
