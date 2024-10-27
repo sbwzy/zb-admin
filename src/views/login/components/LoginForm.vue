@@ -195,6 +195,7 @@
                 })
                 .catch((error) => {
                   //接口失败时 显示当前接口错误
+                  loading.value = false
                   ElMessage({
                     showClose: true,
                     message: error,
@@ -206,6 +207,7 @@
           })
           .catch((error) => {
             //接口失败时 显示当前接口错误
+            loading.value = false
             ElMessage({
               showClose: true,
               message: error,

@@ -1,6 +1,7 @@
 /** When your routing table is too long, you can split it into small modules**/
 
 import Layout from '@/layout/index.vue'
+import { onBeforeRouteUpdate } from 'vue-router'
 
 const functionPageRouter = [
   {
@@ -61,7 +62,19 @@ const functionPageRouter = [
             path: '/function-page/Map/BingMap',
             component: () => import('@/views/functionPage/Map/BingMap/index.vue'),
             name: '定位',
-            meta: { title: '建筑定位落地图', keepAlive: true, icon: 'MenuIcon' },
+            meta: { title: '建筑定位落地图', keepAlive: false, icon: 'MenuIcon' },
+            beforeCreate() {
+              console.log('beforeCreate')
+            },
+            beforeMount() {
+              console.log('beforeMount')
+            },
+            onBeforeRouteUpdate(to, from, next) {
+              next((vm) => {
+                console.log('beforeRouteEntermap')
+                vm.refreshMap()
+              })
+            },
           },
           // {
           //   path: '/function-page/Map/AMap',

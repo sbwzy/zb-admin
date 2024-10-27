@@ -228,6 +228,10 @@
       console.log(e.target.getZoom())
     })
   }
+  const refreshMap = () => {
+    if (map.value) map.value.remove()
+    initMap()
+  }
   const goBack = () => {
     console.log('返回')
     router.push({ path: '/form/collection' })

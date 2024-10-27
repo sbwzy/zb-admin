@@ -41,9 +41,7 @@
         <div class="collction__box__content__title">
           <span>重点提醒</span>
         </div>
-        <div class="collction__box__content__text">
-          <span style="color: red"> {{ notemsg1 }}</span>
-        </div>
+        <div class="collction__box__content__text" v-html="notemsg1"> </div>
       </div>
     </div>
     <!---------------------------------图片模块-无变动------------------------------------>
@@ -124,9 +122,10 @@
             <span>{{ MPZform.ZSQK }}</span>
           </div>
         </el-form-item>
+        <el-divider>幢公安绿牌情况</el-divider>
         <!------------------------------------公安绿牌-------GALP---------gongAnLP-------------->
         <el-form-item label="当前公安绿牌地址" prop="galpdz">
-          <el-input :disabled="ycmsg1" v-model="MPZform.GALP" type="textarea" placeholder="请输入新公安绿牌地址" />
+          <el-input :disabled="ycmsg1" v-model="MPZform.gongAnLP" type="textarea" placeholder="请输入新公安绿牌地址" />
         </el-form-item>
         <el-form-item label="现场公安绿牌照片" prop="galpphotos">
           <div class="collction__box__image">
@@ -158,6 +157,7 @@
             </div>
           </div>
         </el-form-item>
+        <el-divider>幢铭牌内容</el-divider>
         <!------------------------------------铭牌内容----------------MPNRNew-------------->
         <el-form-item label="当前铭牌内容" prop="mpnr">
           <el-input :disabled="ycmsg1" v-model="MPZform.MPNRNew" type="textarea" placeholder="请输入当前铭牌内容" />
@@ -192,6 +192,7 @@
             </div>
           </div>
         </el-form-item>
+        <el-divider>幢损坏情况</el-divider>
         <!------------------------------------损坏情况------------------------------>
         <el-form-item label="损坏情况" prop="shqk">
           <el-select v-model="MPZform.ZSHQK" :disabled="ycmsg1" multiple placeholder="损坏情况类型">
@@ -203,9 +204,6 @@
         </el-form-item>
         <el-form-item label="损坏情况说明" prop="shqksm">
           <el-input v-model="MPZform.ZSHSM" :disabled="ycmsg1" type="textarea" placeholder="现场损坏情况说明" />
-          <!-- <div class="collction__box__form__text" v-else>
-            <span style="color: red">{{ MPZform.SHSM }}</span>
-          </div> -->
         </el-form-item>
         <el-form-item label="损坏情况照片取证" prop="shqkphotos">
           <div class="collction__box__image">
@@ -246,6 +244,7 @@
           striped-flow
           :duration="duration"
         />
+        <el-divider>幢破坏情况</el-divider>
         <!----------------------------------公共部位--破坏情况------------------------------>
         <el-form-item label="破坏情况类型" prop="phsy">
           <el-select v-model="MPZform.ZPHSY" placeholder="破坏情况类型" multiple style="width: 100%">
@@ -303,6 +302,7 @@
           striped-flow
           :duration="duration"
         />
+        <el-divider>幢搭建违建</el-divider>
         <!----------------------------------公共部位--搭建违建-------ZDJWJ-----ZDJWJSL-------ZDJWJSM----------->
         <el-form-item label="是否搭建违建" prop="phsy">
           <el-select v-model="MPZform.ZDJWJ" placeholder="是否搭建违建" style="width: 100%">
@@ -354,6 +354,7 @@
           striped-flow
           :duration="duration"
         />
+        <el-divider>幢违规拆除情况</el-divider>
         <!------------------------------公共部位-----违规拆除------ZWGCH----ZWGCHLX-----ZWGCHSM---------------->
         <el-form-item label="是否违规拆除" prop="wgch">
           <el-select v-model="MPZform.ZWGCH" placeholder="是否存在违规拆除情况">
@@ -410,6 +411,7 @@
           striped-flow
           :duration="duration"
         />
+        <el-divider>幢征收情况</el-divider>
         <!---------------------------------征收复核--------------ZSPHOTOS------------------->
         <el-form-item label="征收现状" prop="zsfh">
           <el-select v-model="MPZform.ZSFH" :disabled="ycmsg1" placeholder="当前是否纳入征收">
@@ -465,6 +467,7 @@
             <span>暂无</span>
           </div> -->
         </el-form-item>
+        <el-divider>幢修缮情况</el-divider>
         <!---------------------------------修缮情况--------------------------------->
         <el-form-item label="修缮情况" prop="xsqk">
           <el-select v-model="MPZform.XSQK" :disabled="ycmsg1" placeholder="修缮情况">
@@ -527,6 +530,7 @@
             <span>暂无</span>
           </div> -->
         </el-form-item>
+        <el-divider></el-divider>
       </el-form>
     </div>
     <!-------------------------------户信息模块-------------------------------------->
@@ -549,15 +553,6 @@
         </el-row>
       </div>
       <div>
-        <!-- <div class="collction__box__nav">
-          <span style="text-decoration: underline; color: #00bfff" class="collction__box__content__title"
-            >第{{ index + 1 }}户-{{ item.SH }}</span
-          >
-          <span :style="item.isShowForm == 1? 'color:red' : 'color:#00bfff'" @click="itemisShowForm(item)">{{
-            item.isShowForm == 0 ? '展示' : '收起'
-          }}</span>
-        </div> -->
-
         <el-form
           label-position="top"
           require-asterisk-position="right"
@@ -590,21 +585,22 @@
               <span>{{ curHuInfo.CB }}</span>
             </div>
           </el-form-item>
+          <el-divider>房屋业态状况</el-divider>
           <!---------------------------------------房屋用途---------------------------------------------->
-          <el-form-item label="房屋业态" prop="fwyt">
+          <el-form-item label="房屋用途" prop="fwyt">
             <div class="collction__box__form__text">
               <span>{{ curHuInfo.FWYT }}</span>
             </div>
           </el-form-item>
-          <el-form-item label="房屋业态现状" prop="xfwyt">
-            <el-select v-model="curHuInfo.DQFWYT" placeholder="选择房屋用途" style="width: 100%">
+          <el-form-item label="房屋业态状况" prop="xfwyt">
+            <el-select v-model="curHuInfo.DQFWYT" placeholder="选择房屋业态" style="width: 100%">
               <el-option v-for="item in fwyt" :key="item.value" :label="item.text" :value="item.value" />
             </el-select>
             <!-- <div class="collction__box__form__text" v-else>
               <span :style="curHuInfo.FWYT != curHuInfo.DQFWYT ? 'color:red' : ''">{{ curHuInfo.DQFWYT }}</span>
             </div> -->
           </el-form-item>
-          <el-form-item label="房屋用途现状照片" prop="fwytphotos">
+          <el-form-item label="房屋业态状况照片" prop="fwytphotos">
             <!-- <div
               class="collction__box__image"
               v-if="
@@ -653,6 +649,7 @@
               <span>暂无</span>
             </div> -->
           </el-form-item>
+          <el-divider>户房屋损坏情况</el-divider>
           <!-------------------------- 户损坏情况---------------------------------------->
           <el-form-item label="损坏情况" prop="phsy">
             <el-select v-model="curHuInfo.SHQK" placeholder="损坏情况类型" multiple style="width: 100%">
@@ -660,7 +657,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="损坏情况说明" prop="phqksm">
-            <el-input v-model="curHuInfo.SHSM" type="textarea" placeholder="请输入现场破坏情况" />
+            <el-input v-model="curHuInfo.SHSM" type="textarea" placeholder="请输入现场损坏情况" />
           </el-form-item>
           <el-form-item label="损坏情况照片取证" prop="phqkphotos">
             <div class="collction__box__image">
@@ -701,6 +698,7 @@
               </div>
             </div>
           </el-form-item>
+          <el-divider>户房屋破坏情况</el-divider>
           <!--------------------------破坏情况---------------------------------------->
           <el-form-item label="破坏情况类型" prop="phsy">
             <el-select v-model="curHuInfo.PHSY" placeholder="破坏情况类型" multiple style="width: 100%">
@@ -765,7 +763,8 @@
               <span>暂无</span>
             </div> -->
           </el-form-item>
-          <!--------------------------------搭建违建---------------------------------->
+          <el-divider>户房屋搭建违建情况</el-divider>
+          <!--------------------------------搭建违建--------------------------------->
           <el-form-item label="是否搭建违建" prop="djwj">
             <el-select v-model="curHuInfo.DJWJ" placeholder="是否搭建违建" style="width: 100%">
               <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
@@ -835,6 +834,7 @@
               <span>暂无</span>
             </div> -->
           </el-form-item>
+          <el-divider>违规拆除情况</el-divider>
           <!-----------------------------------违规拆除------------------------------->
           <el-form-item label="是否违规拆除" prop="wgch">
             <el-select v-model="curHuInfo.WGCH" placeholder="是否存在违规拆除情况">
@@ -898,6 +898,7 @@
               </div>
             </div>
           </el-form-item>
+          <el-divider>转租情况</el-divider>
           <!-----------------------------------是否转租------------------------------->
           <el-form-item label="是否转租" prop="zzqk">
             <el-select v-model="curHuInfo.ZZQK" placeholder="是否转租" style="width: 100%">
@@ -954,6 +955,7 @@
               </div>
             </div>
           </el-form-item>
+          <el-divider>空置情况</el-divider>
           <el-form-item label="是否空置" prop="kzqk">
             <el-select v-model="curHuInfo.KZQK" placeholder="是否空置" style="width: 100%">
               <el-option v-for="item in parent" :key="item.value" :label="item.text" :value="item.value" />
@@ -962,6 +964,7 @@
           <el-form-item label="空置情况说明" prop="kzsm">
             <el-input v-model="curHuInfo.KZSM" type="textarea" placeholder="请输入现场空置情况" />
           </el-form-item>
+          <el-divider></el-divider>
         </el-form>
       </div>
     </div>
@@ -993,25 +996,14 @@
     </div> -->
     <!---------------------------------下方按钮模块--------------------------------->
     <div class="collction__edit">
-      <!-- <div class="collction__edit__btn" @click.stop="dkDialogVisibleShow">
-        <el-icon
-          v-if="
-            (MPZform.tdtxNew == null || MPZform.tdtxNew == '' || MPZform.tdtxNew == undefined) &&
-            (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined)
-          "
-          ><Promotion
-        /></el-icon>
-        <el-icon v-else><SuccessFilled /></el-icon>
-        <span class="collction__edit__btn--text">{{ dkName }}</span>
-      </div> -->
-      <div :class="{ collction__edit__save: true, disabled: isDisabled && ycmsg1, loading: isLoading }" @click.stop="iseditZC(1)">
+      <div :class="{ collction__edit__save: true, disabled: isDisabled || ycmsg1, loading: isLoading }" @click.stop="Daka(1)">
         <el-icon v-if="!isLoading"><DocumentChecked /></el-icon>
         <el-icon v-else><Loading /></el-icon>
         <span v-if="!isLoading">保存</span>
         <span v-else>{{ loadingText }}</span>
       </div>
       <div
-        :class="{ collction__edit__abnormal: true, disabled: isDisabled && ycmsg1, loading: isLoading }"
+        :class="{ collction__edit__abnormal: true, disabled: isDisabled || ycmsg1, loading: isLoading }"
         @click.stop="ycDialogVisibleShow"
       >
         <el-icon v-if="!isLoading"><InfoFilled /></el-icon>
@@ -1020,6 +1012,7 @@
         <span v-else>{{ loadingText }}</span>
       </div>
     </div>
+
     <!------------------------------ 异常信息上报弹窗------------------------------->
     <div class="dialog" v-if="ycDialogFormVisible">
       <div class="dialog__content">
@@ -1027,35 +1020,7 @@
         <el-alert :title="errorReason" type="warning" />
         <div class="dialog__content__footer">
           <div @click.stop="ycDialogFormVisible = false">取消</div>
-          <div @click.stop="iseditZC(2)">确定</div>
-        </div>
-      </div>
-    </div>
-    <!-------------------------------打卡信息弹窗------------------------------------>
-    <div class="dialog" v-if="dkDialogFormVisible">
-      <div class="dialog__content">
-        <h3 class="dialog__content--title">{{ errDKMessage }}</h3>
-        <h3 v-if="contetForm.errorStatus != 0" class="dialog__content--title">{{ contetForm.errorReson }}</h3>
-        <el-alert :title="contetForm.errorReson" type="warning" effect="dark" />
-        <!-- <div class="dialog__content__box">
-          <el-alert :title="contetForm1.errorReson" type="warning" effect="dark" />
-          <p>无法打卡原因</p>
-          <el-input v-if="contetForm1.errorStatus == 1" v-model="contetForm1.BeiZhu" type="textarea" placeholder="请输入无法打卡原因" />
-          <el-select
-            v-if="contetForm1.errorStatus == 2"
-            style="margin: 5px 0"
-            v-model="contetForm1.WFDK"
-            placeholder="请输入无法打卡原因类型"
-          >
-            <el-option label="信号屏蔽" value="信号屏蔽" />
-            <el-option label="树木高层遮挡" value="树木高层遮挡" />
-            <el-option label="无法进入" value="无法进入" />
-            <el-option label="其他原因" value="其他原因" />
-          </el-select>
-        </div> -->
-        <div class="dialog__content__footer">
-          <div @click.stop="dkDialogFormVisible = false">取消</div>
-          <div @click.stop="dkTJ">确定打卡</div>
+          <div @click.stop="Daka(2)">确定</div>
         </div>
       </div>
     </div>
@@ -1128,6 +1093,7 @@
   const isDisabled = ref(false) // 控制是否禁用
   // 获取当前公房信息
   const centerDialogVisible = ref(false)
+  const isDkaka = ref(false)
   // 滚动盒子主体
   const navBox = ref(null)
   // 子盒子路径
@@ -1241,8 +1207,23 @@
     let res = '当前建筑异常情况如下:'
 
     //幢上的损坏情况异常
-    if (MPZform.SHQK && MPZform.SHQK.length > 0) {
-      res += '房屋' + MPZform.SHQK.join(',') + '、'
+    if (MPZform.ZSHQK && MPZform.ZSHQK.length > 0) {
+      res += '幢损坏情况' + MPZform.ZSHQK.join(',') + '、'
+      YCQK = 1
+    }
+    //幢上的破坏情况异常
+    if (MPZform.ZPHSY && MPZform.ZPHSY.length > 0) {
+      res += '幢破坏情况' + MPZform.ZPHSY.join(',') + '、'
+      YCQK = 1
+    }
+    //幢上的搭建违建异常
+    if (MPZform.ZDJWJ == '是') {
+      res += '搭建违建异常、'
+      YCQK = 1
+    }
+    //幢上的违规拆除异常
+    if (MPZform.ZWGCH == '是') {
+      res += '违规拆除异常、'
       YCQK = 1
     }
     //幢上的征收情况异常
@@ -1256,8 +1237,12 @@
       YCQK = 1
     }
     //户上的房屋用途异常 FWYT
-    if (Huform?.some((item) => item.FWYT !== item.DQFWYT)) {
+    if (Huform?.some((item) => item.FWYT !== item.DQFWYT && item.DQFWYT !== '' && item.DQFWYT !== undefined && item.DQFWYT !== null)) {
       res += '户上存在房屋业态异常、'
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.SHQK && item.SHQK.length > 0)) {
+      res += '户上存在损坏情况异常、'
       YCQK = 1
     }
     if (Huform?.some((item) => item.PHSY && item.PHSY.length > 0)) {
@@ -1272,13 +1257,16 @@
       res += '户上存在违规拆除、'
       YCQK = 1
     }
-    if (Huform?.some((item) => item.ZZQK == '是')) {
-      res += '户上存在转租情况、'
-      YCQK = 1
-    }
-    if (Huform?.some((item) => item.KZQK == '是')) {
-      res += '户上存在空置情况、'
-      YCQK = 1
+    // if (Huform?.some((item) => item.ZZQK == '是')) {
+    //   res += '户上存在转租情况、'
+    //   YCQK = 1
+    // }
+    // if (Huform?.some((item) => item.KZQK == '是')) {
+    //   res += '户上存在空置情况、'
+    //   YCQK = 1
+    // }
+    if (res.endsWith('、')) {
+      res = res.slice(0, -1)
     }
     if (YCQK === 1) {
       return res
@@ -1315,20 +1303,122 @@
     }
   }
   // // 提交反馈数据
-  // let contetForm = reactive({
-  //   MPZid: '0', //建筑编号
-  //   tdtx: 0, //房屋新位置经度
-  //   tdty: 0, //房屋新位置纬度
-  //   errorStatus: -1,
-  //   errorReson: '', //打卡异常信息
-  // })
+  let contetForm = reactive({
+    MPZid: '0', //建筑编号
+    tdtx: 0, //房屋新位置经度
+    tdty: 0, //房屋新位置纬度
+    errorStatus: -1,
+    errorReson: '', //打卡异常信息
+  })
   // 是否显示弹窗
-  const ycDialogFormVisible = ref(false)
+  let ycDialogFormVisible = ref(false)
   const dkDialogFormVisible = ref(false)
   const locX = ''
   const locY = ''
   // 提交异常信息
+  const Daka = async (num) => {
+    if (MPZform.DaKaJG != null && MPZform.DaKaJG != '' && MPZform.DaKaJG != undefined) {
+      // 如果 DaKaJG 不为空，直接返回
+      console.log('进1')
+      iseditZC(num)
+      console.log('进2')
+    } else {
+      console.log('定位打卡进1')
+      // 调用定位模块
+      if ('geolocation' in navigator) {
+        // 如果存在位置元素
+        console.log('定位打卡进2')
+        try {
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(
+              (position) => resolve(position),
+              (error) => reject(error),
+              {
+                enableHighAccuracy: true,
+                timeout: 1000,
+                maximumAge: 0,
+              },
+            )
+          })
 
+          const lat = position.coords.latitude.toFixed(6)
+          const lon = position.coords.longitude.toFixed(6)
+
+          // 生成一条打卡记录
+          contetForm = {
+            MPZid: MPZform.MPZid,
+            tdty: lon,
+            tdtx: lat,
+            errorReson: '',
+            errorStatus: 0,
+          }
+          console.log('定位打卡进3', contetForm)
+          await iseditZC(num)
+        } catch (error) {
+          console.log('定位打卡进31', error)
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              contetForm.MPZid = MPZform.MPZid
+              contetForm.errorStatus = 1
+              contetForm.errorReson = '用户拒绝了地理位置请求'
+              break
+            case error.POSITION_UNAVAILABLE:
+              contetForm.MPZid = MPZform.MPZid
+              contetForm.errorStatus = 1
+              contetForm.errorReson = '位置信息不可用'
+              break
+            case error.TIMEOUT:
+              contetForm.MPZid = MPZform.MPZid
+              contetForm.errorStatus = 1
+              contetForm.errorReson = '请求超时'
+              break
+            case error.UNKNOWN_ERROR:
+              contetForm.MPZid = MPZform.MPZid
+              contetForm.errorStatus = 1
+              contetForm.errorReson = '发生未知错误'
+              break
+          }
+          //增加弹窗提醒 1026
+          //isDkaka.value = true
+          ElMessageBox.confirm(contetForm.errorReson + '是否继续操作', '位置信息服务异常', {
+            confirmButtonText: '继续',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(async () => {
+              await iseditZC(num)
+            })
+            .catch(async () => {
+              contetForm = {
+                MPZid: '0',
+                tdty: 0,
+                tdtx: 0,
+                errorReson: '',
+                errorStatus: -1,
+              }
+              return
+            })
+          // 生成一条打卡记录
+        }
+      } else {
+        contetForm.MPZid = MPZform.MPZid
+        contetForm.errorReson = '浏览器不支持地理位置'
+        contetForm.errorStatus = 1
+        //增加弹窗提醒 1026
+        ElMessageBox.confirm(contetForm.errorReson + '是否继续操作', '位置信息服务异常', {
+          confirmButtonText: '继续',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(async () => {
+            await iseditZC(num)
+          })
+          .catch(async () => {
+            return
+          })
+      }
+    }
+  }
   // 是否显示异常信息弹窗
   const ycDialogVisibleShow = () => {
     ycDialogFormVisible.value = true
@@ -1336,99 +1426,36 @@
   // 暂存、保存、和上传接口
   // 先进行打卡操作  不需要建筑原先位置信息 如果没有信号  基本就没有网络
   const iseditZC = async (num) => {
+    console.log('3')
     //按钮禁用
     isDisabled.value = true
     //按钮显示loading
     isLoading.value = true
 
-    let contetForm = reactive({
-      MPZid: '0', //建筑编号
-      tdtx: 0, //房屋新位置经度
-      tdty: 0, //房屋新位置纬度
-      errorStatus: -1,
-      errorReson: '', //打卡异常信息
-    })
-
-    if (MPZform.DaKaJG != null && MPZform.DaKaJG != '' && MPZform.DaKaJG != undefined) {
-    } else {
-      //调用定位模块
-      if ('geolocation' in navigator) {
-        //如果存在位置元素
-        navigator.geolocation.getCurrentPosition(
-          async function (position) {
-            var lat = position.coords.latitude.toFixed(6)
-            var lon = position.coords.longitude.toFixed(6)
-
-            // 生成一条打卡记录
-            contetForm = {
-              MPZid: MPZform.MPZid,
-              tdty: lon,
-              tdtx: lat,
-              errorReson: '',
-              errorStatus: 0,
-            }
-          },
-          async function (error) {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '用户拒绝了地理位置请求'
-                break
-              case error.POSITION_UNAVAILABLE:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '位置信息不可用'
-                break
-              case error.TIMEOUT:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '请求超时'
-                break
-              case error.UNKNOWN_ERROR:
-                ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorStatus = 1)
-                contetForm.errorReson = '发生未知错误'
-                break
-            }
-            //dkDialogFormVisible.value = true
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 1000,
-            maximumAge: 0,
-          },
-        )
-      } else {
-        ;(contetForm.MPZid = MPZform.MPZid), (contetForm.errorReson = '浏览器不支持地理位置')
-        contetForm.errorStatus = 1
-        //dkDialogFormVisible.value = true
-      }
+    if (num == 2) {
+      ycDialogFormVisible.value = false
     }
-    if (contetForm.errorStatus != -1) {
+    // if(num == 2){
+    //   await Daka()
+    // }
+    console.log(4, contetForm)
+    console.log(5, MPZform)
+    if (MPZform.DaKaJG == null || MPZform.DaKaJG == '' || MPZform.DaKaJG == undefined) {
       await saveTrackInfo(contetForm)
         .then((res) => {
           if (res.data.result == 1) {
-            // ElMessage({
-            //   showClose: true,
-            //   message: '打卡成功:' + res.data.msg,
-            //   type: 'success',
-            // })
-            // dkDialogFormVisible.value = false
+            console.log('4')
             MPZform.tdtxNew = contetForm.tdtx
             MPZform.tdtyNew = contetForm.tdty
             MPZform.DaKaJG = contetForm.errorStatus
             MPZform.DaKaBz = contetForm.errorReson
-          } else {
-            // dkDialogFormVisible.value = false
-            // ElMessage({
-            //   showClose: true,
-            //   message: '打卡失败,失败原因:' + res.data.msg,
-            //   type: 'error',
-            // })
           }
         })
         .catch((error) => {
           //接口失败时 显示当前接口错误
           ElMessage({
             showClose: true,
-            message: error,
+            message: '网络错误,请重试',
             type: 'error',
             duration: 0,
           })
@@ -1442,42 +1469,58 @@
       //对破坏情况字段 进行拼接  1023
       item.PHSY = item.PHSY.filter((item) => item).join(',') //户破坏情况
       item.SHQK = item.SHQK.filter((item) => item).join(',') //户损坏情况
-      if (item.FWYT == '非居住生产' && (item.DQFWYT == '工厂' || item.DQFWYT == '农业建筑' || item.DQFWYT == '公共设施用房')) {
-        item.FWYTYC = false
-      } else if (
-        item.FWYT == '非居住营业' &&
-        (item.DQFWYT == '超市(便利店)' ||
-          item.DQFWYT == '商店' ||
-          item.DQFWYT == '专业市场' ||
-          item.DQFWYT == '餐饮' ||
-          item.DQFWYT == '旅馆' ||
-          item.DQFWYT == '站场码头' ||
-          item.DQFWYT == '仓库堆栈' ||
-          item.DQFWYT == '文化馆' ||
-          item.DQFWYT == '体育场' ||
-          item.DQFWYT == '影剧院' ||
-          item.DQFWYT == '福利院')
-      ) {
-        item.FWYTYC = false
-      } else if (
-        item.FWYT == '非居住营业' &&
-        (item.DQFWYT == '办公楼' ||
-          item.DQFWYT == '医院' ||
-          item.DQFWYT == '学校' ||
-          item.DQFWYT == '寺庙教堂' ||
-          item.DQFWYT == '宗祠山庄' ||
-          item.DQFWYT == '其他')
-      ) {
-        item.FWYTYC = false
-      } else if (item.FWYT == '居住' && item.DQFWYT == '居住用房') {
+      if (item.DQFWYT == '' || item.DQFWYT == undefined || item.DQFWYT == null) {
         item.FWYTYC = false
       } else {
-        item.FWYTYC = true
+        if (item.FWYT == '非居住生产' && (item.DQFWYT == '工厂' || item.DQFWYT == '农业建筑' || item.DQFWYT == '公共设施用房')) {
+          item.FWYTYC = false
+        } else if (
+          item.FWYT == '非居住营业' &&
+          (item.DQFWYT == '超市(便利店)' ||
+            item.DQFWYT == '商店' ||
+            item.DQFWYT == '专业市场' ||
+            item.DQFWYT == '餐饮' ||
+            item.DQFWYT == '旅馆' ||
+            item.DQFWYT == '站场码头' ||
+            item.DQFWYT == '仓库堆栈' ||
+            item.DQFWYT == '文化馆' ||
+            item.DQFWYT == '体育场' ||
+            item.DQFWYT == '影剧院' ||
+            item.DQFWYT == '福利院')
+        ) {
+          item.FWYTYC = false
+        } else if (
+          item.FWYT == '非居住营业' &&
+          (item.DQFWYT == '办公楼' ||
+            item.DQFWYT == '医院' ||
+            item.DQFWYT == '学校' ||
+            item.DQFWYT == '寺庙教堂' ||
+            item.DQFWYT == '宗祠山庄' ||
+            item.DQFWYT == '其他')
+        ) {
+          item.FWYTYC = false
+        } else if (item.FWYT == '居住用房' && item.DQFWYT == '居住用房') {
+          item.FWYTYC = false
+        } else {
+          item.FWYTYC = true
+        }
       }
       //item.FWYTYC = item.FWYT == '非居住生产' && (item.DQFWYT == '工厂' || item.DQFWYT == '农业建筑' || item.DQFWYT == '公共设施用房')? //1023
     })
     let YCQK = 0
-    if (MPZform.SHQK && MPZform.SHQK.length > 0) {
+    if (MPZform.ZSHQK && MPZform.ZSHQK.length > 0) {
+      YCQK = 1
+    }
+    //幢上的破坏情况异常
+    if (MPZform.ZPHSY && MPZform.ZPHSY.length > 0) {
+      YCQK = 1
+    }
+    //幢上的搭建违建异常
+    if (MPZform.ZDJWJ == '是') {
+      YCQK = 1
+    }
+    //幢上的违规拆除异常
+    if (MPZform.ZWGCH == '是') {
       YCQK = 1
     }
     if (MPZform.ZSFH != MPZform.ZSQK && MPZform.ZSQK && MPZform.ZSQK != '') {
@@ -1486,10 +1529,16 @@
     if (MPZform.XSQK == '修缮中' && MPZform.SGXK == '否') {
       YCQK = 1
     }
-    if (Huform?.some((item) => item.FWYT !== item.DQFWYT)) {
+    if (Huform?.some((item) => item.FWYT !== item.DQFWYT && item.DQFWYT !== '' && item.DQFWYT !== undefined && item.DQFWYT !== null)) {
       YCQK = 1
     }
     if (Huform?.some((item) => item.PHSY.length > 0)) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.SHQK && item.SHQK.length > 0)) {
+      YCQK = 1
+    }
+    if (Huform?.some((item) => item.PHSY && item.PHSY.length > 0)) {
       YCQK = 1
     }
     if (Huform?.some((item) => item.DJWJ == '是')) {
@@ -1498,24 +1547,38 @@
     if (Huform?.some((item) => item.WGCH == '是')) {
       YCQK = 1
     }
-    if (Huform?.some((item) => item.ZZQK == '是')) {
-      YCQK = 1
-    }
-    if (Huform?.some((item) => item.KZQK == '是')) {
+    // if (Huform?.some((item) => item.ZZQK == '是')) {
+    //   YCQK = 1
+    // }
+    // if (Huform?.some((item) => item.KZQK == '是')) {
+    //   YCQK = 1
+    // }
+    if (Huform?.some((item) => item.FWYTYC == true)) {
       YCQK = 1
     }
     //复制建筑总数据
     tijiaoList = {
       MPZid: MPZform.MPZid, //公房id
-      GALP: MPZform.GALP, //新公安绿牌地址
+      gongAnLP: MPZform.gongAnLP, //新公安绿牌地址
+      MPNRNew: MPZform.MPNRNew, //当前铭牌内容
       ZSHQK: MPZform.ZSHQK.filter((item) => item).join(','), //损坏情况
+      ZSHSM: MPZform.ZSHSM, //损坏情况说明
       ZPHSY: MPZform.ZPHSY.filter((item) => item).join(','), //破坏情况
-      SHSM: MPZform.SHSM, //损坏说明
+      ZPHQK: MPZform.ZPHQK, //破坏情况说明
+      //SHSM: MPZform.SHSM, //损坏说明
+      ZDJWJ: MPZform.ZDJWJ, //是否搭建违建
+      ZDJWJSL: MPZform.ZDJWJSL, //搭建违建数量
+      ZDJWJSM: MPZform.ZDJWJSM, //搭建违建说明
+      ZWGCH: MPZform.ZWGCH, //是否违规拆除
+      ZWGCHLX: MPZform.ZWGCHLX, //违规拆除类型
+      ZWGCHSM: MPZform.ZWGCHSM, //违规拆除说明
       ZSFH: MPZform.ZSFH, //征收复核
       ZSFHSM: MPZform.ZSFHSM, //征收复核说明
       XSQK: MPZform.XSQK, //修缮情况
       SGXK: MPZform.SGXK, //施工许可
-      XSQKSM: MPZform.XSQKSM, //修缮情况说明
+      BJBH: MPZform.BJBH, //报建编号
+      XSQKSM: MPZform.XSQKSM, // 修缮情况说明
+      XSYC: MPZform.XSQK == '修缮中' && MPZform.SGXK == '否' ? '是' : '否',
       Hu: tijiaohuList, //户信息
       SFYC: YCQK == 1 ? '是' : '否',
     }
@@ -1626,10 +1689,12 @@
                                 }
                               })
                               .catch((error) => {
+                                isDisabled.value = false
+                                isLoading.value = false
                                 //接口失败时 显示当前接口错误
                                 ElMessage({
                                   showClose: true,
-                                  message: error,
+                                  message: '网络错误,请重试',
                                   type: 'error',
                                   duration: 0,
                                 })
@@ -1655,9 +1720,11 @@
                               })
                               .catch((error) => {
                                 //接口失败时 显示当前接口错误
+                                isDisabled.value = false
+                                isLoading.value = false
                                 ElMessage({
                                   showClose: true,
-                                  message: error,
+                                  message: '网络错误,请重试',
                                   type: 'error',
                                   duration: 0,
                                 })
@@ -1665,10 +1732,12 @@
                           }
                         })
                         .catch((error) => {
+                          isDisabled.value = false
+                          isLoading.value = false
                           //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
-                            message: error,
+                            message: '网络错误,请重试',
                             type: 'error',
                             duration: 0,
                           })
@@ -1696,6 +1765,8 @@
                           }
                         })
                         .catch((error) => {
+                          isDisabled.value = false
+                          isLoading.value = false
                           //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
@@ -1724,6 +1795,8 @@
                           }
                         })
                         .catch((error) => {
+                          isDisabled.value = false
+                          isLoading.value = false
                           //接口失败时 显示当前接口错误
                           ElMessage({
                             showClose: true,
@@ -1739,10 +1812,12 @@
                   }
                 })
                 .catch((error) => {
+                  isDisabled.value = false
+                  isLoading.value = false
                   //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
-                    message: error,
+                    message: '网络错误,请重试',
                     type: 'error',
                     duration: 0,
                   })
@@ -1802,6 +1877,8 @@
                   }
                 })
                 .catch((error) => {
+                  isDisabled.value = false
+                  isLoading.value = false
                   //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
@@ -1833,10 +1910,12 @@
                   }
                 })
                 .catch((error) => {
+                  isDisabled.value = false
+                  isLoading.value = false
                   //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
-                    message: error,
+                    message: '网络错误,请重试',
                     type: 'error',
                     duration: 0,
                   })
@@ -1861,6 +1940,8 @@
                   }
                 })
                 .catch((error) => {
+                  isDisabled.value = false
+                  isLoading.value = false
                   //接口失败时 显示当前接口错误
                   ElMessage({
                     showClose: true,
@@ -1885,10 +1966,12 @@
         }
       })
       .catch((error) => {
+        isDisabled.value = false
+        isLoading.value = false
         //接口失败时 显示当前接口错误
         ElMessage({
           showClose: true,
-          message: error,
+          message: '网络错误,请重试',
           type: 'error',
           duration: 0,
         })
@@ -1982,46 +2065,48 @@
   //     })
   //   }
   // }
-  const dkTJ = () => {
-    saveTrackInfo(contetForm)
-      .then((res) => {
-        if (res.data.result == 1) {
-          ElMessage({
-            showClose: true,
-            message: '打卡成功:' + res.data.msg,
-            type: 'success',
-          })
-          dkDialogFormVisible.value = false
-          MPZform.tdtxNew = contetForm.tdtx
-          MPZform.tdtyNew = contetForm.tdty
-          MPZform.DaKaJG = contetForm.errorStatus
-          MPZform.DaKaBz = contetForm.errorReson
-        } else {
-          dkDialogFormVisible.value = false
-          ElMessage({
-            showClose: true,
-            message: '打卡失败,失败原因:' + res.data.msg,
-            type: 'error',
-          })
-        }
-      })
-      .catch((error) => {
-        //接口失败时 显示当前接口错误
-        ElMessage({
-          showClose: true,
-          message: error,
-          type: 'error',
-          duration: 0,
-        })
-      })
-  }
+  // const dkTJ = () => {
+  //   saveTrackInfo(contetForm)
+  //     .then((res) => {
+  //       if (res.data.result == 1) {
+  //         ElMessage({
+  //           showClose: true,
+  //           message: '打卡成功:' + res.data.msg,
+  //           type: 'success',
+  //         })
+  //         dkDialogFormVisible.value = false
+  //         MPZform.tdtxNew = contetForm.tdtx
+  //         MPZform.tdtyNew = contetForm.tdty
+  //         MPZform.DaKaJG = contetForm.errorStatus
+  //         MPZform.DaKaBz = contetForm.errorReson
+  //       } else {
+  //         dkDialogFormVisible.value = false
+  //         ElMessage({
+  //           showClose: true,
+  //           message: '打卡失败,失败原因:' + res.data.msg,
+  //           type: 'error',
+  //         })
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       isDisabled.value = false
+  //                           isLoading.value = false
+  //       //接口失败时 显示当前接口错误
+  //       ElMessage({
+  //         showClose: true,
+  //         message: '网络错误,请重试',
+  //         type: 'error',
+  //         duration: 0,
+  //       })
+  //     })
+  // }
   //修改按钮颜色
   const getButtonType = (item) => {
-    const type = item.isShowForm ? 'primary' : item.FWYT !== item.DQFWYT || item.PHSY ? 'danger' : 'success'
+    const type = item.isShowForm ? 'primary' : 'success' //success
     return type
   }
   const getButtonIcon = (item) => {
-    const Icon = item.isShowForm ? 'CirclePlusFilled' : 'Edit'
+    const Icon = item.isShowForm ? 'Edit' : 'CirclePlusFilled' //Edit
     return Icon
   }
   const text = ref() //可以根据需要更改不同的文字
@@ -2099,7 +2184,9 @@
   // 上传文件函数
   const handleImageChange = async (event, name, HuInfo?: Object) => {
     console.log('当前户', HuInfo)
-    const file = event.target.files[0] // 获取选中的文件
+    const file = event.target.files[0]
+    event.target.value = ''
+    // 获取选中的文件
     if (file) {
       //let base64Url = await ySImage(file)
       let base64Url = await fileToBase64(file)
@@ -2308,7 +2395,7 @@
         //接口失败时 显示当前接口错误
         ElMessage({
           showClose: true,
-          message: error,
+          message: '网络错误,请重试',
           type: 'error',
           duration: 0,
         })
@@ -2467,6 +2554,7 @@
     // height: 100vh;
     // width: 100vw;
     // overflow-y: auto;
+    //background: #94e9f2;
     margin: 10px 20px 80px 20px;
     :deep(.el-timeline) {
       padding: 0 !important;
@@ -2517,12 +2605,12 @@
       }
     }
     &__box {
-      background: #fff;
+      background: #ffffff;
       padding: 15px;
       margin-bottom: 15px;
       border-radius: 12px;
       &__scroll {
-        max-height: 80px; /* 可以根据需要调整高度 */
+        max-height: 100px; /* 可以根据需要调整高度 */
         overflow-y: auto;
 
         padding: 10px;
@@ -2661,7 +2749,7 @@
       justify-content: space-between;
       > div {
         width: 100%;
-        border-radius: 40px;
+        //border-radius: 40px;
         height: 40px;
         font-size: 14px;
         display: flex;
@@ -2695,10 +2783,10 @@
       }
       &__save {
         flex: 1;
-        background: rgb(5, 121, 255);
+        background: rgb(37, 139, 207);
       }
       &__abnormal {
-        background: rgb(255, 5, 5);
+        background: rgb(211, 27, 27);
         flex: 1;
       }
     }
